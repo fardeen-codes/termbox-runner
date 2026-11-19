@@ -1,0 +1,25 @@
+services:
+  termbox-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: termbox-runner
+    ports:
+      - "8000:8000"
+    volumes:
+      # Sibling container control: access Docker daemon from host
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Persistent SQLite database storage
+      - termbox-data:/data
+      # Shared host temp directory for container workspaces
+      - /tmp/termbox_workspaces:/tmp/termbox_workspaces
+    environment:
+      - TERMBOX_DB_PATH=/data/termbox_runner.db
+      - TERMBOX_HOST=0.0.0.0
+      - TERMBOX_PORT=8000
+      - TERMBOX_EXECUTION_MODE=docker
+      - TERMBOX_DEFAULT_DOCKER_IMAGE=python:3.12-slim
+    restart: unless-stopped
+
+volumes:
+  termbox-data:

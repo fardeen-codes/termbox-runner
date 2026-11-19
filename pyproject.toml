@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "termbox-runner"
 version = "0.1.0"
 description = "Deterministic sandboxed task runner and evaluation harness for coding/CLI agents and verifiers"
+readme = "README.md"
 authors = [
     { name = "Fardeen", email = "itzfardeen143@gmail.com" }
 ]
