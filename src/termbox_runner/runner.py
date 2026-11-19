@@ -298,7 +298,28 @@ class MockTaskExecutor(TaskExecutor):
                 step_start = time.perf_counter()
                 step_result = StepResult(step=step_type, command=cmd)
 
-                # Check for explicit mock behaviors or command keywords
+                # Explicit mock behavior simulation
+                if mock_behavior == "pass":
+                    step_result.exit_code = 0
+                    step_result.stdout = f"Executed {cmd} successfully."
+                    step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
+                    manifest.steps.append(step_result)
+                    continue
+
+                if mock_behavior == "assertion_failed":
+                    if step_type in (CommandStep.SETUP, CommandStep.MAIN):
+                        step_result.exit_code = 0
+                        step_result.stdout = f"Step {step_type.value} completed."
+                        step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
+                        manifest.steps.append(step_result)
+                        continue
+                    elif step_type == CommandStep.VERIFIER:
+                        step_result.exit_code = 1
+                        step_result.stdout = "FAILED tests/test_eval.py::test_case - AssertionError: 2 != 3\n1 failed in 0.05s"
+                        step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
+                        manifest.steps.append(step_result)
+                        break
+
                 cmd_lower = cmd.lower()
                 is_oom = (
                     mock_behavior == "oom"
@@ -312,11 +333,11 @@ class MockTaskExecutor(TaskExecutor):
                 )
                 is_setup_fail = (
                     step_type == CommandStep.SETUP
-                    and (mock_behavior == "setup_error" or "fail" in cmd_lower)
+                    and (mock_behavior == "setup_error" or "bad-pkg-fail" in cmd_lower)
                 )
                 is_assert_fail = (
                     step_type == CommandStep.VERIFIER
-                    and (mock_behavior == "assertion_failed" or "fail" in cmd_lower or "test_fail" in cmd_lower)
+                    and ("assertion" in cmd_lower or "test_fail" in cmd_lower)
                 )
                 is_runtime_fail = (
                     step_type == CommandStep.MAIN
@@ -372,6 +393,7 @@ class MockTaskExecutor(TaskExecutor):
                         env={**os.environ, **manifest.task.environment},
                     )
                     stdout_b, stderr_b = await proc.communicate()
+                    await proc.wait()
                     step_result.exit_code = proc.returncode
                     step_result.stdout = stdout_b.decode("utf-8", errors="replace")
                     step_result.stderr = stderr_b.decode("utf-8", errors="replace")
