@@ -156,7 +156,7 @@ curl -s -X POST http://localhost:8000/runs \
   -H "Content-Type: application/json" \
   -d '{
     "image": "python:3.12-slim",
-    "main_cmd": "python -c \"import math; print(\x27Result:\x27, math.factorial(5))\"",
+    "main_cmd": "python -c \"import math; print(math.factorial(5))\"",
     "limits": {
       "timeout_seconds": 15,
       "mem_limit": "256m"
@@ -173,8 +173,8 @@ curl -s -X POST http://localhost:8000/runs \
   -H "Content-Type: application/json" \
   -d '{
     "image": "python:3.12-slim",
-    "main_cmd": "python -c \"print(\x27Agent finished work\x27)\"",
-    "verifier_cmd": "python -c \"assert 1 + 1 == 3, \x27Arithmetic assertion failed\x27\"",
+    "main_cmd": "python -c \"print(42)\"",
+    "verifier_cmd": "python -c \"assert 1 + 1 == 3, \\\"Arithmetic assertion failed\\\"\"",
     "limits": {
       "timeout_seconds": 15
     }
@@ -210,7 +210,7 @@ Output:
 {
   "run_id": "run_9876543210ab",
   "failure_mode": "TIMEOUT",
-  "failure_reason": "Step \x27MAIN\x27 timed out during execution.",
+  "failure_reason": "Step '\''MAIN'\'' timed out during execution.",
   "duration_ms": 2010.5
 }
 ```
