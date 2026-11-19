@@ -51,8 +51,8 @@ def get_executor_dependency() -> TaskExecutor:
     return get_executor()
 
 
-@app.get("/", response_class=HTMLResponse, include_in_schema=False)
-@app.get("/ui", response_class=HTMLResponse, include_in_schema=False)
+@app.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse, include_in_schema=False)
+@app.api_route("/ui", methods=["GET", "HEAD"], response_class=HTMLResponse, include_in_schema=False)
 async def serve_dashboard():
     """Serve the dark-mode engineering inspection dashboard."""
     return HTMLResponse(content=DASHBOARD_HTML)
