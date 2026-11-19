@@ -1,0 +1,318 @@
+"""Persistent SQLite storage layer for termbox-runner manifests and replays."""
+
+import asyncio
+from datetime import datetime
+import json
+from pathlib import Path
+from typing import List, Optional, Tuple
+import aiosqlite
+
+from termbox_runner.config import get_settings
+from termbox_runner.models import (
+    FailureMode,
+    RunManifest,
+    RunStatus,
+    RunSummary,
+    StepResult,
+    TaskSubmission,
+)
+
+SCHEMA_SQL = """
+CREATE TABLE IF NOT EXISTS runs (
+    run_id TEXT PRIMARY KEY,
+    parent_run_id TEXT,
+    task_id TEXT,
+    status TEXT NOT NULL,
+    failure_mode TEXT,
+    failure_reason TEXT,
+    exit_code INTEGER,
+    duration_ms REAL NOT NULL DEFAULT 0.0,
+    created_at TEXT NOT NULL,
+    started_at TEXT,
+    finished_at TEXT,
+    image TEXT NOT NULL,
+    main_cmd TEXT NOT NULL,
+    task_json TEXT NOT NULL,
+    steps_json TEXT NOT NULL,
+    combined_stdout TEXT NOT NULL DEFAULT '',
+    combined_stderr TEXT NOT NULL DEFAULT '',
+    container_id TEXT,
+    replay_count INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (parent_run_id) REFERENCES runs (run_id) ON DELETE SET NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_runs_status ON runs(status);
+CREATE INDEX IF NOT EXISTS idx_runs_failure_mode ON runs(failure_mode);
+CREATE INDEX IF NOT EXISTS idx_runs_parent_run_id ON runs(parent_run_id);
+CREATE INDEX IF NOT EXISTS idx_runs_created_at ON runs(created_at DESC);
+"""
+
+
+class RunStorage:
+    """Async SQLite repository managing task definitions, runs, and lineage."""
+
+    def __init__(self, db_path: Optional[str] = None):
+        self.db_path = db_path or get_settings().db_path
+        if self.db_path != ":memory:":
+            parent = Path(self.db_path).parent
+            if parent and not parent.exists():
+                parent.mkdir(parents=True, exist_ok=True)
+        self._conn: Optional[aiosqlite.Connection] = None
+        self._lock = asyncio.Lock()
+
+    async def get_connection(self) -> aiosqlite.Connection:
+        """Get or initialize the persistent database connection."""
+        async with self._lock:
+            if self._conn is None:
+                self._conn = await aiosqlite.connect(self.db_path)
+                self._conn.row_factory = aiosqlite.Row
+                if self.db_path != ":memory:":
+                    await self._conn.execute("PRAGMA journal_mode=WAL;")
+                await self._conn.execute("PRAGMA foreign_keys=ON;")
+            return self._conn
+
+    async def close(self) -> None:
+        """Close the database connection if open."""
+        async with self._lock:
+            if self._conn is not None:
+                await self._conn.close()
+                self._conn = None
+
+    async def init_db(self) -> None:
+        """Create database tables and indexes if they do not exist."""
+        conn = await self.get_connection()
+        async with self._lock:
+            await conn.executescript(SCHEMA_SQL)
+            await conn.commit()
+
+    async def save_run(self, manifest: RunManifest) -> None:
+        """Upsert a run manifest into persistent storage."""
+        conn = await self.get_connection()
+        image = manifest.task.image or get_settings().default_docker_image
+        task_json = manifest.task.model_dump_json()
+        steps_json = json.dumps([s.model_dump() for s in manifest.steps])
+        created_at_str = manifest.created_at.isoformat()
+        started_at_str = manifest.started_at.isoformat() if manifest.started_at else None
+        finished_at_str = manifest.finished_at.isoformat() if manifest.finished_at else None
+
+        sql = """
+        INSERT INTO runs (
+            run_id, parent_run_id, task_id, status, failure_mode, failure_reason,
+            exit_code, duration_ms, created_at, started_at, finished_at,
+            image, main_cmd, task_json, steps_json, combined_stdout,
+            combined_stderr, container_id, replay_count
+        ) VALUES (
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ) ON CONFLICT(run_id) DO UPDATE SET
+            status = excluded.status,
+            failure_mode = excluded.failure_mode,
+            failure_reason = excluded.failure_reason,
+            exit_code = excluded.exit_code,
+            duration_ms = excluded.duration_ms,
+            started_at = excluded.started_at,
+            finished_at = excluded.finished_at,
+            steps_json = excluded.steps_json,
+            combined_stdout = excluded.combined_stdout,
+            combined_stderr = excluded.combined_stderr,
+            container_id = excluded.container_id,
+            replay_count = excluded.replay_count
+        """
+
+        params = (
+            manifest.run_id,
+            manifest.parent_run_id,
+            manifest.task.task_id,
+            manifest.status.value,
+            manifest.failure_mode.value if manifest.failure_mode else None,
+            manifest.failure_reason,
+            manifest.exit_code,
+            manifest.duration_ms,
+            created_at_str,
+            started_at_str,
+            finished_at_str,
+            image,
+            manifest.task.main_cmd,
+            task_json,
+            steps_json,
+            manifest.combined_stdout,
+            manifest.combined_stderr,
+            manifest.container_id,
+            manifest.replay_count,
+        )
+
+        async with self._lock:
+            await conn.execute(sql, params)
+            await conn.commit()
+
+    async def get_run(self, run_id: str) -> Optional[RunManifest]:
+        """Fetch a complete run manifest by ID."""
+        conn = await self.get_connection()
+        sql = "SELECT * FROM runs WHERE run_id = ?"
+        async with self._lock:
+            async with conn.execute(sql, (run_id,)) as cursor:
+                row = await cursor.fetchone()
+                if not row:
+                    return None
+
+                task_data = json.loads(row["task_json"])
+                task = TaskSubmission.model_validate(task_data)
+
+                steps_data = json.loads(row["steps_json"])
+                steps = [StepResult.model_validate(s) for s in steps_data]
+
+                return RunManifest(
+                    run_id=row["run_id"],
+                    parent_run_id=row["parent_run_id"],
+                    task=task,
+                    status=RunStatus(row["status"]),
+                    failure_mode=FailureMode(row["failure_mode"]) if row["failure_mode"] else None,
+                    failure_reason=row["failure_reason"],
+                    exit_code=row["exit_code"],
+                    duration_ms=row["duration_ms"],
+                    created_at=datetime.fromisoformat(row["created_at"]),
+                    started_at=datetime.fromisoformat(row["started_at"]) if row["started_at"] else None,
+                    finished_at=datetime.fromisoformat(row["finished_at"]) if row["finished_at"] else None,
+                    steps=steps,
+                    combined_stdout=row["combined_stdout"] or "",
+                    combined_stderr=row["combined_stderr"] or "",
+                    container_id=row["container_id"],
+                    replay_count=row["replay_count"] or 0,
+                )
+
+    async def list_runs(
+        self,
+        status: Optional[RunStatus] = None,
+        failure_mode: Optional[FailureMode] = None,
+        parent_run_id: Optional[str] = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> Tuple[List[RunSummary], int]:
+        """Query run summaries with optional filtering and pagination."""
+        conn = await self.get_connection()
+        clauses = []
+        params: List[object] = []
+
+        if status:
+            clauses.append("status = ?")
+            params.append(status.value)
+        if failure_mode:
+            clauses.append("failure_mode = ?")
+            params.append(failure_mode.value)
+        if parent_run_id is not None:
+            clauses.append("parent_run_id = ?")
+            params.append(parent_run_id)
+
+        where_str = f" WHERE {' AND '.join(clauses)}" if clauses else ""
+
+        count_sql = f"SELECT COUNT(*) FROM runs{where_str}"
+        select_sql = f"""
+        SELECT
+            run_id, parent_run_id, task_id, status, failure_mode,
+            exit_code, duration_ms, created_at, finished_at, image, main_cmd, replay_count
+        FROM runs{where_str}
+        ORDER BY created_at DESC
+        LIMIT ? OFFSET ?
+        """
+
+        async with self._lock:
+            async with conn.execute(count_sql, tuple(params)) as cursor:
+                total_row = await cursor.fetchone()
+                total = total_row[0] if total_row else 0
+
+            list_params = tuple(params + [limit, offset])
+            async with conn.execute(select_sql, list_params) as cursor:
+                rows = await cursor.fetchall()
+                summaries = [
+                    RunSummary(
+                        run_id=r["run_id"],
+                        parent_run_id=r["parent_run_id"],
+                        task_id=r["task_id"],
+                        status=RunStatus(r["status"]),
+                        failure_mode=FailureMode(r["failure_mode"]) if r["failure_mode"] else None,
+                        exit_code=r["exit_code"],
+                        duration_ms=r["duration_ms"],
+                        created_at=datetime.fromisoformat(r["created_at"]),
+                        finished_at=datetime.fromisoformat(r["finished_at"]) if r["finished_at"] else None,
+                        image=r["image"],
+                        main_cmd=r["main_cmd"],
+                        replay_count=r["replay_count"] or 0,
+                    )
+                    for r in rows
+                ]
+
+        return summaries, total
+
+    async def increment_replay_count(self, run_id: str) -> None:
+        """Increment the replay counter for a given run."""
+        conn = await self.get_connection()
+        sql = "UPDATE runs SET replay_count = replay_count + 1 WHERE run_id = ?"
+        async with self._lock:
+            await conn.execute(sql, (run_id,))
+            await conn.commit()
+
+    async def get_replay_lineage(self, run_id: str) -> List[RunSummary]:
+        """Trace full replay lineage: root ancestor down through all descendent replays."""
+        conn = await self.get_connection()
+        current_id: Optional[str] = run_id
+        ancestor_ids = []
+
+        async with self._lock:
+            visited = set()
+            while current_id and current_id not in visited:
+                visited.add(current_id)
+                async with conn.execute("SELECT parent_run_id FROM runs WHERE run_id = ?", (current_id,)) as cursor:
+                    row = await cursor.fetchone()
+                    if row and row["parent_run_id"]:
+                        ancestor_ids.append(row["parent_run_id"])
+                        current_id = row["parent_run_id"]
+                    else:
+                        break
+
+            root_id = ancestor_ids[-1] if ancestor_ids else run_id
+
+            family_sql = """
+            WITH RECURSIVE family(id) AS (
+                SELECT ?
+                UNION
+                SELECT r.run_id FROM runs r JOIN family f ON r.parent_run_id = f.id
+            )
+            SELECT
+                r.run_id, r.parent_run_id, r.task_id, r.status, r.failure_mode,
+                r.exit_code, r.duration_ms, r.created_at, r.finished_at, r.image, r.main_cmd, r.replay_count
+            FROM runs r
+            JOIN family f ON r.run_id = f.id
+            ORDER BY r.created_at ASC
+            """
+            async with conn.execute(family_sql, (root_id,)) as cursor:
+                rows = await cursor.fetchall()
+                return [
+                    RunSummary(
+                        run_id=r["run_id"],
+                        parent_run_id=r["parent_run_id"],
+                        task_id=r["task_id"],
+                        status=RunStatus(r["status"]),
+                        failure_mode=FailureMode(r["failure_mode"]) if r["failure_mode"] else None,
+                        exit_code=r["exit_code"],
+                        duration_ms=r["duration_ms"],
+                        created_at=datetime.fromisoformat(r["created_at"]),
+                        finished_at=datetime.fromisoformat(r["finished_at"]) if r["finished_at"] else None,
+                        image=r["image"],
+                        main_cmd=r["main_cmd"],
+                        replay_count=r["replay_count"] or 0,
+                    )
+                    for r in rows
+                ]
+
+
+# Global storage helper
+_default_storage: Optional[RunStorage] = None
+
+
+def get_storage(db_path: Optional[str] = None) -> RunStorage:
+    """Return default or custom storage repository."""
+    global _default_storage
+    if db_path is not None:
+        return RunStorage(db_path)
+    if _default_storage is None:
+        _default_storage = RunStorage()
+    return _default_storage
