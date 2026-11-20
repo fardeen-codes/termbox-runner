@@ -3,6 +3,7 @@ import { ansiToHtml } from './ansi_parser.js';
 import { renderLineageGraph } from './lineage_graph.js';
 import { openTemplatesDrawer } from './templates_drawer.js';
 import { renderArtifactsViewer } from './artifact_viewer.js';
+import { openDiffModal } from './diff_viewer.js';
 
 let currentFilter = '';
 let currentSearch = '';
@@ -177,6 +178,12 @@ window.termboxApp = {
     } catch (e) {
       alert('Failed to launch template: ' + e);
     }
+  },
+  openDiff: (runA, runB) => {
+    const container = document.getElementById('diff-modal-content');
+    if (container) openDiffModal(runA, runB, container);
+    const modal = document.getElementById('diff-modal');
+    if (modal) modal.style.display = 'flex';
   },
   openTemplates: () => {
     const container = document.getElementById('templates-modal-content');
