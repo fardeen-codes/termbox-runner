@@ -112,21 +112,41 @@ class DockerTaskExecutor(TaskExecutor):
             env.setdefault("TERMBOX_RUN_ID", manifest.run_id)
             env.setdefault("PYTHONUNBUFFERED", "1")
 
+            # Build security configurations
+            sec = limits.security
+            sec_opts = []
+            if sec.no_new_privileges:
+                sec_opts.append("no-new-privileges:true")
+            if sec.seccomp_profile:
+                sec_opts.append(f"seccomp={sec.seccomp_profile}")
+
+            create_kwargs = {
+                "image": image,
+                "command": ["sh", "-c", "tail -f /dev/null"],
+                "detach": True,
+                "mem_limit": mem_bytes,
+                "memswap_limit": mem_bytes,  # Disable swap to enforce memory cap strictly
+                "nano_cpus": int(cpu_quota * 1e9),
+                "pids_limit": pids_limit,
+                "network_mode": network_mode,
+                "environment": env,
+                "volumes": {temp_dir: {"bind": "/workspace", "mode": "rw"}},
+                "working_dir": "/workspace",
+                "name": f"termbox_{manifest.run_id}",
+                "labels": {"termbox.run_id": manifest.run_id},
+            }
+            if sec_opts:
+                create_kwargs["security_opt"] = sec_opts
+            if sec.drop_capabilities:
+                create_kwargs["cap_drop"] = sec.drop_capabilities
+            if sec.add_capabilities:
+                create_kwargs["cap_add"] = sec.add_capabilities
+            if sec.read_only_rootfs:
+                create_kwargs["read_only"] = True
+
             container = await asyncio.to_thread(
                 client.containers.create,
-                image=image,
-                command=["sh", "-c", "tail -f /dev/null"],
-                detach=True,
-                mem_limit=mem_bytes,
-                memswap_limit=mem_bytes,  # Disable swap to enforce memory cap strictly
-                nano_cpus=int(cpu_quota * 1e9),
-                pids_limit=pids_limit,
-                network_mode=network_mode,
-                environment=env,
-                volumes={temp_dir: {"bind": "/workspace", "mode": "rw"}},
-                working_dir="/workspace",
-                name=f"termbox_{manifest.run_id}",
-                labels={"termbox.run_id": manifest.run_id},
+                **create_kwargs,
             )
 
             manifest.container_id = container.id[:12]

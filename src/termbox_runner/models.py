@@ -56,6 +56,22 @@ def parse_memory_to_bytes(mem_str: str) -> int:
     return num
 
 
+class SecurityOptions(BaseModel):
+    """Hardened sandboxing security and privilege isolation options."""
+
+    read_only_rootfs: bool = Field(default=False, description="Mount root filesystem as read-only")
+    drop_capabilities: List[str] = Field(
+        default_factory=lambda: ["ALL"],
+        description="Linux capabilities to drop (e.g. ['ALL', 'NET_RAW', 'SYS_ADMIN'])",
+    )
+    add_capabilities: List[str] = Field(
+        default_factory=list,
+        description="Explicit Linux capabilities to retain (e.g. ['CHOWN'])",
+    )
+    no_new_privileges: bool = Field(default=True, description="Disallow acquiring additional privileges")
+    seccomp_profile: Optional[str] = Field(default=None, description="Custom seccomp profile JSON string or path")
+
+
 class ResourceLimits(BaseModel):
     """Resource constraints imposed on container execution."""
 
@@ -64,6 +80,7 @@ class ResourceLimits(BaseModel):
     pids_limit: int = Field(default=128, ge=16, le=4096, description="Max concurrent process count")
     network_mode: str = Field(default="none", description="Container network mode ('none', 'bridge', etc.)")
     timeout_seconds: float = Field(default=30.0, ge=1.0, le=600.0, description="Hard wall-clock timeout in seconds")
+    security: SecurityOptions = Field(default_factory=SecurityOptions, description="Security sandbox controls")
 
     @field_validator("mem_limit")
     @classmethod
