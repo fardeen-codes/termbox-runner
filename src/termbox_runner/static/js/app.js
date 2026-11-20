@@ -1,6 +1,7 @@
 import { TermboxAPI } from './api.js';
 import { ansiToHtml } from './ansi_parser.js';
 import { renderLineageGraph } from './lineage_graph.js';
+import { openTemplatesDrawer } from './templates_drawer.js';
 
 let currentFilter = '';
 let currentSearch = '';
@@ -160,6 +161,21 @@ window.termboxApp = {
     } catch (e) {
       alert('Replay failed: ' + e);
     }
+  },
+  launchTemplate: async (templateId) => {
+    try {
+      const res = await TermboxAPI.launchTemplate(templateId);
+      await fetchRuns();
+      window.termboxApp.inspectRun(res.run_id);
+    } catch (e) {
+      alert('Failed to launch template: ' + e);
+    }
+  },
+  openTemplates: () => {
+    const container = document.getElementById('templates-modal-content');
+    if (container) openTemplatesDrawer(container);
+    const modal = document.getElementById('templates-modal');
+    if (modal) modal.style.display = 'flex';
   },
 };
 
