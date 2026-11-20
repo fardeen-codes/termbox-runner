@@ -5,9 +5,11 @@ import { openTemplatesDrawer } from './templates_drawer.js';
 import { renderArtifactsViewer } from './artifact_viewer.js';
 import { openDiffModal } from './diff_viewer.js';
 import { openBatchRunner } from './batch_runner.js';
+import { debounce, extractUniqueTags } from './search_filter.js';
 
 let currentFilter = '';
 let currentSearch = '';
+let currentTag = '';
 let cachedRuns = [];
 let activeStream = null;
 
@@ -60,6 +62,7 @@ export async function fetchRuns() {
     const params = { limit: 100 };
     if (currentFilter) params.failure_mode = currentFilter;
     if (currentSearch) params.search = currentSearch;
+    if (currentTag) params.tag = currentTag;
     const data = await TermboxAPI.listRuns(params);
     cachedRuns = data.runs || [];
     renderRuns(cachedRuns);
@@ -186,6 +189,14 @@ window.termboxApp = {
     const modal = document.getElementById('diff-modal');
     if (modal) modal.style.display = 'flex';
   },
+  setTagFilter: (tag) => {
+    currentTag = tag === currentTag ? '' : tag;
+    fetchRuns();
+  },
+  onSearchInput: debounce((text) => {
+    currentSearch = text;
+    fetchRuns();
+  }, 250),
   openBatchModal: () => {
     const container = document.getElementById('batch-modal-content');
     if (container) openBatchRunner(container);
