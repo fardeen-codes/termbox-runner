@@ -6,6 +6,7 @@ import { renderArtifactsViewer } from './artifact_viewer.js';
 import { openDiffModal } from './diff_viewer.js';
 import { openBatchRunner } from './batch_runner.js';
 import { debounce, extractUniqueTags } from './search_filter.js';
+import { renderTelemetryCharts } from './metrics_chart.js';
 
 let currentFilter = '';
 let currentSearch = '';
@@ -154,10 +155,14 @@ window.termboxApp = {
             <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Extracted Artifacts</div>
             <div id="modal-artifacts-container"></div>
           </div>
+          <div style="margin-bottom: 14px;">
+            <div id="modal-telemetry-container"></div>
+          </div>
           <div class="terminal-box" id="modal-terminal-box">${ansiToHtml(run.combined_stdout) || '(no stdout)'}</div>
         `;
         renderLineageGraph(lineage, run.run_id, document.getElementById('modal-lineage-container'));
         renderArtifactsViewer(artifactsData.artifacts, run.run_id, document.getElementById('modal-artifacts-container'));
+        renderTelemetryCharts(run, document.getElementById('modal-telemetry-container'));
       }
       const modal = document.getElementById('run-detail-modal');
       if (modal) modal.style.display = 'flex';
