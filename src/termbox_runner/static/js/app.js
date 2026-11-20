@@ -1,8 +1,35 @@
 import { TermboxAPI } from './api.js';
+import { ansiToHtml } from './ansi_parser.js';
 
 let currentFilter = '';
 let currentSearch = '';
 let cachedRuns = [];
+let activeStream = null;
+
+export function streamLiveLogs(runId, terminalElement) {
+  if (activeStream) {
+    activeStream.close();
+    activeStream = null;
+  }
+  const evtSource = new EventSource(`/runs/${runId}/events`);
+  activeStream = evtSource;
+  evtSource.onmessage = (e) => {
+    try {
+      const data = JSON.parse(e.data);
+      if (data.type === 'step_finish' && data.payload.stdout) {
+        terminalElement.innerHTML += ansiToHtml(data.payload.stdout);
+        terminalElement.scrollTop = terminalElement.scrollHeight;
+      }
+      if (data.type === 'run_finish') {
+        evtSource.close();
+        activeStream = null;
+      }
+    } catch (err) {
+      console.error('Error handling SSE event', err);
+    }
+  };
+  return evtSource;
+}
 
 export async function checkHealth() {
   try {
@@ -107,7 +134,7 @@ window.termboxApp = {
             <span class="badge badge-${run.failure_mode || run.status}">${run.failure_mode || run.status}</span>
             <span class="mono" style="margin-left: 10px; color: var(--text-muted); font-size: 12px;">Exit: ${run.exit_code} | Duration: ${run.duration_ms}ms</span>
           </div>
-          <div class="terminal-box">${escapeHtml(run.combined_stdout) || '(no stdout)'}</div>
+          <div class="terminal-box" id="modal-terminal-box">${ansiToHtml(run.combined_stdout) || '(no stdout)'}</div>
         `;
       }
       const modal = document.getElementById('run-detail-modal');
