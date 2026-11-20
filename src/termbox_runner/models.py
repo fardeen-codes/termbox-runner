@@ -126,6 +126,10 @@ class TaskSubmission(BaseModel):
     main_cmd: str = Field(..., description="Main task or agent command to execute")
     verifier_cmd: Optional[str] = Field(default=None, description="Automated test/evaluator command (e.g. pytest)")
     files: Dict[str, str] = Field(default_factory=dict, description="Files to inject into the workspace path -> content")
+    extract_artifacts: List[str] = Field(
+        default_factory=list,
+        description="Glob patterns or relative paths to extract after execution (e.g. ['out/*', 'test-results.xml'])",
+    )
     environment: Dict[str, str] = Field(default_factory=dict, description="Custom environment variables")
     limits: ResourceLimits = Field(default_factory=ResourceLimits, description="Resource bounds for the run")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Arbitrary task metadata or tags")
@@ -152,6 +156,7 @@ class RunManifest(BaseModel):
     replay_count: int = 0
     peak_memory_bytes: int = 0
     average_cpu_percent: float = 0.0
+    artifacts: Dict[str, str] = Field(default_factory=dict, description="Artifact relative path -> file content")
 
 
 class ReplayRequest(BaseModel):

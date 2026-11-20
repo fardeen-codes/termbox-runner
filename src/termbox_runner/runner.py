@@ -62,6 +62,21 @@ class DockerTaskExecutor(TaskExecutor):
         except Exception:
             return False
 
+    def _collect_artifacts(self, target_dir: str, patterns: List[str]) -> Dict[str, str]:
+        """Collect file artifacts matching requested glob patterns."""
+        collected: Dict[str, str] = {}
+        target_path = Path(target_dir).resolve()
+        for pat in patterns:
+            clean_pat = pat.lstrip("/\\")
+            try:
+                for p in target_path.glob(clean_pat):
+                    if p.is_file():
+                        rel = str(p.relative_to(target_path))
+                        collected[rel] = p.read_text(encoding="utf-8", errors="replace")
+            except Exception:
+                pass
+        return collected
+
     def _write_files_to_dir(self, target_dir: str, files: Dict[str, str]) -> None:
         """Write task virtual files into the workspace directory."""
         target_path = Path(target_dir).resolve()
@@ -229,6 +244,9 @@ class DockerTaskExecutor(TaskExecutor):
                     manifest.steps.append(step_result)
                     break
 
+            if manifest.task.extract_artifacts:
+                manifest.artifacts = self._collect_artifacts(temp_dir, manifest.task.extract_artifacts)
+
         except Exception as exc:
             # Handle unexpected container/docker creation errors
             manifest.steps.append(
@@ -299,6 +317,21 @@ class MockTaskExecutor(TaskExecutor):
 
     def is_available(self) -> bool:
         return True
+
+    def _collect_artifacts(self, target_dir: str, patterns: List[str]) -> Dict[str, str]:
+        """Collect file artifacts matching requested glob patterns."""
+        collected: Dict[str, str] = {}
+        target_path = Path(target_dir).resolve()
+        for pat in patterns:
+            clean_pat = pat.lstrip("/\\")
+            try:
+                for p in target_path.glob(clean_pat):
+                    if p.is_file():
+                        rel = str(p.relative_to(target_path))
+                        collected[rel] = p.read_text(encoding="utf-8", errors="replace")
+            except Exception:
+                pass
+        return collected
 
     def _write_files_to_dir(self, target_dir: str, files: Dict[str, str]) -> None:
         target_path = Path(target_dir).resolve()
@@ -451,6 +484,9 @@ class MockTaskExecutor(TaskExecutor):
 
                 if step_result.exit_code not in (0, None):
                     break
+
+            if manifest.task.extract_artifacts:
+                manifest.artifacts = self._collect_artifacts(temp_dir, manifest.task.extract_artifacts)
 
         finally:
             shutil.rmtree(temp_dir, ignore_errors=True)

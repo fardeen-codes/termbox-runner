@@ -2,6 +2,7 @@
 
 import asyncio
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import List, Optional
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
 from fastapi.responses import HTMLResponse
@@ -204,3 +205,40 @@ async def get_lineage(run_id: str, storage: RunStorage = Depends(get_storage_dep
             detail=f"Run with id '{run_id}' not found.",
         )
     return await storage.get_replay_lineage(run_id)
+
+
+@app.get("/runs/{run_id}/artifacts")
+async def list_artifacts(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """List extracted artifacts and metadata for a run."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Run '{run_id}' not found.")
+    return {
+        "run_id": run_id,
+        "count": len(manifest.artifacts),
+        "artifacts": [{"path": k, "size_bytes": len(v.encode("utf-8"))} for k, v in manifest.artifacts.items()],
+    }
+
+
+@app.get("/runs/{run_id}/artifacts/{artifact_path:path}")
+async def get_artifact_file(
+    run_id: str,
+    artifact_path: str,
+    storage: RunStorage = Depends(get_storage_dependency),
+):
+    """Download specific artifact file extracted from the run workspace."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Run '{run_id}' not found.")
+    clean_path = artifact_path.lstrip("/\\")
+    if clean_path not in manifest.artifacts:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Artifact '{artifact_path}' not found in run '{run_id}'.",
+        )
+    content = manifest.artifacts[clean_path]
+    return Response(
+        content=content,
+        media_type="text/plain; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="{Path(clean_path).name}"'},
+    )

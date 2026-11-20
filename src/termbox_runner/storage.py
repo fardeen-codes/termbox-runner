@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS runs (
     replay_count INTEGER NOT NULL DEFAULT 0,
     peak_memory_bytes INTEGER NOT NULL DEFAULT 0,
     average_cpu_percent REAL NOT NULL DEFAULT 0.0,
+    artifacts_json TEXT NOT NULL DEFAULT '{}',
     FOREIGN KEY (parent_run_id) REFERENCES runs (run_id) ON DELETE SET NULL
 );
 
@@ -94,6 +95,10 @@ class RunStorage:
                 await conn.execute("ALTER TABLE runs ADD COLUMN average_cpu_percent REAL NOT NULL DEFAULT 0.0;")
             except Exception:
                 pass
+            try:
+                await conn.execute("ALTER TABLE runs ADD COLUMN artifacts_json TEXT NOT NULL DEFAULT '{}';")
+            except Exception:
+                pass
             await conn.commit()
 
     async def save_run(self, manifest: RunManifest) -> None:
@@ -102,6 +107,7 @@ class RunStorage:
         image = manifest.task.image or get_settings().default_docker_image
         task_json = manifest.task.model_dump_json()
         steps_json = json.dumps([s.model_dump() for s in manifest.steps])
+        artifacts_json = json.dumps(manifest.artifacts)
         created_at_str = manifest.created_at.isoformat()
         started_at_str = manifest.started_at.isoformat() if manifest.started_at else None
         finished_at_str = manifest.finished_at.isoformat() if manifest.finished_at else None
@@ -111,9 +117,10 @@ class RunStorage:
             run_id, parent_run_id, task_id, status, failure_mode, failure_reason,
             exit_code, duration_ms, created_at, started_at, finished_at,
             image, main_cmd, task_json, steps_json, combined_stdout,
-            combined_stderr, container_id, replay_count, peak_memory_bytes, average_cpu_percent
+            combined_stderr, container_id, replay_count, peak_memory_bytes, average_cpu_percent,
+            artifacts_json
         ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         ) ON CONFLICT(run_id) DO UPDATE SET
             status = excluded.status,
             failure_mode = excluded.failure_mode,
@@ -128,7 +135,8 @@ class RunStorage:
             container_id = excluded.container_id,
             replay_count = excluded.replay_count,
             peak_memory_bytes = excluded.peak_memory_bytes,
-            average_cpu_percent = excluded.average_cpu_percent
+            average_cpu_percent = excluded.average_cpu_percent,
+            artifacts_json = excluded.artifacts_json
         """
 
         params = (
@@ -153,6 +161,7 @@ class RunStorage:
             manifest.replay_count,
             manifest.peak_memory_bytes,
             manifest.average_cpu_percent,
+            artifacts_json,
         )
 
         async with self._lock:
@@ -175,6 +184,13 @@ class RunStorage:
                 steps_data = json.loads(row["steps_json"])
                 steps = [StepResult.model_validate(s) for s in steps_data]
 
+                artifacts = {}
+                if "artifacts_json" in row.keys() and row["artifacts_json"]:
+                    try:
+                        artifacts = json.loads(row["artifacts_json"])
+                    except Exception:
+                        artifacts = {}
+
                 return RunManifest(
                     run_id=row["run_id"],
                     parent_run_id=row["parent_run_id"],
@@ -194,6 +210,7 @@ class RunStorage:
                     replay_count=row["replay_count"] or 0,
                     peak_memory_bytes=row["peak_memory_bytes"] if "peak_memory_bytes" in row.keys() else 0,
                     average_cpu_percent=row["average_cpu_percent"] if "average_cpu_percent" in row.keys() else 0.0,
+                    artifacts=artifacts,
                 )
 
     async def list_runs(
