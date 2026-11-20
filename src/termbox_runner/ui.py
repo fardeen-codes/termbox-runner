@@ -698,23 +698,23 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       let payload = {};
       if (preset === 'pass') {
         payload = {
-          main_cmd: "python -c \"import math; print('Calculation result:', math.factorial(6))\"",
+          main_cmd: "python -c 'import math; print(math.factorial(6))'",
           limits: { timeout_seconds: 10, mem_limit: "256m" }
         };
       } else if (preset === 'assert') {
         payload = {
-          main_cmd: "python -c \"print('Running agent...')\"",
-          verifier_cmd: "python -c \"assert 10 == 20, 'Expected 10 to equal 20'\"",
+          main_cmd: "python -c 'print(42)'",
+          verifier_cmd: "python -c 'assert 10 == 20'",
           limits: { timeout_seconds: 10 }
         };
       } else if (preset === 'timeout') {
         payload = {
-          main_cmd: "python -c \"import time; print('Sleeping...'); time.sleep(10)\"",
+          main_cmd: "python -c 'import time; time.sleep(10)'",
           limits: { timeout_seconds: 2 }
         };
       } else if (preset === 'oom') {
         payload = {
-          main_cmd: "python -c \"b = bytearray(120 * 1024 * 1024)\"",
+          main_cmd: "python -c 'b = bytearray(120 * 1024 * 1024)'",
           limits: { mem_limit: "32m", timeout_seconds: 10 }
         };
       }
