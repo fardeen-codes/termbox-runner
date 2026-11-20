@@ -2,6 +2,7 @@ import { TermboxAPI } from './api.js';
 import { ansiToHtml } from './ansi_parser.js';
 import { renderLineageGraph } from './lineage_graph.js';
 import { openTemplatesDrawer } from './templates_drawer.js';
+import { renderArtifactsViewer } from './artifact_viewer.js';
 
 let currentFilter = '';
 let currentSearch = '';
@@ -124,9 +125,10 @@ window.termboxApp = {
   fetchRuns,
   inspectRun: async (runId) => {
     try {
-      const [run, lineage] = await Promise.all([
+      const [run, lineage, artifactsData] = await Promise.all([
         TermboxAPI.getRun(runId),
         TermboxAPI.getLineage(runId).catch(() => []),
+        TermboxAPI.listArtifacts(runId).catch(() => ({ artifacts: [] })),
       ]);
       const title = document.getElementById('modal-run-title');
       const content = document.getElementById('modal-run-content');
@@ -143,9 +145,14 @@ window.termboxApp = {
             <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Lineage History</div>
             <div id="modal-lineage-container"></div>
           </div>
+          <div style="margin-bottom: 14px;">
+            <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Extracted Artifacts</div>
+            <div id="modal-artifacts-container"></div>
+          </div>
           <div class="terminal-box" id="modal-terminal-box">${ansiToHtml(run.combined_stdout) || '(no stdout)'}</div>
         `;
         renderLineageGraph(lineage, run.run_id, document.getElementById('modal-lineage-container'));
+        renderArtifactsViewer(artifactsData.artifacts, run.run_id, document.getElementById('modal-artifacts-container'));
       }
       const modal = document.getElementById('run-detail-modal');
       if (modal) modal.style.display = 'flex';
