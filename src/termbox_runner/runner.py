@@ -8,7 +8,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import time
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from termbox_runner.classifier import classify_run
 from termbox_runner.config import get_settings
@@ -23,6 +23,35 @@ from termbox_runner.models import (
     StepResult,
     parse_memory_to_bytes,
 )
+
+_ACTIVE_CONTAINERS: Dict[str, Any] = {}
+_CANCELLED_RUNS: set = set()
+
+
+def register_active_container(run_id: str, container: Any) -> None:
+    _ACTIVE_CONTAINERS[run_id] = container
+
+
+def unregister_active_container(run_id: str) -> None:
+    _ACTIVE_CONTAINERS.pop(run_id, None)
+    _CANCELLED_RUNS.discard(run_id)
+
+
+def cancel_active_run(run_id: str) -> bool:
+    """Abort an actively running container by run_id."""
+    _CANCELLED_RUNS.add(run_id)
+    container = _ACTIVE_CONTAINERS.get(run_id)
+    if container:
+        try:
+            container.kill()
+        except Exception:
+            pass
+        return True
+    return False
+
+
+def is_run_cancelled(run_id: str) -> bool:
+    return run_id in _CANCELLED_RUNS
 
 
 class TaskExecutor(ABC):
@@ -168,10 +197,15 @@ class DockerTaskExecutor(TaskExecutor):
             )
 
             manifest.container_id = container.id[:12]
+            register_active_container(manifest.run_id, container)
             await asyncio.to_thread(container.start)
 
             # Execute each step sequentially with remaining wall-clock timeout budget
             for step_type, cmd in steps_plan:
+                if is_run_cancelled(manifest.run_id):
+                    manifest.status = RunStatus.CANCELLED
+                    manifest.failure_reason = "Run cancelled by client."
+                    break
                 elapsed_so_far = time.perf_counter() - start_time_mono
                 remaining_timeout = timeout_sec - elapsed_so_far
 
@@ -271,6 +305,7 @@ class DockerTaskExecutor(TaskExecutor):
                 )
             )
         finally:
+            unregister_active_container(manifest.run_id)
             # Guaranteed container stop and removal
             if container is not None:
                 try:

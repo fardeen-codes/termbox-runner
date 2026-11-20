@@ -2,7 +2,7 @@
 
 import asyncio
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Optional
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
@@ -161,6 +161,28 @@ async def get_run(run_id: str, storage: RunStorage = Depends(get_storage_depende
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Run with id '{run_id}' not found.",
         )
+    return manifest
+
+
+@app.post("/runs/{run_id}/cancel", response_model=RunManifest)
+async def cancel_run(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Cancel an active or queued task execution."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Run '{run_id}' not found.")
+    if manifest.status not in (RunStatus.QUEUED, RunStatus.RUNNING):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Run '{run_id}' is already finished with status '{manifest.status.value}'.",
+        )
+    from termbox_runner.runner import cancel_active_run
+
+    cancel_active_run(run_id)
+    manifest.status = RunStatus.CANCELLED
+    manifest.failure_mode = FailureMode.RUNTIME_ERROR
+    manifest.failure_reason = "Execution cancelled by client request."
+    manifest.finished_at = datetime.now(timezone.utc)
+    await storage.save_run(manifest)
     return manifest
 
 
