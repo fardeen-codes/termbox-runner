@@ -8,6 +8,7 @@ from typing import Dict, List, Optional
 import uuid
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
 from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 
 from termbox_runner.comparator import compare_runs
 from termbox_runner.config import get_settings
@@ -51,6 +52,10 @@ app = FastAPI(
     description="Deterministic sandboxed task runner and evaluation harness for coding/CLI agents",
     lifespan=lifespan,
 )
+
+static_dir = Path(__file__).parent / "static"
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 
 def get_storage_dependency() -> RunStorage:
