@@ -9,6 +9,7 @@ from fastapi.responses import HTMLResponse
 
 from termbox_runner.config import get_settings
 from termbox_runner.models import (
+    BenchmarkTemplate,
     FailureMode,
     HealthResponse,
     ReplayRequest,
@@ -20,6 +21,7 @@ from termbox_runner.models import (
 )
 from termbox_runner.runner import DockerTaskExecutor, TaskExecutor, get_executor
 from termbox_runner.storage import RunStorage, get_storage
+from termbox_runner.templates_catalog import get_benchmark_template, list_benchmark_templates
 from termbox_runner.ui import DASHBOARD_HTML
 
 _active_runs_count = 0
@@ -205,6 +207,41 @@ async def get_lineage(run_id: str, storage: RunStorage = Depends(get_storage_dep
             detail=f"Run with id '{run_id}' not found.",
         )
     return await storage.get_replay_lineage(run_id)
+
+
+@app.get("/templates", response_model=List[BenchmarkTemplate])
+async def get_templates():
+    """List available benchmark and verification task templates."""
+    return list_benchmark_templates()
+
+
+@app.get("/templates/{template_id}", response_model=BenchmarkTemplate)
+async def get_template(template_id: str):
+    """Fetch details of a specific benchmark template."""
+    tmpl = get_benchmark_template(template_id)
+    if not tmpl:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Benchmark template '{template_id}' not found.",
+        )
+    return tmpl
+
+
+@app.post("/templates/{template_id}/launch", response_model=RunManifest, status_code=status.HTTP_201_CREATED)
+async def launch_template(
+    template_id: str,
+    wait: bool = Query(default=True),
+    storage: RunStorage = Depends(get_storage_dependency),
+    executor: TaskExecutor = Depends(get_executor_dependency),
+):
+    """Instantiate and execute a benchmark template directly."""
+    tmpl = get_benchmark_template(template_id)
+    if not tmpl:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Benchmark template '{template_id}' not found.",
+        )
+    return await submit_run(task=tmpl.task, wait=wait, storage=storage, executor=executor)
 
 
 @app.get("/runs/{run_id}/artifacts")

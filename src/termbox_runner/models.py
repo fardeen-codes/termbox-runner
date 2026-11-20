@@ -193,6 +193,16 @@ class RunListResponse(BaseModel):
     runs: List[RunSummary]
 
 
+class BenchmarkTemplate(BaseModel):
+    """Pre-configured benchmark or evaluation template."""
+
+    id: str
+    name: str
+    category: str
+    description: str
+    task: TaskSubmission
+
+
 class HealthResponse(BaseModel):
     """System health and operational status."""
 
