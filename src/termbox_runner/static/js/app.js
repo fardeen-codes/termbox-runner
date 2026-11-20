@@ -4,6 +4,7 @@ import { renderLineageGraph } from './lineage_graph.js';
 import { openTemplatesDrawer } from './templates_drawer.js';
 import { renderArtifactsViewer } from './artifact_viewer.js';
 import { openDiffModal } from './diff_viewer.js';
+import { openBatchRunner } from './batch_runner.js';
 
 let currentFilter = '';
 let currentSearch = '';
@@ -185,7 +186,46 @@ window.termboxApp = {
     const modal = document.getElementById('diff-modal');
     if (modal) modal.style.display = 'flex';
   },
-  openTemplates: () => {
+  openBatchModal: () => {
+    const container = document.getElementById('batch-modal-content');
+    if (container) openBatchRunner(container);
+    const modal = document.getElementById('batch-modal');
+    if (modal) modal.style.display = 'flex';
+  },
+  submitBatchFromUI: async () => {
+    const name = document.getElementById('batch-name').value || 'batch_eval';
+    const limit = parseInt(document.getElementById('batch-concurrency').value || '4', 10);
+    const rawCmds = document.getElementById('batch-commands').value || '';
+    const commands = rawCmds.split('\n').map(c => c.trim()).filter(c => c.length > 0);
+    if (!commands.length) return alert('Please enter at least one command.');
+
+    const resArea = document.getElementById('batch-results-area');
+    if (resArea) resArea.innerHTML = '<div style="color: #60a5fa;">Running batch tasks...</div>';
+
+    try {
+      const res = await fetch('/batches', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          parallel_limit: limit,
+          tasks: commands.map(c => ({ main_cmd: c })),
+        }),
+      });
+      const data = await res.json();
+      if (resArea) {
+        resArea.innerHTML = `
+          <div style="background: var(--code-bg); padding: 12px; border-radius: 6px; border: 1px solid var(--card-border);">
+            <div style="font-weight: bold; margin-bottom: 6px;">Batch Complete: ${data.name}</div>
+            <div>Total: ${data.total_runs} | <span style="color:#10b981;">Passed: ${data.passed_count}</span> | <span style="color:#ef4444;">Failed: ${data.failed_count}</span></div>
+          </div>
+        `;
+      }
+      await fetchRuns();
+    } catch (e) {
+      alert('Batch launch failed: ' + e);
+    }
+  },
     const container = document.getElementById('templates-modal-content');
     if (container) openTemplatesDrawer(container);
     const modal = document.getElementById('templates-modal');
