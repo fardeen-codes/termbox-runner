@@ -12,6 +12,7 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from termbox_runner.comparator import compare_runs
 from termbox_runner.config import get_settings
 from termbox_runner.events import get_event_broker
+from termbox_runner.export import runs_to_jsonl, to_sarif
 from termbox_runner.models import (
     BatchSubmission,
     BatchSummary,
@@ -154,6 +155,23 @@ async def stream_run_events(run_id: str, storage: RunStorage = Depends(get_stora
         broker.subscribe(run_id),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "Connection": "keep-alive"},
+    )
+
+
+@app.get("/runs/export.jsonl")
+async def export_runs_jsonl(storage: RunStorage = Depends(get_storage_dependency)):
+    """Export all stored runs in JSONL (JSON Lines) dataset format."""
+    summaries, _ = await storage.list_runs(limit=1000)
+    full_runs = []
+    for s in summaries:
+        m = await storage.get_run(s.run_id)
+        if m:
+            full_runs.append(m)
+    lines = runs_to_jsonl(full_runs)
+    return Response(
+        content=lines,
+        media_type="application/x-jsonlines",
+        headers={"Content-Disposition": 'attachment; filename="runs.jsonl"'},
     )
 
 
@@ -371,6 +389,21 @@ async def launch_template(
             detail=f"Benchmark template '{template_id}' not found.",
         )
     return await submit_run(task=tmpl.task, wait=wait, storage=storage, executor=executor)
+
+
+@app.get("/runs/{run_id}/export")
+async def export_run(
+    run_id: str,
+    format: str = Query(default="json", pattern="^(json|sarif)$"),
+    storage: RunStorage = Depends(get_storage_dependency),
+):
+    """Export run manifest in JSON or standard SARIF v2.1.0 format."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Run '{run_id}' not found.")
+    if format == "sarif":
+        return to_sarif(manifest)
+    return manifest.model_dump()
 
 
 @app.get("/runs/{run_id}/artifacts")
