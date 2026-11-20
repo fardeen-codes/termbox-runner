@@ -206,6 +206,26 @@ class BenchmarkTemplate(BaseModel):
     task: TaskSubmission
 
 
+class BatchSubmission(BaseModel):
+    """Matrix or batch collection of tasks for concurrent execution."""
+
+    name: str = Field(default="batch_evaluation", description="Batch campaign name")
+    tasks: List[TaskSubmission] = Field(default_factory=list, description="List of tasks to evaluate")
+    parallel_limit: int = Field(default=4, ge=1, le=16, description="Concurrency limit")
+
+
+class BatchSummary(BaseModel):
+    """Aggregated outcome of a batch evaluation run."""
+
+    batch_id: str
+    name: str
+    total_runs: int
+    passed_count: int
+    failed_count: int
+    runs: List[RunSummary]
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
 class HealthResponse(BaseModel):
     """System health and operational status."""
 

@@ -4,13 +4,16 @@ import asyncio
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
+import uuid
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
 from fastapi.responses import HTMLResponse, StreamingResponse
 
 from termbox_runner.config import get_settings
 from termbox_runner.events import get_event_broker
 from termbox_runner.models import (
+    BatchSubmission,
+    BatchSummary,
     BenchmarkTemplate,
     FailureMode,
     HealthResponse,
@@ -253,6 +256,68 @@ async def get_lineage(run_id: str, storage: RunStorage = Depends(get_storage_dep
             detail=f"Run with id '{run_id}' not found.",
         )
     return await storage.get_replay_lineage(run_id)
+
+
+_BATCH_CACHE: Dict[str, BatchSummary] = {}
+
+
+@app.post("/batches", response_model=BatchSummary, status_code=status.HTTP_201_CREATED)
+async def submit_batch(
+    batch: BatchSubmission,
+    storage: RunStorage = Depends(get_storage_dependency),
+    executor: TaskExecutor = Depends(get_executor_dependency),
+):
+    """Execute a batch of benchmark tasks concurrently with a bounded semaphore."""
+    batch_id = f"batch_{uuid.uuid4().hex[:8]}"
+    sem = asyncio.Semaphore(batch.parallel_limit)
+
+    async def _execute_single(task: TaskSubmission) -> RunSummary:
+        async with sem:
+            manifest = RunManifest(task=task, status=RunStatus.QUEUED)
+            await storage.save_run(manifest)
+            finished = await executor.execute(manifest)
+            await storage.save_run(finished)
+            return RunSummary(
+                run_id=finished.run_id,
+                parent_run_id=finished.parent_run_id,
+                task_id=finished.task.task_id,
+                status=finished.status,
+                failure_mode=finished.failure_mode,
+                exit_code=finished.exit_code,
+                duration_ms=finished.duration_ms,
+                created_at=finished.created_at,
+                finished_at=finished.finished_at,
+                image=finished.task.image or get_settings().default_docker_image,
+                main_cmd=finished.task.main_cmd,
+                replay_count=finished.replay_count,
+                tags=finished.task.tags,
+            )
+
+    run_summaries = await asyncio.gather(*[_execute_single(t) for t in batch.tasks])
+    passed = sum(1 for r in run_summaries if r.failure_mode == FailureMode.PASSED)
+    failed = len(run_summaries) - passed
+
+    summary = BatchSummary(
+        batch_id=batch_id,
+        name=batch.name,
+        total_runs=len(run_summaries),
+        passed_count=passed,
+        failed_count=failed,
+        runs=run_summaries,
+    )
+    _BATCH_CACHE[batch_id] = summary
+    return summary
+
+
+@app.get("/batches/{batch_id}", response_model=BatchSummary)
+async def get_batch(batch_id: str):
+    """Retrieve execution status and summary of a task batch."""
+    if batch_id not in _BATCH_CACHE:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Batch '{batch_id}' not found.",
+        )
+    return _BATCH_CACHE[batch_id]
 
 
 @app.get("/templates", response_model=List[BenchmarkTemplate])
