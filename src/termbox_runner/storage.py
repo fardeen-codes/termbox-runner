@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS runs (
     combined_stderr TEXT NOT NULL DEFAULT '',
     container_id TEXT,
     replay_count INTEGER NOT NULL DEFAULT 0,
+    peak_memory_bytes INTEGER NOT NULL DEFAULT 0,
+    average_cpu_percent REAL NOT NULL DEFAULT 0.0,
     FOREIGN KEY (parent_run_id) REFERENCES runs (run_id) ON DELETE SET NULL
 );
 
@@ -79,10 +81,19 @@ class RunStorage:
                 self._conn = None
 
     async def init_db(self) -> None:
-        """Create database tables and indexes if they do not exist."""
+        """Create database tables and indexes if they do not exist, and apply migrations."""
         conn = await self.get_connection()
         async with self._lock:
             await conn.executescript(SCHEMA_SQL)
+            # Safe table migration for newly added columns
+            try:
+                await conn.execute("ALTER TABLE runs ADD COLUMN peak_memory_bytes INTEGER NOT NULL DEFAULT 0;")
+            except Exception:
+                pass
+            try:
+                await conn.execute("ALTER TABLE runs ADD COLUMN average_cpu_percent REAL NOT NULL DEFAULT 0.0;")
+            except Exception:
+                pass
             await conn.commit()
 
     async def save_run(self, manifest: RunManifest) -> None:
@@ -100,9 +111,9 @@ class RunStorage:
             run_id, parent_run_id, task_id, status, failure_mode, failure_reason,
             exit_code, duration_ms, created_at, started_at, finished_at,
             image, main_cmd, task_json, steps_json, combined_stdout,
-            combined_stderr, container_id, replay_count
+            combined_stderr, container_id, replay_count, peak_memory_bytes, average_cpu_percent
         ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         ) ON CONFLICT(run_id) DO UPDATE SET
             status = excluded.status,
             failure_mode = excluded.failure_mode,
@@ -115,7 +126,9 @@ class RunStorage:
             combined_stdout = excluded.combined_stdout,
             combined_stderr = excluded.combined_stderr,
             container_id = excluded.container_id,
-            replay_count = excluded.replay_count
+            replay_count = excluded.replay_count,
+            peak_memory_bytes = excluded.peak_memory_bytes,
+            average_cpu_percent = excluded.average_cpu_percent
         """
 
         params = (
@@ -138,6 +151,8 @@ class RunStorage:
             manifest.combined_stderr,
             manifest.container_id,
             manifest.replay_count,
+            manifest.peak_memory_bytes,
+            manifest.average_cpu_percent,
         )
 
         async with self._lock:
@@ -177,6 +192,8 @@ class RunStorage:
                     combined_stderr=row["combined_stderr"] or "",
                     container_id=row["container_id"],
                     replay_count=row["replay_count"] or 0,
+                    peak_memory_bytes=row["peak_memory_bytes"] if "peak_memory_bytes" in row.keys() else 0,
+                    average_cpu_percent=row["average_cpu_percent"] if "average_cpu_percent" in row.keys() else 0.0,
                 )
 
     async def list_runs(

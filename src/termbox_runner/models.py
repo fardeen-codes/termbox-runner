@@ -77,6 +77,15 @@ class ResourceLimits(BaseModel):
         return v
 
 
+class ResourceUsage(BaseModel):
+    """Resource consumption metrics captured during execution."""
+
+    cpu_percent: float = Field(default=0.0, description="Estimated CPU core utilization percentage")
+    memory_peak_bytes: int = Field(default=0, description="Peak memory consumption in bytes")
+    io_read_bytes: int = Field(default=0, description="Disk/volume bytes read")
+    io_write_bytes: int = Field(default=0, description="Disk/volume bytes written")
+
+
 class StepResult(BaseModel):
     """Execution telemetry captured for an individual step."""
 
@@ -88,6 +97,7 @@ class StepResult(BaseModel):
     duration_ms: float = 0.0
     oom_killed: bool = False
     timed_out: bool = False
+    resource_usage: Optional[ResourceUsage] = None
 
 
 class TaskSubmission(BaseModel):
@@ -123,6 +133,8 @@ class RunManifest(BaseModel):
     combined_stderr: str = ""
     container_id: Optional[str] = None
     replay_count: int = 0
+    peak_memory_bytes: int = 0
+    average_cpu_percent: float = 0.0
 
 
 class ReplayRequest(BaseModel):
