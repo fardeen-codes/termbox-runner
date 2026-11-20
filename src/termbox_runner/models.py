@@ -131,6 +131,7 @@ class TaskSubmission(BaseModel):
         description="Glob patterns or relative paths to extract after execution (e.g. ['out/*', 'test-results.xml'])",
     )
     environment: Dict[str, str] = Field(default_factory=dict, description="Custom environment variables")
+    tags: List[str] = Field(default_factory=list, description="Categorization tags, e.g. ['smoke', 'eval', 'pr-123']")
     limits: ResourceLimits = Field(default_factory=ResourceLimits, description="Resource bounds for the run")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Arbitrary task metadata or tags")
 
@@ -184,6 +185,7 @@ class RunSummary(BaseModel):
     image: str
     main_cmd: str
     replay_count: int = 0
+    tags: List[str] = Field(default_factory=list)
 
 
 class RunListResponse(BaseModel):

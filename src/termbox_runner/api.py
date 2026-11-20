@@ -2,6 +2,7 @@
 
 import asyncio
 from contextlib import asynccontextmanager
+from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
@@ -113,15 +114,23 @@ async def list_runs(
     status: Optional[RunStatus] = Query(default=None, description="Filter by run status"),
     failure_mode: Optional[FailureMode] = Query(default=None, description="Filter by failure mode"),
     parent_run_id: Optional[str] = Query(default=None, description="Filter by parent run lineage"),
+    tag: Optional[str] = Query(default=None, description="Filter by task tag"),
+    search: Optional[str] = Query(default=None, description="Fuzzy search across command, task ID, and diagnostics"),
+    since: Optional[datetime] = Query(default=None, description="Filter runs created on or after this timestamp"),
+    until: Optional[datetime] = Query(default=None, description="Filter runs created on or before this timestamp"),
     limit: int = Query(default=50, ge=1, le=200, description="Max runs to return"),
     offset: int = Query(default=0, ge=0, description="Offset for pagination"),
     storage: RunStorage = Depends(get_storage_dependency),
 ):
-    """List executions with optional filtering by status or failure mode."""
+    """List executions with optional filtering by status, failure mode, tags, or search string."""
     summaries, total = await storage.list_runs(
         status=status,
         failure_mode=failure_mode,
         parent_run_id=parent_run_id,
+        tag=tag,
+        search=search,
+        since=since,
+        until=until,
         limit=limit,
         offset=offset,
     )

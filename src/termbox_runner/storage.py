@@ -218,10 +218,14 @@ class RunStorage:
         status: Optional[RunStatus] = None,
         failure_mode: Optional[FailureMode] = None,
         parent_run_id: Optional[str] = None,
+        tag: Optional[str] = None,
+        search: Optional[str] = None,
+        since: Optional[datetime] = None,
+        until: Optional[datetime] = None,
         limit: int = 50,
         offset: int = 0,
     ) -> Tuple[List[RunSummary], int]:
-        """Query run summaries with optional filtering and pagination."""
+        """Query run summaries with optional filtering, search, and pagination."""
         conn = await self.get_connection()
         clauses = []
         params: List[object] = []
@@ -235,6 +239,19 @@ class RunStorage:
         if parent_run_id is not None:
             clauses.append("parent_run_id = ?")
             params.append(parent_run_id)
+        if tag:
+            clauses.append("task_json LIKE ?")
+            params.append(f'%"{tag}"%')
+        if search:
+            clauses.append("(run_id LIKE ? OR main_cmd LIKE ? OR task_id LIKE ? OR failure_reason LIKE ?)")
+            pat = f"%{search}%"
+            params.extend([pat, pat, pat, pat])
+        if since:
+            clauses.append("created_at >= ?")
+            params.append(since.isoformat())
+        if until:
+            clauses.append("created_at <= ?")
+            params.append(until.isoformat())
 
         where_str = f" WHERE {' AND '.join(clauses)}" if clauses else ""
 
@@ -242,7 +259,7 @@ class RunStorage:
         select_sql = f"""
         SELECT
             run_id, parent_run_id, task_id, status, failure_mode,
-            exit_code, duration_ms, created_at, finished_at, image, main_cmd, replay_count
+            exit_code, duration_ms, created_at, finished_at, image, main_cmd, replay_count, task_json
         FROM runs{where_str}
         ORDER BY created_at DESC
         LIMIT ? OFFSET ?
@@ -256,23 +273,31 @@ class RunStorage:
             list_params = tuple(params + [limit, offset])
             async with conn.execute(select_sql, list_params) as cursor:
                 rows = await cursor.fetchall()
-                summaries = [
-                    RunSummary(
-                        run_id=r["run_id"],
-                        parent_run_id=r["parent_run_id"],
-                        task_id=r["task_id"],
-                        status=RunStatus(r["status"]),
-                        failure_mode=FailureMode(r["failure_mode"]) if r["failure_mode"] else None,
-                        exit_code=r["exit_code"],
-                        duration_ms=r["duration_ms"],
-                        created_at=datetime.fromisoformat(r["created_at"]),
-                        finished_at=datetime.fromisoformat(r["finished_at"]) if r["finished_at"] else None,
-                        image=r["image"],
-                        main_cmd=r["main_cmd"],
-                        replay_count=r["replay_count"] or 0,
+                summaries = []
+                for r in rows:
+                    row_tags = []
+                    if "task_json" in r.keys() and r["task_json"]:
+                        try:
+                            row_tags = json.loads(r["task_json"]).get("tags", [])
+                        except Exception:
+                            row_tags = []
+                    summaries.append(
+                        RunSummary(
+                            run_id=r["run_id"],
+                            parent_run_id=r["parent_run_id"],
+                            task_id=r["task_id"],
+                            status=RunStatus(r["status"]),
+                            failure_mode=FailureMode(r["failure_mode"]) if r["failure_mode"] else None,
+                            exit_code=r["exit_code"],
+                            duration_ms=r["duration_ms"],
+                            created_at=datetime.fromisoformat(r["created_at"]),
+                            finished_at=datetime.fromisoformat(r["finished_at"]) if r["finished_at"] else None,
+                            image=r["image"],
+                            main_cmd=r["main_cmd"],
+                            replay_count=r["replay_count"] or 0,
+                            tags=row_tags,
+                        )
                     )
-                    for r in rows
-                ]
 
         return summaries, total
 
