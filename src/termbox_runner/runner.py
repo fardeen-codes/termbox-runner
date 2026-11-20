@@ -12,6 +12,7 @@ from typing import Dict, List, Optional, Tuple
 
 from termbox_runner.classifier import classify_run
 from termbox_runner.config import get_settings
+from termbox_runner.events import get_event_broker
 from termbox_runner.models import (
     CommandStep,
     FailureMode,
@@ -103,6 +104,8 @@ class DockerTaskExecutor(TaskExecutor):
         manifest.status = RunStatus.RUNNING
         manifest.started_at = datetime.now(timezone.utc)
         start_time_mono = time.perf_counter()
+        broker = get_event_broker()
+        await broker.publish(manifest.run_id, "run_start", {"main_cmd": manifest.task.main_cmd})
 
         # Temporary workspace for mounted files
         temp_dir = tempfile.mkdtemp(prefix=f"termbox_{manifest.run_id}_")
@@ -229,6 +232,11 @@ class DockerTaskExecutor(TaskExecutor):
                         step_result.resource_usage = ResourceUsage(memory_peak_bytes=1024 * 1024)
 
                     manifest.steps.append(step_result)
+                    await broker.publish(
+                        manifest.run_id,
+                        "step_finish",
+                        {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                    )
 
                     # Stop pipeline if step failed or was killed
                     if step_result.exit_code not in (0, None) or step_result.oom_killed:
@@ -242,6 +250,11 @@ class DockerTaskExecutor(TaskExecutor):
                     step_result.exit_code = 124
                     step_result.stderr = f"Command timed out after {round(remaining_timeout, 2)}s."
                     manifest.steps.append(step_result)
+                    await broker.publish(
+                        manifest.run_id,
+                        "step_finish",
+                        {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                    )
                     break
 
             if manifest.task.extract_artifacts:
@@ -309,6 +322,13 @@ class DockerTaskExecutor(TaskExecutor):
         manifest.failure_reason = reason
         manifest.status = RunStatus.COMPLETED if failure_mode == FailureMode.PASSED else RunStatus.FAILED
 
+        await broker.publish(
+            manifest.run_id,
+            "run_finish",
+            {"status": manifest.status.value, "failure_mode": failure_mode.value},
+        )
+        await broker.close_stream(manifest.run_id)
+
         return manifest
 
 
@@ -351,6 +371,8 @@ class MockTaskExecutor(TaskExecutor):
         manifest.started_at = datetime.now(timezone.utc)
         manifest.container_id = f"mock_{manifest.run_id[:8]}"
         start_mono = time.perf_counter()
+        broker = get_event_broker()
+        await broker.publish(manifest.run_id, "run_start", {"main_cmd": manifest.task.main_cmd})
 
         temp_dir = tempfile.mkdtemp(prefix=f"termbox_mock_{manifest.run_id}_")
         self._write_files_to_dir(temp_dir, manifest.task.files)
@@ -378,6 +400,11 @@ class MockTaskExecutor(TaskExecutor):
                     step_result.stdout = f"Executed {cmd} successfully."
                     step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
                     manifest.steps.append(step_result)
+                    await broker.publish(
+                        manifest.run_id,
+                        "step_finish",
+                        {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                    )
                     continue
 
                 if mock_behavior == "assertion_failed":
@@ -386,12 +413,22 @@ class MockTaskExecutor(TaskExecutor):
                         step_result.stdout = f"Step {step_type.value} completed."
                         step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
                         manifest.steps.append(step_result)
+                        await broker.publish(
+                            manifest.run_id,
+                            "step_finish",
+                            {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                        )
                         continue
                     elif step_type == CommandStep.VERIFIER:
                         step_result.exit_code = 1
                         step_result.stdout = "FAILED tests/test_eval.py::test_case - AssertionError: 2 != 3\n1 failed in 0.05s"
                         step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
                         manifest.steps.append(step_result)
+                        await broker.publish(
+                            manifest.run_id,
+                            "step_finish",
+                            {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                        )
                         break
 
                 cmd_lower = cmd.lower()
@@ -425,6 +462,11 @@ class MockTaskExecutor(TaskExecutor):
                     step_result.stderr = f"Step timed out after {timeout_sec}s."
                     step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
                     manifest.steps.append(step_result)
+                    await broker.publish(
+                        manifest.run_id,
+                        "step_finish",
+                        {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                    )
                     break
 
                 if is_oom:
@@ -434,6 +476,11 @@ class MockTaskExecutor(TaskExecutor):
                     step_result.stderr = "Killed (Out of memory)"
                     step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
                     manifest.steps.append(step_result)
+                    await broker.publish(
+                        manifest.run_id,
+                        "step_finish",
+                        {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                    )
                     break
 
                 if is_setup_fail:
@@ -441,6 +488,11 @@ class MockTaskExecutor(TaskExecutor):
                     step_result.stderr = "Setup command failed: missing package or syntax error"
                     step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
                     manifest.steps.append(step_result)
+                    await broker.publish(
+                        manifest.run_id,
+                        "step_finish",
+                        {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                    )
                     break
 
                 if is_assert_fail:
@@ -448,6 +500,11 @@ class MockTaskExecutor(TaskExecutor):
                     step_result.stdout = "FAILED tests/test_eval.py::test_case - AssertionError: 2 != 3\n1 failed in 0.05s"
                     step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
                     manifest.steps.append(step_result)
+                    await broker.publish(
+                        manifest.run_id,
+                        "step_finish",
+                        {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                    )
                     break
 
                 if is_runtime_fail:
@@ -455,6 +512,11 @@ class MockTaskExecutor(TaskExecutor):
                     step_result.stderr = "Traceback (most recent call last):\n  RuntimeError: Task computation failed"
                     step_result.duration_ms = round((time.perf_counter() - step_start) * 1000.0, 2)
                     manifest.steps.append(step_result)
+                    await broker.publish(
+                        manifest.run_id,
+                        "step_finish",
+                        {"step": step_type.value, "exit_code": step_result.exit_code, "stdout": step_result.stdout},
+                    )
                     break
 
                 # Execute local safe command in temp directory
@@ -516,6 +578,13 @@ class MockTaskExecutor(TaskExecutor):
         manifest.failure_mode = failure_mode
         manifest.failure_reason = reason
         manifest.status = RunStatus.COMPLETED if failure_mode == FailureMode.PASSED else RunStatus.FAILED
+
+        await broker.publish(
+            manifest.run_id,
+            "run_finish",
+            {"status": manifest.status.value, "failure_mode": failure_mode.value},
+        )
+        await broker.close_stream(manifest.run_id)
 
         return manifest
 

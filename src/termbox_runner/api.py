@@ -6,9 +6,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 
 from termbox_runner.config import get_settings
+from termbox_runner.events import get_event_broker
 from termbox_runner.models import (
     BenchmarkTemplate,
     FailureMode,
@@ -135,6 +136,20 @@ async def list_runs(
         offset=offset,
     )
     return RunListResponse(total=total, runs=summaries)
+
+
+@app.get("/runs/{run_id}/events")
+async def stream_run_events(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Stream execution telemetry and step events via Server-Sent Events (SSE)."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Run '{run_id}' not found.")
+    broker = get_event_broker()
+    return StreamingResponse(
+        broker.subscribe(run_id),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "Connection": "keep-alive"},
+    )
 
 
 @app.get("/runs/{run_id}", response_model=RunManifest)
