@@ -31,6 +31,7 @@ from termbox_runner.runner import DockerTaskExecutor, TaskExecutor, get_executor
 from termbox_runner.storage import RunStorage, get_storage
 from termbox_runner.templates_catalog import get_benchmark_template, list_benchmark_templates
 from termbox_runner.ui import DASHBOARD_HTML
+from termbox_runner.webhooks import dispatch_webhook
 
 _active_runs_count = 0
 
@@ -87,6 +88,8 @@ async def _run_in_background(manifest: RunManifest, executor: TaskExecutor, stor
     try:
         manifest = await executor.execute(manifest)
         await storage.save_run(manifest)
+        if manifest.task.webhook_url:
+            asyncio.create_task(dispatch_webhook(manifest.task.webhook_url, manifest))
     finally:
         _active_runs_count = max(0, _active_runs_count - 1)
 
@@ -108,6 +111,8 @@ async def submit_run(
         try:
             manifest = await executor.execute(manifest)
             await storage.save_run(manifest)
+            if manifest.task.webhook_url:
+                asyncio.create_task(dispatch_webhook(manifest.task.webhook_url, manifest))
         finally:
             _active_runs_count = max(0, _active_runs_count - 1)
         return manifest
