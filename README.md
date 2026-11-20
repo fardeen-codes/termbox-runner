@@ -270,6 +270,72 @@ curl -s http://localhost:8000/runs/run_oom123456789/lineage | jq .
 ```bash
 # Filter only OOM killed executions
 curl -s "http://localhost:8000/runs?failure_mode=OOM_KILLED&limit=10" | jq .
+
+# Search by keyword and tags
+curl -s "http://localhost:8000/runs?search=calc&tag=eval" | jq .
+```
+
+### 9. Live Event Streaming (SSE)
+
+Stream step phase transitions and stdout chunks in real-time:
+
+```bash
+curl -N http://localhost:8000/runs/run_a1b2c3d4e5f6/events
+```
+
+### 10. Run Comparison & Output Diffing
+
+Compare telemetry and outputs between any two runs:
+
+```bash
+curl -s http://localhost:8000/runs/run_a1/diff/run_b2 | jq .
+```
+
+### 11. Artifact Extraction & Download
+
+```bash
+# List extracted files
+curl -s http://localhost:8000/runs/run_a1/artifacts | jq .
+
+# Download specific artifact
+curl -O http://localhost:8000/runs/run_a1/artifacts/summary.json
+```
+
+### 12. Benchmark Suite Catalog & One-Click Launch
+
+```bash
+# List built-in benchmark templates
+curl -s http://localhost:8000/templates | jq .
+
+# Launch HumanEval benchmark template directly
+curl -s -X POST http://localhost:8000/templates/humaneval-py/launch | jq .
+```
+
+### 13. Batch Matrix Campaign
+
+Submit multiple tasks evaluated concurrently with bounded parallelism:
+
+```bash
+curl -s -X POST http://localhost:8000/batches \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "matrix-benchmark",
+    "parallel_limit": 4,
+    "tasks": [
+      {"main_cmd": "python -c \"print(10)\""},
+      {"main_cmd": "python -c \"print(20)\""}
+    ]
+  }' | jq .
+```
+
+### 14. SARIF v2.1.0 and JSONL Export
+
+```bash
+# Export run as standard SARIF report (for GitHub Actions / code scanning)
+curl -s "http://localhost:8000/runs/run_a1/export?format=sarif" | jq .
+
+# Export all runs as JSON Lines
+curl -s http://localhost:8000/runs/export.jsonl -o runs.jsonl
 ```
 
 ---
