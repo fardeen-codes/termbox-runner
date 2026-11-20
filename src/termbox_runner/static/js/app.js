@@ -1,5 +1,6 @@
 import { TermboxAPI } from './api.js';
 import { ansiToHtml } from './ansi_parser.js';
+import { renderLineageGraph } from './lineage_graph.js';
 
 let currentFilter = '';
 let currentSearch = '';
@@ -122,7 +123,10 @@ window.termboxApp = {
   fetchRuns,
   inspectRun: async (runId) => {
     try {
-      const run = await TermboxAPI.getRun(runId);
+      const [run, lineage] = await Promise.all([
+        TermboxAPI.getRun(runId),
+        TermboxAPI.getLineage(runId).catch(() => []),
+      ]);
       const title = document.getElementById('modal-run-title');
       const content = document.getElementById('modal-run-content');
       const replayBtn = document.getElementById('btn-modal-replay');
@@ -134,8 +138,13 @@ window.termboxApp = {
             <span class="badge badge-${run.failure_mode || run.status}">${run.failure_mode || run.status}</span>
             <span class="mono" style="margin-left: 10px; color: var(--text-muted); font-size: 12px;">Exit: ${run.exit_code} | Duration: ${run.duration_ms}ms</span>
           </div>
+          <div style="margin-bottom: 14px;">
+            <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Lineage History</div>
+            <div id="modal-lineage-container"></div>
+          </div>
           <div class="terminal-box" id="modal-terminal-box">${ansiToHtml(run.combined_stdout) || '(no stdout)'}</div>
         `;
+        renderLineageGraph(lineage, run.run_id, document.getElementById('modal-lineage-container'));
       }
       const modal = document.getElementById('run-detail-modal');
       if (modal) modal.style.display = 'flex';
