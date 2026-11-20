@@ -7,6 +7,7 @@ import { openDiffModal } from './diff_viewer.js';
 import { openBatchRunner } from './batch_runner.js';
 import { debounce, extractUniqueTags } from './search_filter.js';
 import { renderTelemetryCharts } from './metrics_chart.js';
+import { initKeyboardShortcuts } from './shortcuts.js';
 
 let currentFilter = '';
 let currentSearch = '';
@@ -252,5 +253,6 @@ window.termboxApp = {
 document.addEventListener('DOMContentLoaded', () => {
   checkHealth();
   fetchRuns();
+  initKeyboardShortcuts();
   setInterval(fetchRuns, 8000);
 });
