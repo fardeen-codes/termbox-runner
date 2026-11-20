@@ -9,6 +9,7 @@ import uuid
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
 from fastapi.responses import HTMLResponse, StreamingResponse
 
+from termbox_runner.comparator import compare_runs
 from termbox_runner.config import get_settings
 from termbox_runner.events import get_event_broker
 from termbox_runner.models import (
@@ -18,6 +19,7 @@ from termbox_runner.models import (
     FailureMode,
     HealthResponse,
     ReplayRequest,
+    RunDiffResult,
     RunListResponse,
     RunManifest,
     RunStatus,
@@ -244,6 +246,22 @@ async def replay_run(
     else:
         asyncio.create_task(_run_in_background(replayed_manifest, executor, storage))
         return replayed_manifest
+
+
+@app.get("/runs/{run_id}/diff/{other_run_id}", response_model=RunDiffResult)
+async def get_run_diff(
+    run_id: str,
+    other_run_id: str,
+    storage: RunStorage = Depends(get_storage_dependency),
+):
+    """Compute differential telemetry and unified diff between two runs."""
+    run_a = await storage.get_run(run_id)
+    if not run_a:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Run '{run_id}' not found.")
+    run_b = await storage.get_run(other_run_id)
+    if not run_b:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Run '{other_run_id}' not found.")
+    return compare_runs(run_a, run_b)
 
 
 @app.get("/runs/{run_id}/lineage", response_model=List[RunSummary])

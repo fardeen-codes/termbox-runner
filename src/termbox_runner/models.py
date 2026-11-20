@@ -3,7 +3,7 @@
 from datetime import datetime, timezone
 from enum import Enum
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import uuid
 from pydantic import BaseModel, Field, field_validator
 
@@ -224,6 +224,22 @@ class BatchSummary(BaseModel):
     failed_count: int
     runs: List[RunSummary]
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class RunDiffResult(BaseModel):
+    """Comparative differential between two sandbox runs."""
+
+    run_a_id: str
+    run_b_id: str
+    status_changed: bool
+    failure_mode_a: Optional[FailureMode] = None
+    failure_mode_b: Optional[FailureMode] = None
+    exit_code_diff: Tuple[Optional[int], Optional[int]]
+    duration_diff_ms: float
+    peak_memory_diff_bytes: int
+    stdout_unified_diff: str
+    stderr_unified_diff: str
+    command_diff: Tuple[str, str]
 
 
 class HealthResponse(BaseModel):
