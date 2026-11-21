@@ -704,3 +704,9 @@ def is_file_within_size_limit(file_path: str, max_bytes: int = MAX_ARTIFACT_SIZE
         return os.path.getsize(file_path) <= max_bytes
     except OSError:
         return False
+
+def detect_artifact_mime_type(filename: str) -> str:
+    """Determine MIME type for extracted artifact."""
+    import mimetypes
+    mime, _ = mimetypes.guess_type(filename)
+    return mime or "application/octet-stream"
