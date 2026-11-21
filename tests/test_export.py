@@ -43,3 +43,21 @@ async def test_export_api_endpoints(async_client: AsyncClient):
     jsonl_res = await async_client.get("/runs/export.jsonl")
     assert jsonl_res.status_code == 200
     assert "test_export" in jsonl_res.text
+
+
+def test_junit_and_csv_exports():
+    from termbox_runner.export import build_junit_xml, export_run_to_markdown, export_github_step_summary
+    from termbox_runner.models import TaskSubmission, RunManifest, FailureMode
+    
+    task = TaskSubmission(main_cmd="pytest")
+    manifest = RunManifest(task=task, exit_code=0, failure_mode=FailureMode.PASSED, duration_ms=450.0)
+    
+    xml = build_junit_xml(manifest)
+    assert 'failures="0"' in xml
+    assert 'name="termbox"' in xml
+
+    md = export_run_to_markdown(manifest)
+    assert "# Run Execution Report" in md
+
+    gh = export_github_step_summary(manifest)
+    assert "✅" in gh
