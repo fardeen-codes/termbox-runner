@@ -45,3 +45,13 @@ async def test_artifact_api_endpoints(async_client: AsyncClient):
     # 404 for missing artifact
     missing_res = await async_client.get(f"/runs/{run_id}/artifacts/does_not_exist.txt")
     assert missing_res.status_code == 404
+
+
+def test_artifact_helpers():
+    from termbox_runner.runner import detect_artifact_mime_type, is_glob_pattern, is_file_within_size_limit
+
+    assert "json" in detect_artifact_mime_type("results.json")
+    assert "xml" in detect_artifact_mime_type("report.xml")
+
+    assert is_glob_pattern("*.py") is True
+    assert is_glob_pattern("src/main.py") is False
