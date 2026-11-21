@@ -120,3 +120,28 @@ async def test_replay_lineage_tracking(test_storage: RunStorage):
     updated_root = await test_storage.get_run(root.run_id)
     assert updated_root is not None
     assert updated_root.replay_count == 1
+
+
+@pytest.mark.asyncio
+async def test_storage_additional_queries(tmp_path):
+    storage = RunStorage(str(tmp_path / "test_queries.db"))
+    await storage.init_db()
+
+    task = TaskSubmission(main_cmd="echo hello", tags=["unit", "test"])
+    manifest = RunManifest(task=task, exit_code=0, duration_ms=120.0)
+    await storage.save_run(manifest)
+
+    status_counts = await storage.count_runs_by_status()
+    assert manifest.status.value in status_counts
+
+    total_time = await storage.get_total_execution_time_ms()
+    assert total_time >= 120.0
+
+    updated = await storage.update_tags(manifest.run_id, ["prod", "v2"])
+    assert updated is True
+
+    await storage.vacuum()
+    deleted = await storage.delete_run(manifest.run_id)
+    assert deleted is True
+
+    await storage.close()
