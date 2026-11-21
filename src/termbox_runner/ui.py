@@ -768,6 +768,16 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     }
 
 
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      if (t) {
+        t.textContent = msg;
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2500);
+      }
+    }
+
     function copyRunId(id) {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(id);
@@ -806,6 +816,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     fetchRuns();
     setInterval(fetchRuns, 8000);
   </script>
+  <div id="toast" style="display:none; position:fixed; bottom:20px; right:20px; background:#1e293b; color:#fff; border:1px solid #3b82f6; padding:10px 18px; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.5); z-index:9999;"></div>
 </body>
 </html>
 """
