@@ -557,3 +557,15 @@ async def list_template_categories():
     from termbox_runner.templates_catalog import TEMPLATES
     categories = sorted(list(set(t.category for t in TEMPLATES.values())))
     return {"categories": categories}
+
+@app.get("/telemetry/system")
+async def get_system_telemetry():
+    """Return live host CPU, memory, and load averages."""
+    from termbox_runner.telemetry import get_system_load_average
+    load1, load5, load15 = get_system_load_average()
+    return {
+        "load_1m": load1,
+        "load_5m": load5,
+        "load_15m": load15,
+        "active_runs": _active_runs_count,
+    }
