@@ -176,8 +176,8 @@ async def test_lineage_not_found(async_client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_system_info_and_headers(client):
-    res = await client.get("/system/info")
+async def test_system_info_and_headers(async_client):
+    res = await async_client.get("/system/info")
     assert res.status_code == 200
     assert "os" in res.json()
     assert "X-Process-Time" in res.headers
@@ -185,7 +185,7 @@ async def test_system_info_and_headers(client):
 
 
 @pytest.mark.asyncio
-async def test_stats_summary_endpoint(client):
-    res = await client.get("/stats/summary")
+async def test_stats_summary_endpoint(async_client):
+    res = await async_client.get("/stats/summary")
     assert res.status_code == 200
     assert "status_counts" in res.json()

@@ -22,24 +22,13 @@ def build_parser() -> argparse.ArgumentParser:
     p_insp = subparsers.add_parser('inspect', help='Inspect a specific run')
     p_insp.add_argument('run_id')
     p_run = subparsers.add_parser('run', help='Execute sandboxed command')
-    p_run.add_argument('command')
+    p_run.add_argument('task_cmd', help='Command to execute inside sandbox')
     p_run.add_argument('--image', default='python:3.12-slim')
     p_rep = subparsers.add_parser('replay', help='Replay a prior run')
     p_rep.add_argument('run_id')
     subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
-
-def main(args=None):
-    parser = build_parser()
-    parsed = parser.parse_args(args)
-    if not parsed.command:
-        parser.print_help()
-        sys.exit(0)
-
-
-if __name__ == "__main__":
-    main()
 
 def cmd_health(server_url: str):
     """Query health and Docker sandbox connectivity."""
@@ -94,6 +83,31 @@ def cmd_templates(server_url: str):
     """List benchmark templates."""
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         res = client.get("/templates")
-        items = res.json().get("templates", [])
+        data = res.json()
+        items = data if isinstance(data, list) else data.get("templates", [])
         for t in items:
             print(f"- {t['id']} [{t['category']}]: {t['name']}")
+
+def main(args=None):
+    parser = build_parser()
+    parsed = parser.parse_args(args)
+    if not parsed.command:
+        parser.print_help()
+        sys.exit(0)
+    server = parsed.server
+    if parsed.command == "health":
+        cmd_health(server)
+    elif parsed.command == "list":
+        cmd_list(server)
+    elif parsed.command == "inspect":
+        cmd_inspect(server, parsed.run_id)
+    elif parsed.command == "run":
+        cmd_run(server, parsed.task_cmd, parsed.image)
+    elif parsed.command == "replay":
+        cmd_replay(server, parsed.run_id)
+    elif parsed.command == "templates":
+        cmd_templates(server)
+
+
+if __name__ == "__main__":
+    main()

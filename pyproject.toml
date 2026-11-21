@@ -30,6 +30,7 @@ dev = [
 
 [project.scripts]
 termbox-runner = "termbox_runner.main:main"
+termbox = "termbox_runner.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/termbox_runner"]
@@ -39,6 +40,3 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
 pythonpath = ["src"]
-
-[project.scripts]
-termbox = "termbox_runner.cli:main"

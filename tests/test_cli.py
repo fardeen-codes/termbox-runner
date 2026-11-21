@@ -10,6 +10,7 @@ def test_cli_parser_commands():
 
     args_run = parser.parse_args(["run", "echo hello"])
     assert args_run.command == "run"
+    assert args_run.task_cmd == "echo hello"
 
 
 def test_cli_colorize():

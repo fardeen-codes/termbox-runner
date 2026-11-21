@@ -26,6 +26,7 @@ from termbox_runner.models import (
     RunManifest,
     RunStatus,
     RunSummary,
+    RunTagUpdateRequest,
     TaskSubmission,
 )
 from termbox_runner.runner import DockerTaskExecutor, TaskExecutor, get_executor
@@ -47,6 +48,13 @@ async def lifespan(app: FastAPI):
 
 
 
+app = FastAPI(
+    title="Termbox Runner",
+    version=get_settings().app_version,
+    description="Deterministic sandboxed task runner and evaluation harness for coding/CLI agents",
+    lifespan=lifespan,
+)
+
 @app.middleware("http")
 async def add_process_time_header(request, call_next):
     import time
@@ -56,13 +64,6 @@ async def add_process_time_header(request, call_next):
     response.headers["X-Process-Time"] = f"{duration:.4f}s"
     response.headers["X-Request-ID"] = request.headers.get("X-Request-ID", str(uuid.uuid4()))
     return response
-
-app = FastAPI(
-    title="Termbox Runner",
-    version=get_settings().app_version,
-    description="Deterministic sandboxed task runner and evaluation harness for coding/CLI agents",
-    lifespan=lifespan,
-)
 
 static_dir = Path(__file__).parent / "static"
 if static_dir.exists():
@@ -492,12 +493,12 @@ async def get_run_raw_stderr(run_id: str, storage: RunStorage = Depends(get_stor
     return PlainTextResponse(manifest.combined_stderr)
 
 @app.post("/runs/{run_id}/tags")
-async def update_run_tags(run_id: str, tags: list, storage: RunStorage = Depends(get_storage_dependency)):
+async def update_run_tags(run_id: str, payload: RunTagUpdateRequest, storage: RunStorage = Depends(get_storage_dependency)):
     """Update tags associated with a specific run."""
-    success = await storage.update_tags(run_id, tags)
+    success = await storage.update_tags(run_id, payload.tags)
     if not success:
         raise HTTPException(status_code=404, detail="Run not found")
-    return {"status": "ok", "run_id": run_id, "tags": tags}
+    return {"status": "ok", "run_id": run_id, "tags": payload.tags}
 
 @app.delete("/runs/{run_id}")
 async def delete_run_record(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
