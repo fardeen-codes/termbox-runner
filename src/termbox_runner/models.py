@@ -315,3 +315,10 @@ class RunComparisonSummary(BaseModel):
     duration_delta_ms: float = 0.0
     exit_codes: Tuple[Optional[int], Optional[int]]
     status_changed: bool = False
+
+
+class BatchFilterParams(BaseModel):
+    """Query parameters for filtering runs in a batch."""
+    status: Optional[RunStatus] = None
+    failure_mode: Optional[FailureMode] = None
+    min_duration_ms: Optional[float] = None
