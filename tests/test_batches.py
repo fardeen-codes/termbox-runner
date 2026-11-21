@@ -29,3 +29,10 @@ async def test_batch_execution(async_client: AsyncClient):
     get_res = await async_client.get(f"/batches/{batch_id}")
     assert get_res.status_code == 200
     assert get_res.json()["batch_id"] == batch_id
+
+
+@pytest.mark.asyncio
+async def test_batch_rerun_failed(async_client):
+    res = await async_client.post("/batches/b123/rerun-failed")
+    assert res.status_code == 200
+    assert res.json()["batch_id"] == "b123"
