@@ -482,3 +482,11 @@ async def get_run_raw_stdout(run_id: str, storage: RunStorage = Depends(get_stor
     if not manifest:
         raise HTTPException(status_code=404, detail="Run not found")
     return PlainTextResponse(manifest.combined_stdout)
+
+@app.get("/runs/{run_id}/raw-stderr", response_class=PlainTextResponse)
+async def get_run_raw_stderr(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Stream raw unformatted standard error log."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return PlainTextResponse(manifest.combined_stderr)
