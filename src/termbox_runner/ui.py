@@ -777,6 +777,12 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       document.getElementById(id).style.display = 'none';
     }
 
+
+    function formatDurationPrecise(ms) {
+      if (ms < 1000) return ms.toFixed(0) + 'ms';
+      return (ms / 1000).toFixed(2) + 's';
+    }
+
     function escapeHtml(text) {
       if (!text) return '';
       return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
