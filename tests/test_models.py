@@ -85,3 +85,25 @@ def test_run_manifest_serialization():
     assert reconstituted.run_id == manifest.run_id
     assert len(reconstituted.steps) == 1
     assert reconstituted.steps[0].stdout == "hello\n"
+
+
+def test_task_submission_new_fields():
+    sub = TaskSubmission(main_cmd="echo 1", priority=3, git_commit="c0ffee", git_branch="main", workdir="/app")
+    assert sub.priority == 3
+    assert sub.git_commit == "c0ffee"
+    assert sub.git_branch == "main"
+    assert sub.workdir == "/app"
+
+
+def test_manifest_exit_signal_and_step_success():
+    task = TaskSubmission(main_cmd="echo 1")
+    manifest = RunManifest(task=task, exit_code=137)
+    assert manifest.exit_signal == 9
+    
+    clean = RunManifest(task=task, exit_code=0)
+    assert clean.exit_signal is None
+
+    step = StepResult(step=CommandStep.MAIN, command="test", exit_code=0)
+    assert step.is_success is True
+    step_fail = StepResult(step=CommandStep.MAIN, command="test", exit_code=1)
+    assert step_fail.is_success is False
