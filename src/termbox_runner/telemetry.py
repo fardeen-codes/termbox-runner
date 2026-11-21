@@ -16,3 +16,10 @@ def calculate_memory_percent(peak_bytes: int, limit_bytes: int) -> float:
     if limit_bytes <= 0:
         return 0.0
     return round((peak_bytes / limit_bytes) * 100.0, 2)
+
+def estimate_disk_throughput(io_bytes: int, duration_ms: float) -> float:
+    """Estimate IO throughput in megabytes per second (MB/s)."""
+    if duration_ms <= 0:
+        return 0.0
+    duration_s = duration_ms / 1000.0
+    return round((io_bytes / (1024 * 1024)) / duration_s, 2)
