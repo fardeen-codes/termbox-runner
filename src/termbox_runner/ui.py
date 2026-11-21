@@ -761,6 +761,14 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       }
     }
 
+
+    function copyRunId(id) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(id);
+        alert('Copied run ID to clipboard: ' + id);
+      }
+    }
+
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
