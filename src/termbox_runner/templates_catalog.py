@@ -123,3 +123,16 @@ TEMPLATES["golang-test"] = BenchmarkTemplate(
         limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0),
     ),
 )
+
+TEMPLATES["bash-script"] = BenchmarkTemplate(
+    id="bash-script",
+    name="POSIX Shell Script Compliance",
+    category="Shell",
+    description="Validates bash script execution under strict unofficial bash strict mode.",
+    task=TaskSubmission(
+        image="bash:5.2-alpine",
+        main_cmd="bash -euo pipefail script.sh",
+        files={"script.sh": "echo 'Strict mode OK'\n"},
+        limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0),
+    ),
+)
