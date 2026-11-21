@@ -289,3 +289,13 @@ class HealthResponse(BaseModel):
 class RunTagUpdateRequest(BaseModel):
     """Payload for updating tags on an existing run."""
     tags: List[str] = Field(..., description="Replacement list of tags")
+
+
+class WebhookEvent(BaseModel):
+    """Typed payload sent to client webhook receiver endpoints."""
+    event: str
+    run_id: str
+    status: str
+    failure_mode: Optional[str] = None
+    exit_code: Optional[int] = None
+    duration_ms: float = 0.0
