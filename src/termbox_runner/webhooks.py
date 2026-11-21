@@ -36,3 +36,8 @@ async def dispatch_webhook(webhook_url: str, manifest: RunManifest, timeout: flo
     except Exception as exc:
         logger.warning(f"Failed to dispatch webhook to {webhook_url}: {exc}")
         return False
+
+def generate_hmac_signature(payload: bytes, secret: str) -> str:
+    """Compute SHA-256 HMAC digest for webhook request verification."""
+    import hmac, hashlib
+    return "sha256=" + hmac.new(secret.encode("utf-8"), payload, hashlib.sha256).hexdigest()
