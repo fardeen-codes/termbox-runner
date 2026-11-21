@@ -108,3 +108,7 @@ def export_github_step_summary(manifest: RunManifest) -> str:
 def export_runs_to_ndjson(runs: list) -> str:
     """Serialize list of runs as newline-delimited JSON."""
     return "\n".join(r.model_dump_json() for r in runs)
+
+def xml_escape(text: str) -> str:
+    """Escape string for safe inclusion in XML attributes and elements."""
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
