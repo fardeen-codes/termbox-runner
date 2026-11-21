@@ -110,3 +110,16 @@ TEMPLATES["rust-cargo"] = BenchmarkTemplate(
         limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0),
     ),
 )
+
+TEMPLATES["golang-test"] = BenchmarkTemplate(
+    id="golang-test",
+    name="Go Standard Test Harness",
+    category="Golang",
+    description="Executes Go package unit tests with coverage reporting.",
+    task=TaskSubmission(
+        image="golang:1.22-alpine",
+        main_cmd="go build ./...",
+        verifier_cmd="go test -v ./...",
+        limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0),
+    ),
+)
