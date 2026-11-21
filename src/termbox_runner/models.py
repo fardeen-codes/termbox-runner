@@ -306,3 +306,12 @@ class ArtifactMetadata(BaseModel):
     path: str
     size_bytes: int = 0
     mime_type: str = "application/octet-stream"
+
+
+class RunComparisonSummary(BaseModel):
+    """Compact summary of differential analysis between two runs."""
+    run_a_id: str
+    run_b_id: str
+    duration_delta_ms: float = 0.0
+    exit_codes: Tuple[Optional[int], Optional[int]]
+    status_changed: bool = False
