@@ -638,3 +638,8 @@ def get_executor(force_mock: bool = False) -> TaskExecutor:
     return MockTaskExecutor()
 
 # Runner workdir support enabled
+
+def build_ulimits_config(limits: ResourceLimits) -> list:
+    """Construct Docker ulimit configuration dictionary from resource limits."""
+    import docker
+    return [docker.types.Ulimit(name="nofile", soft=limits.max_open_files, hard=limits.max_open_files)]
