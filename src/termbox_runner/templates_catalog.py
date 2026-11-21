@@ -97,3 +97,16 @@ TEMPLATES["nodejs-jest"] = BenchmarkTemplate(
         limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0),
     ),
 )
+
+TEMPLATES["rust-cargo"] = BenchmarkTemplate(
+    id="rust-cargo",
+    name="Rust Cargo Test Suite",
+    category="Rust",
+    description="Compiles and tests Rust modules with memory safety guarantees.",
+    task=TaskSubmission(
+        image="rust:1.76-slim",
+        main_cmd="cargo check",
+        verifier_cmd="cargo test",
+        limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0),
+    ),
+)
