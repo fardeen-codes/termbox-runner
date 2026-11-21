@@ -74,6 +74,14 @@ class RunStorage:
                 await self._conn.execute("PRAGMA foreign_keys=ON;")
             return self._conn
 
+
+    async def count_runs_by_status(self) -> dict:
+        """Return counts of runs grouped by lifecycle status."""
+        conn = await self.get_connection()
+        async with conn.execute("SELECT status, COUNT(*) as cnt FROM runs GROUP BY status") as cursor:
+            rows = await cursor.fetchall()
+            return {row["status"]: row["cnt"] for row in rows}
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
