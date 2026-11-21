@@ -26,6 +26,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_run.add_argument('--image', default='python:3.12-slim')
     p_rep = subparsers.add_parser('replay', help='Replay a prior run')
     p_rep.add_argument('run_id')
+    p_search = subparsers.add_parser('search', help='Search runs by command query')
+    p_search.add_argument('query')
     subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
@@ -111,3 +113,12 @@ def main(args=None):
 
 if __name__ == "__main__":
     main()
+
+def cmd_search(server_url: str, query: str):
+    """Search runs by command text."""
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        res = client.get(f"/runs/search?q={query}")
+        ids = res.json().get("run_ids", [])
+        print(f"Found {len(ids)} runs matching '{query}':")
+        for rid in ids:
+            print(f"- {rid}")
