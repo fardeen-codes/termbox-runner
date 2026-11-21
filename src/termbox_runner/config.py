@@ -56,6 +56,7 @@ class Settings(BaseSettings):
     stop_grace_period_seconds: int = 2
     webhook_timeout_seconds: float = 5.0
     webhook_max_retries: int = 3
+    workspace_retention_minutes: int = 60
     def sanitized_dict(self) -> Dict[str, Any]:
         """Export sanitized settings dictionary omitting sensitive paths/tokens."""
         data = self.model_dump()
