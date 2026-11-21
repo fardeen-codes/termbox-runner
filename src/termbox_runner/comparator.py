@@ -59,3 +59,11 @@ def detect_exit_code_change(code_a, code_b) -> bool:
 def compute_memory_delta(mem_a: int, mem_b: int) -> int:
     """Compute byte difference in peak memory consumption."""
     return mem_b - mem_a
+
+def format_diff_line(line: str) -> str:
+    """Format unified diff line with descriptive prefix badge."""
+    if line.startswith("+"):
+        return f"[ADD] {line[1:]}"
+    elif line.startswith("-"):
+        return f"[DEL] {line[1:]}"
+    return line
