@@ -116,6 +116,8 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       text-align: left;
     }
     .btn-preset:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(96, 165, 250, 0.15);
       border-color: var(--accent);
       background: #283548;
     }
