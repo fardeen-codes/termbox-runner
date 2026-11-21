@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 import uuid
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from termbox_runner.comparator import compare_runs
@@ -474,3 +474,11 @@ async def get_system_info():
         "python_version": platform.python_version(),
         "app_version": get_settings().app_version,
     }
+
+@app.get("/runs/{run_id}/raw-stdout", response_class=PlainTextResponse)
+async def get_run_raw_stdout(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Stream raw unformatted standard output log."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return PlainTextResponse(manifest.combined_stdout)
