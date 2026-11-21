@@ -549,3 +549,10 @@ async def export_all_runs_csv(storage: RunStorage = Depends(get_storage_dependen
     from termbox_runner.export import export_runs_to_csv
     csv_data = export_runs_to_csv(runs)
     return Response(content=csv_data, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=runs.csv"})
+
+@app.get("/templates/categories")
+async def list_template_categories():
+    """Return list of distinct categories represented across all benchmark templates."""
+    from termbox_runner.templates_catalog import TEMPLATES
+    categories = sorted(list(set(t.category for t in TEMPLATES.values())))
+    return {"categories": categories}
