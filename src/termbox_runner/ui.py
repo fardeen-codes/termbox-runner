@@ -365,6 +365,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     </div>
     <div class="top-actions">
       <button class="btn" onclick="fetchRuns()">🔄 Refresh</button>
+      <a href="/runs/export/csv" class="btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">📊 Export CSV</a>
       <button class="btn btn-primary" onclick="openNewRunModal()">+ New Run</button>
     </div>
   </div>
