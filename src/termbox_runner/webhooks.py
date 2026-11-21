@@ -52,3 +52,8 @@ def determine_event_type(manifest: RunManifest) -> str:
     if manifest.failure_mode:
         return f"run.{manifest.failure_mode.value.lower()}"
     return "run.completed"
+
+def log_dispatch_result(webhook_url: str, run_id: str, success: bool, duration_ms: float) -> None:
+    """Log webhook outcome and network latency."""
+    status_str = "SUCCESS" if success else "FAILED"
+    logger.info(f"Webhook dispatch [{status_str}] for run={run_id} to {webhook_url} ({duration_ms:.1f}ms)")
