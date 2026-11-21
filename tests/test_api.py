@@ -189,3 +189,12 @@ async def test_stats_summary_endpoint(async_client):
     res = await async_client.get("/stats/summary")
     assert res.status_code == 200
     assert "status_counts" in res.json()
+
+
+@pytest.mark.asyncio
+async def test_system_telemetry_endpoint(async_client):
+    res = await async_client.get("/telemetry/system")
+    assert res.status_code == 200
+    data = res.json()
+    assert "load_1m" in data
+    assert "active_runs" in data
