@@ -53,6 +53,8 @@ def classify_run(
     for step in steps:
         if step.exit_code == 139:
             return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Segmentation Fault (SIGSEGV, exit code 139)."
+        if step.exit_code == 132:
+            return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Illegal Instruction (SIGILL, exit code 132)."
 
     for step in steps:
         if step.oom_killed:
