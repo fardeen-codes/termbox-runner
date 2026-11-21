@@ -30,3 +30,13 @@ def calculate_start_jitter(created_at, started_at) -> float:
         return 0.0
     delta = (started_at - created_at).total_seconds()
     return max(0.0, round(delta * 1000.0, 2))
+
+def format_bytes(num_bytes: int) -> str:
+    """Format byte count into human-readable string (KB, MB, GB)."""
+    if num_bytes < 1024:
+        return f"{num_bytes} B"
+    elif num_bytes < 1024 * 1024:
+        return f"{num_bytes / 1024:.1f} KB"
+    elif num_bytes < 1024 * 1024 * 1024:
+        return f"{num_bytes / (1024 * 1024):.1f} MB"
+    return f"{num_bytes / (1024 * 1024 * 1024):.2f} GB"
