@@ -710,3 +710,7 @@ def detect_artifact_mime_type(filename: str) -> str:
     import mimetypes
     mime, _ = mimetypes.guess_type(filename)
     return mime or "application/octet-stream"
+
+def is_glob_pattern(pattern: str) -> bool:
+    """Check if pattern contains glob metacharacters."""
+    return any(c in pattern for c in "*?[]")
