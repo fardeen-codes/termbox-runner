@@ -76,6 +76,12 @@ def classify_run(
         if "recursionerror: maximum recursion depth exceeded" in (step.stderr + " " + step.stdout).lower():
             return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' exceeded maximum recursion depth (RecursionError)."
 
+        # Check for missing Python module
+        if "modulenotfounderror: no module named" in (step.stderr + " " + step.stdout).lower():
+            diag = extract_diagnostic_summary(step.stderr or step.stdout)
+            mode = FailureMode.SETUP_ERROR if step.step == CommandStep.SETUP else FailureMode.RUNTIME_ERROR
+            return mode, f"Step '{step.step.value}' missing dependency: {diag}"
+
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
