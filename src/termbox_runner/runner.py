@@ -672,3 +672,9 @@ def safe_remove_container(container: Any, max_retries: int = 2) -> bool:
         except Exception:
             time.sleep(0.1)
     return False
+
+def estimate_mock_memory_usage(manifest: RunManifest) -> int:
+    """Simulate realistic peak memory consumption for mock execution."""
+    if manifest.failure_mode == FailureMode.OOM_KILLED:
+        return parse_memory_to_bytes(manifest.task.limits.mem_limit)
+    return 32 * 1024 * 1024  # 32MB base footprint
