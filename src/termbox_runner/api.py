@@ -588,3 +588,21 @@ async def list_run_artifact_keys(run_id: str, storage: RunStorage = Depends(get_
     if not manifest:
         raise HTTPException(status_code=404, detail="Run not found")
     return {"run_id": run_id, "artifacts": list(manifest.artifacts.keys())}
+
+@app.get("/runs/{run_id}/artifacts/zip")
+async def download_run_artifacts_zip(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Package and stream all captured artifacts as a zip archive."""
+    import io, zipfile
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for name, content in manifest.artifacts.items():
+            zf.writestr(name, content)
+    buf.seek(0)
+    return Response(
+        content=buf.getvalue(),
+        media_type="application/zip",
+        headers={"Content-Disposition": f"attachment; filename={run_id}_artifacts.zip"}
+    )
