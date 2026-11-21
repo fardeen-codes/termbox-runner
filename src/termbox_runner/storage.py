@@ -174,6 +174,20 @@ class RunStorage:
             rows = await cursor.fetchall()
             return [row["run_id"] for row in rows]
 
+
+    async def get_flaky_runs(self) -> list:
+        """Identify runs whose replay lineages produced divergent outcomes."""
+        conn = await self.get_connection()
+        query = """
+        SELECT DISTINCT parent_run_id FROM runs
+        WHERE parent_run_id IS NOT NULL
+        GROUP BY parent_run_id
+        HAVING COUNT(DISTINCT failure_mode) > 1
+        """
+        async with conn.execute(query) as cursor:
+            rows = await cursor.fetchall()
+            return [row["parent_run_id"] for row in rows]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
