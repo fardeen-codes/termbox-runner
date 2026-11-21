@@ -55,3 +55,7 @@ def generate_stderr_diff(err_a: str, err_b: str, label_a: str = "run_a", label_b
 def detect_exit_code_change(code_a, code_b) -> bool:
     """Return True if exit codes differ between runs."""
     return code_a != code_b
+
+def compute_memory_delta(mem_a: int, mem_b: int) -> int:
+    """Compute byte difference in peak memory consumption."""
+    return mem_b - mem_a
