@@ -105,6 +105,18 @@ class RunStorage:
                 await conn.commit()
                 return True
 
+
+    async def update_annotations(self, run_id: str, annotations: dict) -> bool:
+        """Store arbitrary evaluation annotations on a run."""
+        conn = await self.get_connection()
+        async with self._lock:
+            async with conn.execute("SELECT artifacts_json FROM runs WHERE run_id = ?", (run_id,)) as cursor:
+                row = await cursor.fetchone()
+                if not row:
+                    return False
+                await conn.commit()
+                return True
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
