@@ -45,3 +45,9 @@ def generate_stdout_diff(out_a: str, out_b: str, label_a: str = "run_a", label_b
     lines_a = out_a.splitlines(keepends=True)
     lines_b = out_b.splitlines(keepends=True)
     return "".join(difflib.unified_diff(lines_a, lines_b, fromfile=label_a, tofile=label_b))
+
+def generate_stderr_diff(err_a: str, err_b: str, label_a: str = "run_a", label_b: str = "run_b") -> str:
+    """Produce unified diff string between stderr logs."""
+    lines_a = err_a.splitlines(keepends=True)
+    lines_b = err_b.splitlines(keepends=True)
+    return "".join(difflib.unified_diff(lines_a, lines_b, fromfile=label_a, tofile=label_b))
