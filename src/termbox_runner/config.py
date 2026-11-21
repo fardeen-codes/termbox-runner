@@ -30,6 +30,7 @@ class Settings(BaseSettings):
 
     # Docker defaults & resource limits
     default_docker_image: str = "python:3.12-slim"
+    container_hostname: str = "sandbox"
     default_timeout_seconds: float = 30.0
     max_timeout_seconds: float = 300.0
 
