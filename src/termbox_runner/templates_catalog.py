@@ -162,3 +162,15 @@ TEMPLATES["ruby-rspec"] = BenchmarkTemplate(
         limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0),
     ),
 )
+
+TEMPLATES["java-junit"] = BenchmarkTemplate(
+    id="java-junit",
+    name="Java JUnit 5 Harness",
+    category="Java",
+    description="Executes Java Gradle/Maven test suite with JUnit 5 Jupiter engine.",
+    task=TaskSubmission(
+        image="eclipse-temurin:21-jdk-alpine",
+        main_cmd="./gradlew test",
+        limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0),
+    ),
+)
