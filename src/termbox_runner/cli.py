@@ -16,6 +16,9 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser('list', help='List recent execution manifests')
     p_insp = subparsers.add_parser('inspect', help='Inspect a specific run')
     p_insp.add_argument('run_id')
+    p_run = subparsers.add_parser('run', help='Execute sandboxed command')
+    p_run.add_argument('command')
+    p_run.add_argument('--image', default='python:3.12-slim')
     return parser
 
 
@@ -63,3 +66,11 @@ def cmd_inspect(server_url: str, run_id: str):
         print(f"Duration: {data['duration_ms']}ms")
         print("--- Standard Output ---")
         print(data.get("combined_stdout") or "(empty)")
+
+def cmd_run(server_url: str, command: str, image: str = "python:3.12-slim"):
+    """Submit and synchronously wait for task run."""
+    with httpx.Client(base_url=server_url, timeout=60.0) as client:
+        payload = {"main_cmd": command, "image": image}
+        res = client.post("/runs", json=payload)
+        run = res.json()
+        print(f"Executed: {run['run_id']} | Status: {run['status']} | Mode: {run.get('failure_mode') or 'PASSED'}")
