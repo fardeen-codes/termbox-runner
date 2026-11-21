@@ -19,6 +19,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_run = subparsers.add_parser('run', help='Execute sandboxed command')
     p_run.add_argument('command')
     p_run.add_argument('--image', default='python:3.12-slim')
+    p_rep = subparsers.add_parser('replay', help='Replay a prior run')
+    p_rep.add_argument('run_id')
     return parser
 
 
@@ -74,3 +76,10 @@ def cmd_run(server_url: str, command: str, image: str = "python:3.12-slim"):
         res = client.post("/runs", json=payload)
         run = res.json()
         print(f"Executed: {run['run_id']} | Status: {run['status']} | Mode: {run.get('failure_mode') or 'PASSED'}")
+
+def cmd_replay(server_url: str, run_id: str):
+    """Replay a previous task execution by ID."""
+    with httpx.Client(base_url=server_url, timeout=60.0) as client:
+        res = client.post(f"/runs/{run_id}/replay", json={})
+        run = res.json()
+        print(f"Replayed: {run['run_id']} (parent: {run.get('parent_run_id')})")
