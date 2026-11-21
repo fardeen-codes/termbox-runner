@@ -81,3 +81,21 @@ def export_runs_to_csv(runs: list) -> str:
     for r in runs:
         writer.writerow([r.run_id, r.status.value, r.failure_mode.value if r.failure_mode else "", r.exit_code, r.duration_ms, r.image, r.main_cmd])
     return out.getvalue()
+
+def export_run_to_markdown(manifest: RunManifest) -> str:
+    """Format run execution manifest as GitHub-flavored Markdown."""
+    mode = manifest.failure_mode.value if manifest.failure_mode else manifest.status.value
+    lines = [
+        f"# Run Execution Report: `{manifest.run_id}`",
+        f"- **Status**: {manifest.status.value}",
+        f"- **Failure Mode**: {mode}",
+        f"- **Exit Code**: {manifest.exit_code}",
+        f"- **Duration**: {manifest.duration_ms:.2f}ms",
+        f"- **Command**: `{manifest.task.main_cmd}`",
+        "",
+        "## Standard Output",
+        "```",
+        manifest.combined_stdout or "(empty)",
+        "```",
+    ]
+    return "\n".join(lines)
