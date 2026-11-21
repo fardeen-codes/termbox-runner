@@ -166,6 +166,14 @@ class RunStorage:
             rows = await cursor.fetchall()
             return [row["run_id"] for row in rows]
 
+
+    async def get_runs_by_date_range(self, start_date: str, end_date: str, limit: int = 50) -> list:
+        """Find runs created within specified ISO datetime window."""
+        conn = await self.get_connection()
+        async with conn.execute("SELECT run_id FROM runs WHERE created_at >= ? AND created_at <= ? ORDER BY created_at DESC LIMIT ?", (start_date, end_date, limit)) as cursor:
+            rows = await cursor.fetchall()
+            return [row["run_id"] for row in rows]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
