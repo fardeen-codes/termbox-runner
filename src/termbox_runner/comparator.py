@@ -51,3 +51,7 @@ def generate_stderr_diff(err_a: str, err_b: str, label_a: str = "run_a", label_b
     lines_a = err_a.splitlines(keepends=True)
     lines_b = err_b.splitlines(keepends=True)
     return "".join(difflib.unified_diff(lines_a, lines_b, fromfile=label_a, tofile=label_b))
+
+def detect_exit_code_change(code_a, code_b) -> bool:
+    """Return True if exit codes differ between runs."""
+    return code_a != code_b
