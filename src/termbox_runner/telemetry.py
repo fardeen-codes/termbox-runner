@@ -10,3 +10,9 @@ def get_system_load_average() -> Tuple[float, float, float]:
         return os.getloadavg()
     except (AttributeError, OSError):
         return (0.0, 0.0, 0.0)
+
+def calculate_memory_percent(peak_bytes: int, limit_bytes: int) -> float:
+    """Calculate percentage of allocated memory limit consumed."""
+    if limit_bytes <= 0:
+        return 0.0
+    return round((peak_bytes / limit_bytes) * 100.0, 2)
