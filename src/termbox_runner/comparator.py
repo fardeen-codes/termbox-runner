@@ -39,3 +39,9 @@ def calculate_duration_delta_percent(dur_a: float, dur_b: float) -> float:
     if dur_a <= 0:
         return 0.0
     return round(((dur_b - dur_a) / dur_a) * 100.0, 2)
+
+def generate_stdout_diff(out_a: str, out_b: str, label_a: str = "run_a", label_b: str = "run_b") -> str:
+    """Produce unified diff string between stdout logs."""
+    lines_a = out_a.splitlines(keepends=True)
+    lines_b = out_b.splitlines(keepends=True)
+    return "".join(difflib.unified_diff(lines_a, lines_b, fromfile=label_a, tofile=label_b))
