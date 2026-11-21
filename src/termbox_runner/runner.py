@@ -695,3 +695,12 @@ def ping_docker_daemon() -> bool:
         return DockerTaskExecutor().is_available()
     except Exception:
         return False
+
+MAX_ARTIFACT_SIZE_BYTES = 5 * 1024 * 1024  # 5MB per artifact file
+
+def is_file_within_size_limit(file_path: str, max_bytes: int = MAX_ARTIFACT_SIZE_BYTES) -> bool:
+    """Check if artifact file does not exceed safe memory limit."""
+    try:
+        return os.path.getsize(file_path) <= max_bytes
+    except OSError:
+        return False
