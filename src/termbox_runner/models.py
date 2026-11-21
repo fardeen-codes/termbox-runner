@@ -108,6 +108,7 @@ class ResourceUsage(BaseModel):
     memory_peak_bytes: int = Field(default=0, description="Peak memory consumption in bytes")
     io_read_bytes: int = Field(default=0, description="Disk/volume bytes read")
     io_write_bytes: int = Field(default=0, description="Disk/volume bytes written")
+    load_average: Optional[float] = Field(default=None, description="System 1-min load average at execution time")
 
 
 class StepResult(BaseModel):
