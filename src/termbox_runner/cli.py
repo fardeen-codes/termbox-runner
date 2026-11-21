@@ -14,6 +14,8 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     subparsers.add_parser('health', help='Check server and sandbox health')
     subparsers.add_parser('list', help='List recent execution manifests')
+    p_insp = subparsers.add_parser('inspect', help='Inspect a specific run')
+    p_insp.add_argument('run_id')
     return parser
 
 
@@ -47,3 +49,17 @@ def cmd_list(server_url: str, limit: int = 15):
         for r in runs:
             mode = r.get("failure_mode") or "-"
             print(f"{r['run_id']:<16} {r['status']:<12} {mode:<18} {str(r.get('exit_code') or '-'):<6} {r['duration_ms']:.1f}ms  {r['main_cmd'][:20]}")
+
+def cmd_inspect(server_url: str, run_id: str):
+    """Inspect details and logs for a specific run."""
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        res = client.get(f"/runs/{run_id}")
+        if res.status_code == 404:
+            print(f"Error: Run '{run_id}' not found.")
+            return
+        data = res.json()
+        print(f"Run ID: {data['run_id']}")
+        print(f"Status: {data['status']} ({data.get('failure_mode') or 'PASSED'})")
+        print(f"Duration: {data['duration_ms']}ms")
+        print("--- Standard Output ---")
+        print(data.get("combined_stdout") or "(empty)")
