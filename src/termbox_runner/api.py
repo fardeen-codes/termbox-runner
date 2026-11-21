@@ -580,3 +580,11 @@ async def test_webhook_url(url: str = Query(..., description="Target callback UR
             return {"reachable": res.is_success, "status_code": res.status_code}
     except Exception as e:
         return {"reachable": False, "error": str(e)}
+
+@app.get("/runs/{run_id}/artifacts/keys")
+async def list_run_artifact_keys(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Return list of all artifact file paths captured for a run."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return {"run_id": run_id, "artifacts": list(manifest.artifacts.keys())}
