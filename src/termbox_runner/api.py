@@ -498,3 +498,11 @@ async def update_run_tags(run_id: str, tags: list, storage: RunStorage = Depends
     if not success:
         raise HTTPException(status_code=404, detail="Run not found")
     return {"status": "ok", "run_id": run_id, "tags": tags}
+
+@app.delete("/runs/{run_id}")
+async def delete_run_record(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Delete a completed run record from persistent storage."""
+    success = await storage.delete_run(run_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return {"status": "deleted", "run_id": run_id}
