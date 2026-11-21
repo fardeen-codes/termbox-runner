@@ -157,6 +157,15 @@ class RunStorage:
             row = await cursor.fetchone()
             return float(row["total_ms"]) if row and row["total_ms"] else 0.0
 
+
+    async def search_runs_by_command(self, query: str, limit: int = 50) -> list:
+        """Search runs matching command substring."""
+        conn = await self.get_connection()
+        pattern = f"%{query}%"
+        async with conn.execute("SELECT run_id FROM runs WHERE main_cmd LIKE ? ORDER BY created_at DESC LIMIT ?", (pattern, limit)) as cursor:
+            rows = await cursor.fetchall()
+            return [row["run_id"] for row in rows]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
