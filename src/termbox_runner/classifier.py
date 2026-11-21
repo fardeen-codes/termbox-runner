@@ -51,6 +51,10 @@ def classify_run(
         return FailureMode.OOM_KILLED, "Container was terminated by Docker Out-Of-Memory (OOM) killer."
 
     for step in steps:
+        if step.exit_code == 139:
+            return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Segmentation Fault (SIGSEGV, exit code 139)."
+
+    for step in steps:
         if step.oom_killed:
             return (
                 FailureMode.OOM_KILLED,
