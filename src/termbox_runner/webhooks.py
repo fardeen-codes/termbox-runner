@@ -41,3 +41,8 @@ def generate_hmac_signature(payload: bytes, secret: str) -> str:
     """Compute SHA-256 HMAC digest for webhook request verification."""
     import hmac, hashlib
     return "sha256=" + hmac.new(secret.encode("utf-8"), payload, hashlib.sha256).hexdigest()
+
+def compute_retry_delay(attempt: int, base: float = 1.0, max_delay: float = 30.0) -> float:
+    """Calculate exponential backoff delay for retry attempts."""
+    delay = base * (2 ** max(0, attempt - 1))
+    return min(delay, max_delay)
