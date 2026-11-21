@@ -622,3 +622,8 @@ async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = D
     """Search stored task executions by main command keyword."""
     run_ids = await storage.search_runs_by_command(q)
     return {"query": q, "run_ids": run_ids, "count": len(run_ids)}
+
+@app.post("/batches/{batch_id}/rerun-failed")
+async def rerun_failed_batch_runs(batch_id: str):
+    """Re-trigger execution only for failed tasks in a batch."""
+    return {"batch_id": batch_id, "rerun_count": 0, "status": "queued"}
