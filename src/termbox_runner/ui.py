@@ -421,6 +421,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     <button class="filter-btn" onclick="setFilter('OOM_KILLED')">OOM Killed</button>
     <button class="filter-btn" onclick="setFilter('SETUP_ERROR')">Setup Error</button>
     <button class="filter-btn" onclick="setFilter('RUNTIME_ERROR')">Runtime Error</button>
+        <button class="filter-btn" onclick="setFilter('REPLAY')">Replays Only</button>
   </div>
 
   <!-- Runs Table -->
