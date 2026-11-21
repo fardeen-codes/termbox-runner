@@ -71,3 +71,13 @@ def build_junit_xml(manifest: RunManifest) -> str:
     {failure_tag}
   </testcase>
 </testsuite>'''
+
+def export_runs_to_csv(runs: list) -> str:
+    """Export list of run summaries into CSV format."""
+    import csv, io
+    out = io.StringIO()
+    writer = csv.writer(out)
+    writer.writerow(["run_id", "status", "failure_mode", "exit_code", "duration_ms", "image", "main_cmd"])
+    for r in runs:
+        writer.writerow([r.run_id, r.status.value, r.failure_mode.value if r.failure_mode else "", r.exit_code, r.duration_ms, r.image, r.main_cmd])
+    return out.getvalue()
