@@ -198,3 +198,10 @@ async def test_system_telemetry_endpoint(async_client):
     data = res.json()
     assert "load_1m" in data
     assert "active_runs" in data
+
+
+@pytest.mark.asyncio
+async def test_webhook_test_endpoint_unreachable(async_client):
+    res = await async_client.post("/webhooks/test?url=http://127.0.0.1:19999/nonexistent")
+    assert res.status_code == 200
+    assert res.json()["reachable"] is False
