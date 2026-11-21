@@ -1,3 +1,8 @@
+
+def colorize(text: str, color: str) -> str:
+    """Wrap text in ANSI color codes."""
+    colors = {"green": "\033[92m", "red": "\033[91m", "yellow": "\033[93m", "cyan": "\033[96m", "reset": "\033[0m"}
+    return f"{colors.get(color, '')}{text}{colors['reset']}"
 """Command-line interface (CLI) for Termbox Runner."""
 
 import argparse
