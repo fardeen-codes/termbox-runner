@@ -516,3 +516,9 @@ async def get_runs_summary_stats(storage: RunStorage = Depends(get_storage_depen
         "status_counts": status_counts,
         "total_duration_ms": total_time,
     }
+
+@app.post("/maintenance/vacuum")
+async def trigger_db_vacuum(storage: RunStorage = Depends(get_storage_dependency)):
+    """Trigger SQLite maintenance vacuum."""
+    await storage.vacuum()
+    return {"status": "optimized"}
