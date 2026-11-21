@@ -174,3 +174,7 @@ TEMPLATES["java-junit"] = BenchmarkTemplate(
         limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0),
     ),
 )
+
+def get_templates_by_category(category: str) -> List[BenchmarkTemplate]:
+    """Filter catalog templates by case-insensitive category name."""
+    return [t for t in TEMPLATES.values() if t.category.lower() == category.lower()]
