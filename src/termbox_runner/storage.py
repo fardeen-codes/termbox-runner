@@ -82,6 +82,14 @@ class RunStorage:
             rows = await cursor.fetchall()
             return {row["status"]: row["cnt"] for row in rows}
 
+
+    async def count_runs_by_failure_mode(self) -> dict:
+        """Return counts of runs grouped by failure mode."""
+        conn = await self.get_connection()
+        async with conn.execute("SELECT failure_mode, COUNT(*) as cnt FROM runs WHERE failure_mode IS NOT NULL GROUP BY failure_mode") as cursor:
+            rows = await cursor.fetchall()
+            return {row["failure_mode"]: row["cnt"] for row in rows}
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
