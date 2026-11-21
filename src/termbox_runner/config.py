@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     default_docker_image: str = "python:3.12-slim"
     container_hostname: str = "sandbox"
     extra_docker_args: List[str] = Field(default_factory=list)
+    default_dns_servers: List[str] = Field(default_factory=lambda: ["1.1.1.1", "8.8.8.8"])
     default_timeout_seconds: float = 30.0
     max_timeout_seconds: float = 300.0
 
