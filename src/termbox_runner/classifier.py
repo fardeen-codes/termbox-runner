@@ -57,6 +57,8 @@ def classify_run(
             return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Illegal Instruction (SIGILL, exit code 132)."
         if step.exit_code == 135:
             return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Bus Error (SIGBUS, exit code 135)."
+        if step.exit_code == 136:
+            return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Floating Point Exception (SIGFPE, exit code 136)."
 
     for step in steps:
         if step.oom_killed:
