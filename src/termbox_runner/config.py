@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     environment: str = "development"
     debug: bool = False
     default_log_level: str = 'INFO'
+    max_log_buffer_bytes: int = 10 * 1024 * 1024  # 10MB output cap
     host: str = "0.0.0.0"
     port: int = 8000
 
