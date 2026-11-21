@@ -118,6 +118,11 @@ class StepResult(BaseModel):
     timed_out: bool = False
     resource_usage: Optional[ResourceUsage] = None
 
+    @property
+    def is_success(self) -> bool:
+        """Return True if step finished cleanly with exit code 0."""
+        return self.exit_code == 0
+
 
 class TaskSubmission(BaseModel):
     """User submission requesting sandboxed task execution."""
