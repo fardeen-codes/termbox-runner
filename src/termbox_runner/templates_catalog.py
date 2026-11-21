@@ -136,3 +136,16 @@ TEMPLATES["bash-script"] = BenchmarkTemplate(
         limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0),
     ),
 )
+
+TEMPLATES["cpp-googletest"] = BenchmarkTemplate(
+    id="cpp-googletest",
+    name="C++ GoogleTest Harness",
+    category="C++",
+    description="Compiles and executes C++ binary under GoogleTest suite.",
+    task=TaskSubmission(
+        image="gcc:13-bookworm",
+        main_cmd="make",
+        verifier_cmd="./run_tests",
+        limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0),
+    ),
+)
