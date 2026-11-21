@@ -54,6 +54,8 @@ class Settings(BaseSettings):
     workspace_root: str = "/tmp/termbox_workspaces"
     tmpfs_size_mb: int = 64
     stop_grace_period_seconds: int = 2
+    webhook_timeout_seconds: float = 5.0
+    webhook_max_retries: int = 3
     def sanitized_dict(self) -> Dict[str, Any]:
         """Export sanitized settings dictionary omitting sensitive paths/tokens."""
         data = self.model_dump()
