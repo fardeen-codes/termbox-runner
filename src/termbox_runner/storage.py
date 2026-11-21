@@ -142,6 +142,13 @@ class RunStorage:
             rows = await cursor.fetchall()
             return [row["run_id"] for row in rows]
 
+
+    async def vacuum(self) -> None:
+        """Run SQLite VACUUM optimization to reclaim storage space."""
+        conn = await self.get_connection()
+        async with self._lock:
+            await conn.execute("VACUUM;")
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
