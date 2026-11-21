@@ -126,3 +126,26 @@ ValueError: Score calculation exploded
 """
     summary = extract_diagnostic_summary(traceback_log, max_lines=2)
     assert "ValueError: Score calculation exploded" in summary
+
+
+def test_classify_signals_and_exit_codes():
+    from termbox_runner.classifier import describe_signal
+
+    step_segv = StepResult(step=CommandStep.MAIN, command="c_app", exit_code=139)
+    mode, reason = classify_run([step_segv])
+    assert mode == FailureMode.RUNTIME_ERROR
+    assert "Segmentation Fault" in reason
+
+    step_ill = StepResult(step=CommandStep.MAIN, command="bad_ins", exit_code=132)
+    mode, reason = classify_run([step_ill])
+    assert mode == FailureMode.RUNTIME_ERROR
+    assert "Illegal Instruction" in reason
+
+    step_127 = StepResult(step=CommandStep.MAIN, command="nonexistent", exit_code=127)
+    mode, reason = classify_run([step_127])
+    assert mode == FailureMode.RUNTIME_ERROR
+    assert "not found" in reason
+
+    assert describe_signal(137) == "SIGKILL"
+    assert describe_signal(139) == "SIGSEGV"
+    assert describe_signal(0) is None
