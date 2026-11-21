@@ -723,3 +723,9 @@ def cleanup_empty_dirs(root_dir: str) -> None:
                 os.rmdir(dirpath)
             except OSError:
                 pass
+
+def is_potentially_harmful_command(cmd: str) -> bool:
+    """Heuristic detection of destructive commands (fork bombs, host escaping)."""
+    dangerous_patterns = [":(){ :|:& };:", "rm -rf / --no-preserve-root", "> /dev/sda"]
+    clean = cmd.strip()
+    return any(p in clean for p in dangerous_patterns)
