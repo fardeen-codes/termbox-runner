@@ -146,3 +146,15 @@ def classify_run(
 
     # 6. PASSED
     return FailureMode.PASSED, "All sandbox commands completed successfully."
+
+
+def describe_signal(exit_code: int) -> Optional[str]:
+    """Return the human-readable POSIX signal name for exit codes > 128."""
+    if exit_code <= 128:
+        return None
+    sig = exit_code - 128
+    signals = {
+        1: "SIGHUP", 2: "SIGINT", 3: "SIGQUIT", 4: "SIGILL", 6: "SIGABRT",
+        8: "SIGFPE", 9: "SIGKILL", 11: "SIGSEGV", 13: "SIGPIPE", 14: "SIGALRM", 15: "SIGTERM"
+    }
+    return signals.get(sig, f"SIG#{sig}")
