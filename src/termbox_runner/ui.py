@@ -577,7 +577,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function renderRuns(runs) {
       const tbody = document.getElementById('runs-table-body');
       if (!runs.length) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 32px;">No execution manifests found. Submit a task or click a preset above!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 32px;">⚡ No execution manifests found. Choose a benchmark preset above or click + New Run to start!</td></tr>`;
         return;
       }
       tbody.innerHTML = runs.map(run => {
