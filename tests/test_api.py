@@ -173,3 +173,19 @@ async def test_replay_not_found(async_client: AsyncClient):
 async def test_lineage_not_found(async_client: AsyncClient):
     res = await async_client.get("/runs/nonexistent_run/lineage")
     assert res.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_system_info_and_headers(client):
+    res = await client.get("/system/info")
+    assert res.status_code == 200
+    assert "os" in res.json()
+    assert "X-Process-Time" in res.headers
+    assert "X-Request-ID" in res.headers
+
+
+@pytest.mark.asyncio
+async def test_stats_summary_endpoint(client):
+    res = await client.get("/stats/summary")
+    assert res.status_code == 200
+    assert "status_counts" in res.json()
