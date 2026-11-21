@@ -40,3 +40,7 @@ def format_bytes(num_bytes: int) -> str:
     elif num_bytes < 1024 * 1024 * 1024:
         return f"{num_bytes / (1024 * 1024):.1f} MB"
     return f"{num_bytes / (1024 * 1024 * 1024):.2f} GB"
+
+def format_percent(val: float) -> str:
+    """Format floating percentage with standard unit."""
+    return f"{val:.1f}%"
