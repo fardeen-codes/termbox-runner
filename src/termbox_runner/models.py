@@ -162,6 +162,7 @@ class RunManifest(BaseModel):
     combined_stderr: str = ""
     container_id: Optional[str] = None
     replay_count: int = 0
+    annotations: Dict[str, str] = Field(default_factory=dict, description="User notes or review annotations")
 
     @property
     def exit_signal(self) -> Optional[int]:
@@ -199,6 +200,7 @@ class RunSummary(BaseModel):
     image: str
     main_cmd: str
     replay_count: int = 0
+    annotations: Dict[str, str] = Field(default_factory=dict, description="User notes or review annotations")
 
     @property
     def exit_signal(self) -> Optional[int]:
