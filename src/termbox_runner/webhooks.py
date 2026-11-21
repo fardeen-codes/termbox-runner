@@ -46,3 +46,9 @@ def compute_retry_delay(attempt: int, base: float = 1.0, max_delay: float = 30.0
     """Calculate exponential backoff delay for retry attempts."""
     delay = base * (2 ** max(0, attempt - 1))
     return min(delay, max_delay)
+
+def determine_event_type(manifest: RunManifest) -> str:
+    """Return granular event string based on execution failure mode."""
+    if manifest.failure_mode:
+        return f"run.{manifest.failure_mode.value.lower()}"
+    return "run.completed"
