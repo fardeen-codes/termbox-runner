@@ -149,3 +149,16 @@ TEMPLATES["cpp-googletest"] = BenchmarkTemplate(
         limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0),
     ),
 )
+
+TEMPLATES["ruby-rspec"] = BenchmarkTemplate(
+    id="ruby-rspec",
+    name="Ruby RSpec Evaluation",
+    category="Ruby",
+    description="Executes Ruby agent code against RSpec behavior specs.",
+    task=TaskSubmission(
+        image="ruby:3.3-slim",
+        main_cmd="ruby app.rb",
+        verifier_cmd="rspec",
+        limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0),
+    ),
+)
