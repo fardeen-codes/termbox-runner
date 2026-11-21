@@ -59,6 +59,9 @@ def classify_run(
             return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Bus Error (SIGBUS, exit code 135)."
         if step.exit_code == 136:
             return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Floating Point Exception (SIGFPE, exit code 136)."
+        if step.exit_code == 126:
+            mode = FailureMode.SETUP_ERROR if step.step == CommandStep.SETUP else FailureMode.RUNTIME_ERROR
+            return mode, f"Step '{step.step.value}' permission denied or command not executable (exit code 126)."
         if step.exit_code == 127:
             mode = FailureMode.SETUP_ERROR if step.step == CommandStep.SETUP else FailureMode.RUNTIME_ERROR
             return mode, f"Step '{step.step.value}' command not found or binary missing (exit code 127)."
