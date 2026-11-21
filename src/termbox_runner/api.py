@@ -616,3 +616,9 @@ async def get_runs_diff(run_id: str, other_run_id: str, storage: RunStorage = De
         raise HTTPException(status_code=404, detail="One or both runs not found")
     from termbox_runner.comparator import compare_runs
     return compare_runs(run_a, run_b)
+
+@app.get("/runs/search")
+async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
+    """Search stored task executions by main command keyword."""
+    run_ids = await storage.search_runs_by_command(q)
+    return {"query": q, "run_ids": run_ids, "count": len(run_ids)}
