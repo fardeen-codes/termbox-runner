@@ -83,3 +83,17 @@ def list_benchmark_templates() -> List[BenchmarkTemplate]:
 def get_benchmark_template(template_id: str) -> Optional[BenchmarkTemplate]:
     """Get a template by ID or None."""
     return TEMPLATES.get(template_id)
+
+TEMPLATES["nodejs-jest"] = BenchmarkTemplate(
+    id="nodejs-jest",
+    name="Node.js Jest Test Suite",
+    category="JavaScript",
+    description="Evaluates Node.js functions against Jest unit assertions.",
+    task=TaskSubmission(
+        image="node:20-slim",
+        main_cmd="node index.js",
+        verifier_cmd="npm test",
+        files={"index.js": "module.exports = (a, b) => a + b;\n"},
+        limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0),
+    ),
+)
