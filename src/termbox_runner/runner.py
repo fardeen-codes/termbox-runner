@@ -643,3 +643,7 @@ def build_ulimits_config(limits: ResourceLimits) -> list:
     """Construct Docker ulimit configuration dictionary from resource limits."""
     import docker
     return [docker.types.Ulimit(name="nofile", soft=limits.max_open_files, hard=limits.max_open_files)]
+
+def calculate_step_duration(start_time: float) -> float:
+    """Return elapsed execution time in milliseconds."""
+    return round((time.perf_counter() - start_time) * 1000.0, 2)
