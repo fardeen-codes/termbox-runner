@@ -27,6 +27,7 @@ class Settings(BaseSettings):
 
     # Persistence
     db_path: str = "termbox_runner.db"
+    db_busy_timeout_ms: int = 5000
 
     # Docker defaults & resource limits
     default_docker_image: str = "python:3.12-slim"
