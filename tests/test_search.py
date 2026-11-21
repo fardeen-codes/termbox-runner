@@ -41,3 +41,23 @@ async def test_search_and_tags(async_client: AsyncClient):
     res_none = await async_client.get("/runs?search=absolutely_nonexistent_token_123")
     assert res_none.status_code == 200
     assert res_none.json()["total"] == 0
+
+
+@pytest.mark.asyncio
+async def test_storage_search_helpers(tmp_path):
+    from termbox_runner.storage import RunStorage
+    from termbox_runner.models import TaskSubmission, RunManifest
+
+    storage = RunStorage(str(tmp_path / "search.db"))
+    await storage.init_db()
+
+    task = TaskSubmission(main_cmd="python compute_primes.py")
+    await storage.save_run(RunManifest(task=task))
+
+    matches = await storage.search_runs_by_command("primes")
+    assert len(matches) == 1
+
+    empty = await storage.search_runs_by_command("nonexistent_pattern")
+    assert len(empty) == 0
+
+    await storage.close()
