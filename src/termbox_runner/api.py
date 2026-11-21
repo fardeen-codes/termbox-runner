@@ -606,3 +606,13 @@ async def download_run_artifacts_zip(run_id: str, storage: RunStorage = Depends(
         media_type="application/zip",
         headers={"Content-Disposition": f"attachment; filename={run_id}_artifacts.zip"}
     )
+
+@app.get("/runs/{run_id}/diff/{other_run_id}")
+async def get_runs_diff(run_id: str, other_run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Compare execution results and generate unified log diffs between two runs."""
+    run_a = await storage.get_run(run_id)
+    run_b = await storage.get_run(other_run_id)
+    if not run_a or not run_b:
+        raise HTTPException(status_code=404, detail="One or both runs not found")
+    from termbox_runner.comparator import compare_runs
+    return compare_runs(run_a, run_b)
