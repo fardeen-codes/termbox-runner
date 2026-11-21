@@ -282,3 +282,8 @@ class HealthResponse(BaseModel):
     docker_available: bool = False
     active_runs: int = 0
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class RunTagUpdateRequest(BaseModel):
+    """Payload for updating tags on an existing run."""
+    tags: List[str] = Field(..., description="Replacement list of tags")
