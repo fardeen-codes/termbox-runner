@@ -104,3 +104,7 @@ def export_github_step_summary(manifest: RunManifest) -> str:
     """Generate concise summary suitable for $GITHUB_STEP_SUMMARY."""
     status_icon = "✅" if manifest.failure_mode == FailureMode.PASSED else "❌"
     return f"### {status_icon} Termbox Run: `{manifest.run_id}` ({manifest.duration_ms / 1000:.2f}s)"
+
+def export_runs_to_ndjson(runs: list) -> str:
+    """Serialize list of runs as newline-delimited JSON."""
+    return "\n".join(r.model_dump_json() for r in runs)
