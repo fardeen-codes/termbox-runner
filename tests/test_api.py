@@ -214,3 +214,9 @@ async def test_artifact_keys_and_zip_endpoints(async_client):
 
     zip_res = await async_client.get("/runs/nonexistent_run/artifacts/zip")
     assert zip_res.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_runs_diff_endpoint_missing(async_client):
+    res = await async_client.get("/runs/nonexistent_1/diff/nonexistent_2")
+    assert res.status_code == 404
