@@ -662,3 +662,13 @@ def sanitize_environment_variables(env: Dict[str, str]) -> Dict[str, str]:
 def get_sandbox_hostname() -> str:
     """Return the configured hostname to assign to the sandbox container."""
     return get_settings().container_hostname
+
+def safe_remove_container(container: Any, max_retries: int = 2) -> bool:
+    """Safely stop and remove a container with retry handling."""
+    for _ in range(max_retries):
+        try:
+            container.remove(force=True)
+            return True
+        except Exception:
+            time.sleep(0.1)
+    return False
