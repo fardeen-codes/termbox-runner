@@ -18,6 +18,11 @@ class FailureMode(str, Enum):
     SETUP_ERROR = "SETUP_ERROR"
     RUNTIME_ERROR = "RUNTIME_ERROR"
 
+    @property
+    def is_infrastructure_failure(self) -> bool:
+        """Return True if failure was due to infra constraints rather than code logic."""
+        return self in (FailureMode.OOM_KILLED, FailureMode.TIMEOUT, FailureMode.SETUP_ERROR)
+
 
 class RunStatus(str, Enum):
     """Execution lifecycle status."""
