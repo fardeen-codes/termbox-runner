@@ -508,6 +508,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary" id="btn-modal-replay">🔁 Replay Run</button>
+        <a id="btn-download-stdout" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">⬇ Download Logs</a>
         <button class="btn" onclick="closeModal('run-detail-modal')">Close</button>
       </div>
     </div>
