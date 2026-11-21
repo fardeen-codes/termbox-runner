@@ -23,3 +23,10 @@ def estimate_disk_throughput(io_bytes: int, duration_ms: float) -> float:
         return 0.0
     duration_s = duration_ms / 1000.0
     return round((io_bytes / (1024 * 1024)) / duration_s, 2)
+
+def calculate_start_jitter(created_at, started_at) -> float:
+    """Calculate scheduling delay in milliseconds between submission and start."""
+    if not created_at or not started_at:
+        return 0.0
+    delta = (started_at - created_at).total_seconds()
+    return max(0.0, round(delta * 1000.0, 2))
