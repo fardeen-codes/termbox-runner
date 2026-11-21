@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     app_version: str = "0.1.0"
     environment: str = "development"
     debug: bool = False
+    default_log_level: str = 'INFO'
     host: str = "0.0.0.0"
     port: int = 8000
 
