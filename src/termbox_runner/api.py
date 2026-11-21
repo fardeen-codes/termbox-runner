@@ -490,3 +490,11 @@ async def get_run_raw_stderr(run_id: str, storage: RunStorage = Depends(get_stor
     if not manifest:
         raise HTTPException(status_code=404, detail="Run not found")
     return PlainTextResponse(manifest.combined_stderr)
+
+@app.post("/runs/{run_id}/tags")
+async def update_run_tags(run_id: str, tags: list, storage: RunStorage = Depends(get_storage_dependency)):
+    """Update tags associated with a specific run."""
+    success = await storage.update_tags(run_id, tags)
+    if not success:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return {"status": "ok", "run_id": run_id, "tags": tags}
