@@ -782,6 +782,13 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '?' && !e.target.matches('input, textarea')) {
+        alert('Keyboard Shortcuts:\n/ : Focus Search\nEsc : Close Modal\nr : Refresh Runs');
+      }
+    });
+
     // Init
     checkHealth();
     fetchRuns();
