@@ -28,6 +28,9 @@ def build_parser() -> argparse.ArgumentParser:
     p_rep.add_argument('run_id')
     p_search = subparsers.add_parser('search', help='Search runs by command query')
     p_search.add_argument('query')
+    p_diff = subparsers.add_parser('diff', help='Compare two runs')
+    p_diff.add_argument('run_a')
+    p_diff.add_argument('run_b')
     subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
@@ -122,3 +125,15 @@ def cmd_search(server_url: str, query: str):
         print(f"Found {len(ids)} runs matching '{query}':")
         for rid in ids:
             print(f"- {rid}")
+
+def cmd_diff(server_url: str, run_a: str, run_b: str):
+    """Compare two runs."""
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        res = client.get(f"/runs/{run_a}/diff/{run_b}")
+        if res.status_code == 404:
+            print("Error: Runs not found for comparison.")
+            return
+        data = res.json()
+        print(f"Diff: {run_a} vs {run_b}")
+        print(f"Duration Delta: {data.get('duration_diff_ms')}ms")
+        print(f"Status Changed: {data.get('status_changed')}")
