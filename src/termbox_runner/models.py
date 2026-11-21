@@ -150,6 +150,7 @@ class TaskSubmission(BaseModel):
     environment: Dict[str, str] = Field(default_factory=dict, description="Custom environment variables")
     tags: List[str] = Field(default_factory=list, description="Categorization tags, e.g. ['smoke', 'eval', 'pr-123']")
     webhook_url: Optional[str] = Field(default=None, description="HTTP callback URL to invoke upon run completion")
+    webhook_secret: Optional[str] = Field(default=None, description="Shared secret for HMAC-SHA256 callback signing")
     limits: ResourceLimits = Field(default_factory=ResourceLimits, description="Resource bounds for the run")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Arbitrary task metadata or tags")
 
