@@ -90,6 +90,21 @@ class RunStorage:
             rows = await cursor.fetchall()
             return {row["failure_mode"]: row["cnt"] for row in rows}
 
+
+    async def update_tags(self, run_id: str, tags: list) -> bool:
+        """Update tags stored inside the task_json payload for a given run."""
+        conn = await self.get_connection()
+        async with self._lock:
+            async with conn.execute("SELECT task_json FROM runs WHERE run_id = ?", (run_id,)) as cursor:
+                row = await cursor.fetchone()
+                if not row:
+                    return False
+                task_data = json.loads(row["task_json"])
+                task_data["tags"] = tags
+                await conn.execute("UPDATE runs SET task_json = ? WHERE run_id = ?", (json.dumps(task_data), run_id))
+                await conn.commit()
+                return True
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
