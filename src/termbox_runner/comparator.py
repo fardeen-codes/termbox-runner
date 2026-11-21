@@ -33,3 +33,9 @@ def compare_runs(run_a: RunManifest, run_b: RunManifest) -> RunDiffResult:
         stderr_unified_diff=stderr_diff,
         command_diff=(run_a.task.main_cmd, run_b.task.main_cmd),
     )
+
+def calculate_duration_delta_percent(dur_a: float, dur_b: float) -> float:
+    """Calculate relative percentage change in duration between two runs."""
+    if dur_a <= 0:
+        return 0.0
+    return round(((dur_b - dur_a) / dur_a) * 100.0, 2)
