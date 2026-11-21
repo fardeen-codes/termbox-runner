@@ -299,3 +299,10 @@ class WebhookEvent(BaseModel):
     failure_mode: Optional[str] = None
     exit_code: Optional[int] = None
     duration_ms: float = 0.0
+
+
+class ArtifactMetadata(BaseModel):
+    """Metadata descriptor for an extracted sandbox artifact."""
+    path: str
+    size_bytes: int = 0
+    mime_type: str = "application/octet-stream"
