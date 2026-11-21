@@ -21,6 +21,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_run.add_argument('--image', default='python:3.12-slim')
     p_rep = subparsers.add_parser('replay', help='Replay a prior run')
     p_rep.add_argument('run_id')
+    subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
 
@@ -83,3 +84,11 @@ def cmd_replay(server_url: str, run_id: str):
         res = client.post(f"/runs/{run_id}/replay", json={})
         run = res.json()
         print(f"Replayed: {run['run_id']} (parent: {run.get('parent_run_id')})")
+
+def cmd_templates(server_url: str):
+    """List benchmark templates."""
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        res = client.get("/templates")
+        items = res.json().get("templates", [])
+        for t in items:
+            print(f"- {t['id']} [{t['category']}]: {t['name']}")
