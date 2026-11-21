@@ -157,3 +157,14 @@ async def test_docker_executor_oom_enforcement():
     assert result.status == RunStatus.FAILED
     assert result.failure_mode == FailureMode.OOM_KILLED
     assert result.exit_code == 137
+
+
+def test_runner_utilities():
+    from termbox_runner.runner import sanitize_environment_variables, get_sandbox_hostname, estimate_mock_memory_usage
+    
+    env = {"API_KEY": "secret123", "SAFE_VAR": "hello"}
+    sanitized = sanitize_environment_variables(env)
+    assert sanitized["API_KEY"] == "***MASKED***"
+    assert sanitized["SAFE_VAR"] == "hello"
+
+    assert get_sandbox_hostname() == "sandbox"
