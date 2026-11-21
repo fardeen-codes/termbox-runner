@@ -462,3 +462,15 @@ async def get_artifact_file(
         media_type="text/plain; charset=utf-8",
         headers={"Content-Disposition": f'attachment; filename="{Path(clean_path).name}"'},
     )
+
+@app.get("/system/info")
+async def get_system_info():
+    """Return host architecture and sandbox execution platform metadata."""
+    import platform
+    return {
+        "os": platform.system(),
+        "release": platform.release(),
+        "machine": platform.machine(),
+        "python_version": platform.python_version(),
+        "app_version": get_settings().app_version,
+    }
