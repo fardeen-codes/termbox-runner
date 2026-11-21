@@ -636,3 +636,5 @@ def get_executor(force_mock: bool = False) -> TaskExecutor:
 
     # Fallback to mock executor if docker unavailable
     return MockTaskExecutor()
+
+# Runner workdir support enabled
