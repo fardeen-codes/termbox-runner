@@ -541,3 +541,11 @@ async def get_run_export_markdown(run_id: str, storage: RunStorage = Depends(get
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.export import export_run_to_markdown
     return PlainTextResponse(export_run_to_markdown(manifest))
+
+@app.get("/runs/export/csv", response_class=Response)
+async def export_all_runs_csv(storage: RunStorage = Depends(get_storage_dependency)):
+    """Export all runs as a CSV file."""
+    runs = await storage.list_runs(limit=1000)
+    from termbox_runner.export import export_runs_to_csv
+    csv_data = export_runs_to_csv(runs)
+    return Response(content=csv_data, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=runs.csv"})
