@@ -506,3 +506,13 @@ async def delete_run_record(run_id: str, storage: RunStorage = Depends(get_stora
     if not success:
         raise HTTPException(status_code=404, detail="Run not found")
     return {"status": "deleted", "run_id": run_id}
+
+@app.get("/stats/summary")
+async def get_runs_summary_stats(storage: RunStorage = Depends(get_storage_dependency)):
+    """Return aggregated summary statistics for dashboard metrics."""
+    status_counts = await storage.count_runs_by_status()
+    total_time = await storage.get_total_execution_time_ms()
+    return {
+        "status_counts": status_counts,
+        "total_duration_ms": total_time,
+    }
