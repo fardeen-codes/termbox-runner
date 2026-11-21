@@ -56,3 +56,18 @@ def to_sarif(manifest: RunManifest) -> Dict[str, Any]:
 def runs_to_jsonl(runs: List[RunManifest]) -> str:
     """Serialize a list of RunManifest instances into newline-delimited JSON (JSONL)."""
     return "\n".join(r.model_dump_json() for r in runs)
+
+def build_junit_xml(manifest: RunManifest) -> str:
+    """Format run execution result as standard JUnit XML report."""
+    time_s = manifest.duration_ms / 1000.0
+    failures = 1 if manifest.failure_mode and manifest.failure_mode != FailureMode.PASSED else 0
+    failure_tag = ""
+    if failures:
+        msg = manifest.failure_reason or manifest.failure_mode.value
+        failure_tag = f'<failure message="{msg}" type="{manifest.failure_mode.value}"/>'
+    return f'''<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="termbox" tests="1" failures="{failures}" errors="0" time="{time_s:.3f}">
+  <testcase classname="termbox.runner" name="{manifest.run_id}" time="{time_s:.3f}">
+    {failure_tag}
+  </testcase>
+</testsuite>'''
