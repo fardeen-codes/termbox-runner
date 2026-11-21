@@ -52,6 +52,12 @@ class Settings(BaseSettings):
     docker_base_url: Optional[str] = None
     execution_mode: str = "docker"  # "docker" or "mock"
     workspace_root: str = "/tmp/termbox_workspaces"
+    def sanitized_dict(self) -> Dict[str, Any]:
+        """Export sanitized settings dictionary omitting sensitive paths/tokens."""
+        data = self.model_dump()
+        data.pop("docker_base_url", None)
+        return data
+
 
 
 @lru_cache()
