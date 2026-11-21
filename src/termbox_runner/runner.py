@@ -647,3 +647,14 @@ def build_ulimits_config(limits: ResourceLimits) -> list:
 def calculate_step_duration(start_time: float) -> float:
     """Return elapsed execution time in milliseconds."""
     return round((time.perf_counter() - start_time) * 1000.0, 2)
+
+def sanitize_environment_variables(env: Dict[str, str]) -> Dict[str, str]:
+    """Mask values for sensitive environment variable names."""
+    sensitive_patterns = {"SECRET", "PASSWORD", "TOKEN", "KEY", "AUTH"}
+    sanitized = {}
+    for k, v in env.items():
+        if any(pat in k.upper() for pat in sensitive_patterns):
+            sanitized[k] = "***MASKED***"
+        else:
+            sanitized[k] = v
+    return sanitized
