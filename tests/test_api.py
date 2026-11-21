@@ -205,3 +205,12 @@ async def test_webhook_test_endpoint_unreachable(async_client):
     res = await async_client.post("/webhooks/test?url=http://127.0.0.1:19999/nonexistent")
     assert res.status_code == 200
     assert res.json()["reachable"] is False
+
+
+@pytest.mark.asyncio
+async def test_artifact_keys_and_zip_endpoints(async_client):
+    res = await async_client.get("/runs/nonexistent_run/artifacts/keys")
+    assert res.status_code == 404
+
+    zip_res = await async_client.get("/runs/nonexistent_run/artifacts/zip")
+    assert zip_res.status_code == 404
