@@ -678,3 +678,12 @@ def estimate_mock_memory_usage(manifest: RunManifest) -> int:
     if manifest.failure_mode == FailureMode.OOM_KILLED:
         return parse_memory_to_bytes(manifest.task.limits.mem_limit)
     return 32 * 1024 * 1024  # 32MB base footprint
+
+def create_default_resource_usage(memory_bytes: int = 0) -> ResourceUsage:
+    """Create a default ResourceUsage instance."""
+    return ResourceUsage(
+        cpu_percent=0.0,
+        memory_peak_bytes=memory_bytes,
+        io_read_bytes=0,
+        io_write_bytes=0,
+    )
