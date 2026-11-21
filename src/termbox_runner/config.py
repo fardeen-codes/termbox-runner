@@ -53,6 +53,7 @@ class Settings(BaseSettings):
     execution_mode: str = "docker"  # "docker" or "mock"
     workspace_root: str = "/tmp/termbox_workspaces"
     tmpfs_size_mb: int = 64
+    stop_grace_period_seconds: int = 2
     def sanitized_dict(self) -> Dict[str, Any]:
         """Export sanitized settings dictionary omitting sensitive paths/tokens."""
         data = self.model_dump()
