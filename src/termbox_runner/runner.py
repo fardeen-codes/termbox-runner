@@ -658,3 +658,7 @@ def sanitize_environment_variables(env: Dict[str, str]) -> Dict[str, str]:
         else:
             sanitized[k] = v
     return sanitized
+
+def get_sandbox_hostname() -> str:
+    """Return the configured hostname to assign to the sandbox container."""
+    return get_settings().container_hostname
