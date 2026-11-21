@@ -117,6 +117,15 @@ class RunStorage:
                 await conn.commit()
                 return True
 
+
+    async def delete_run(self, run_id: str) -> bool:
+        """Delete a run manifest record by ID."""
+        conn = await self.get_connection()
+        async with self._lock:
+            cursor = await conn.execute("DELETE FROM runs WHERE run_id = ?", (run_id,))
+            await conn.commit()
+            return cursor.rowcount > 0
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
