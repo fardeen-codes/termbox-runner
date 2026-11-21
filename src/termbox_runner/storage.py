@@ -149,6 +149,14 @@ class RunStorage:
         async with self._lock:
             await conn.execute("VACUUM;")
 
+
+    async def get_total_execution_time_ms(self) -> float:
+        """Compute total wall-clock execution time recorded across all runs."""
+        conn = await self.get_connection()
+        async with conn.execute("SELECT SUM(duration_ms) as total_ms FROM runs") as cursor:
+            row = await cursor.fetchone()
+            return float(row["total_ms"]) if row and row["total_ms"] else 0.0
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
