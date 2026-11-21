@@ -41,3 +41,15 @@ async def test_template_api_endpoints(async_client: AsyncClient):
     # 404 for invalid template
     res_404 = await async_client.get("/templates/nonexistent_template")
     assert res_404.status_code == 404
+
+
+def test_new_multilang_templates():
+    from termbox_runner.templates_catalog import get_benchmark_template, get_templates_by_category
+    
+    assert get_benchmark_template("nodejs-jest") is not None
+    assert get_benchmark_template("rust-cargo") is not None
+    assert get_benchmark_template("bash-script") is not None
+
+    js_templates = get_templates_by_category("javascript")
+    assert len(js_templates) >= 1
+    assert js_templates[0].id == "nodejs-jest"
