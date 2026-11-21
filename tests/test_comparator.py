@@ -51,3 +51,26 @@ async def test_compare_runs_api(async_client: AsyncClient):
     assert diff_data["run_a_id"] == id1
     assert diff_data["run_b_id"] == id2
     assert "command_diff" in diff_data
+
+
+def test_comparator_utilities():
+    from termbox_runner.comparator import (
+        calculate_duration_delta_percent,
+        generate_stdout_diff,
+        detect_exit_code_change,
+        compute_memory_delta,
+        format_diff_line,
+    )
+
+    assert calculate_duration_delta_percent(100.0, 150.0) == 50.0
+    assert detect_exit_code_change(0, 1) is True
+    assert detect_exit_code_change(0, 0) is False
+
+    assert compute_memory_delta(1024, 2048) == 1024
+
+    diff = generate_stdout_diff("hello\n", "world\n")
+    assert "-hello" in diff
+    assert "+world" in diff
+
+    assert format_diff_line("+added").startswith("[ADD]")
+    assert format_diff_line("-deleted").startswith("[DEL]")
