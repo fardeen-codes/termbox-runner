@@ -46,6 +46,16 @@ async def lifespan(app: FastAPI):
     await storage.close()
 
 
+
+@app.middleware("http")
+async def add_process_time_header(request, call_next):
+    import time
+    start = time.perf_counter()
+    response = await call_next(request)
+    duration = time.perf_counter() - start
+    response.headers["X-Process-Time"] = f"{duration:.4f}s"
+    return response
+
 app = FastAPI(
     title="Termbox Runner",
     version=get_settings().app_version,
