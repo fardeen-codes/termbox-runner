@@ -687,3 +687,11 @@ def create_default_resource_usage(memory_bytes: int = 0) -> ResourceUsage:
         io_read_bytes=0,
         io_write_bytes=0,
     )
+
+def ping_docker_daemon() -> bool:
+    """Quick health check to determine if local Docker daemon is reachable."""
+    try:
+        from termbox_runner.runner import DockerTaskExecutor
+        return DockerTaskExecutor().is_available()
+    except Exception:
+        return False
