@@ -569,3 +569,14 @@ async def get_system_telemetry():
         "load_15m": load15,
         "active_runs": _active_runs_count,
     }
+
+@app.post("/webhooks/test")
+async def test_webhook_url(url: str = Query(..., description="Target callback URL to test")):
+    """Send a mock ping event to verify client webhook URL connectivity."""
+    headers = {"User-Agent": "Termbox-Runner-Webhook/0.1.0", "X-Termbox-Event": "ping"}
+    try:
+        async with httpx.AsyncClient(timeout=4.0) as client:
+            res = await client.post(url, json={"event": "ping", "message": "Termbox webhook test"}, headers=headers)
+            return {"reachable": res.is_success, "status_code": res.status_code}
+    except Exception as e:
+        return {"reachable": False, "error": str(e)}
