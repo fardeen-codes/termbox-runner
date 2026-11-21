@@ -1,7 +1,7 @@
 """Configuration settings for termbox-runner."""
 
 from functools import lru_cache
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     # Docker defaults & resource limits
     default_docker_image: str = "python:3.12-slim"
     container_hostname: str = "sandbox"
+    extra_docker_args: List[str] = Field(default_factory=list)
     default_timeout_seconds: float = 30.0
     max_timeout_seconds: float = 300.0
 
