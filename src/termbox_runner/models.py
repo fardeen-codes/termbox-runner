@@ -161,6 +161,13 @@ class RunManifest(BaseModel):
     combined_stderr: str = ""
     container_id: Optional[str] = None
     replay_count: int = 0
+
+    @property
+    def exit_signal(self) -> Optional[int]:
+        """Return the POSIX exit signal number if process exited via a signal (>128)."""
+        if self.exit_code is not None and self.exit_code > 128:
+            return self.exit_code - 128
+        return None
     peak_memory_bytes: int = 0
     average_cpu_percent: float = 0.0
     artifacts: Dict[str, str] = Field(default_factory=dict, description="Artifact relative path -> file content")
@@ -191,6 +198,13 @@ class RunSummary(BaseModel):
     image: str
     main_cmd: str
     replay_count: int = 0
+
+    @property
+    def exit_signal(self) -> Optional[int]:
+        """Return the POSIX exit signal number if process exited via a signal (>128)."""
+        if self.exit_code is not None and self.exit_code > 128:
+            return self.exit_code - 128
+        return None
     tags: List[str] = Field(default_factory=list)
 
 
