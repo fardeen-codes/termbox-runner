@@ -72,6 +72,10 @@ def classify_run(
                 FailureMode.OOM_KILLED,
                 f"Step '{step.step.value}' terminated due to out-of-memory (OOM) condition.",
             )
+        # Check for Python recursion limit
+        if "recursionerror: maximum recursion depth exceeded" in (step.stderr + " " + step.stdout).lower():
+            return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' exceeded maximum recursion depth (RecursionError)."
+
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
