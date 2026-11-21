@@ -714,3 +714,12 @@ def detect_artifact_mime_type(filename: str) -> str:
 def is_glob_pattern(pattern: str) -> bool:
     """Check if pattern contains glob metacharacters."""
     return any(c in pattern for c in "*?[]")
+
+def cleanup_empty_dirs(root_dir: str) -> None:
+    """Remove empty directories recursively under root path."""
+    for dirpath, dirnames, filenames in os.walk(root_dir, topdown=False):
+        if not dirnames and not filenames:
+            try:
+                os.rmdir(dirpath)
+            except OSError:
+                pass
