@@ -123,6 +123,8 @@ class TaskSubmission(BaseModel):
 
     task_id: Optional[str] = Field(default=None, description="Client-provided task or benchmark identifier")
     priority: int = Field(default=0, ge=-10, le=10, description="Task execution priority ranking")
+    git_commit: Optional[str] = Field(default=None, description="Source commit SHA")
+    git_branch: Optional[str] = Field(default=None, description="Source branch name")
     image: Optional[str] = Field(default=None, description="Base Docker image; defaults to system configured image")
     setup_cmd: Optional[str] = Field(default=None, description="Initial command executed during container preparation")
     main_cmd: str = Field(..., description="Main task or agent command to execute")
