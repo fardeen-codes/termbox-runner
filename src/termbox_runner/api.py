@@ -197,6 +197,13 @@ async def export_runs_jsonl(storage: RunStorage = Depends(get_storage_dependency
     )
 
 
+@app.get("/runs/search")
+async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
+    """Search stored task executions by main command keyword."""
+    run_ids = await storage.search_runs_by_command(q)
+    return {"query": q, "run_ids": run_ids, "count": len(run_ids)}
+
+
 @app.get("/runs/{run_id}", response_model=RunManifest)
 async def get_run(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
     """Fetch complete execution manifest, stdout/stderr, and failure classification."""
@@ -606,22 +613,6 @@ async def download_run_artifacts_zip(run_id: str, storage: RunStorage = Depends(
         media_type="application/zip",
         headers={"Content-Disposition": f"attachment; filename={run_id}_artifacts.zip"}
     )
-
-@app.get("/runs/{run_id}/diff/{other_run_id}")
-async def get_runs_diff(run_id: str, other_run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
-    """Compare execution results and generate unified log diffs between two runs."""
-    run_a = await storage.get_run(run_id)
-    run_b = await storage.get_run(other_run_id)
-    if not run_a or not run_b:
-        raise HTTPException(status_code=404, detail="One or both runs not found")
-    from termbox_runner.comparator import compare_runs
-    return compare_runs(run_a, run_b)
-
-@app.get("/runs/search")
-async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
-    """Search stored task executions by main command keyword."""
-    run_ids = await storage.search_runs_by_command(q)
-    return {"query": q, "run_ids": run_ids, "count": len(run_ids)}
 
 @app.post("/batches/{batch_id}/rerun-failed")
 async def rerun_failed_batch_runs(batch_id: str):

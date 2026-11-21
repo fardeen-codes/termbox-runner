@@ -376,3 +376,22 @@ All settings can be configured via environment variables prefixed with `TERMBOX_
 ## 📄 License
 
 MIT License. Designed and maintained for production AI benchmark evaluation and agent sandboxing.
+
+## CLI Companion Tool (`termbox`)
+
+Install or invoke the CLI via module:
+```bash
+python -m termbox_runner.cli --help
+python -m termbox_runner.cli health
+python -m termbox_runner.cli list
+python -m termbox_runner.cli run "python -c 'print(42)'"
+python -m termbox_runner.cli search "pytest"
+python -m termbox_runner.cli diff <run_id_1> <run_id_2>
+python -m termbox_runner.cli templates
+```
+
+## Telemetry & Differential Analysis
+- **System Telemetry:** `GET /telemetry/system`
+- **Run Comparison:** `GET /runs/{run_id}/diff/{other_run_id}`
+- **Search:** `GET /runs/search?q=<query>`
+- **Artifacts:** `GET /runs/{run_id}/artifacts/zip`
