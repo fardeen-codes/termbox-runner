@@ -54,6 +54,7 @@ async def add_process_time_header(request, call_next):
     response = await call_next(request)
     duration = time.perf_counter() - start
     response.headers["X-Process-Time"] = f"{duration:.4f}s"
+    response.headers["X-Request-ID"] = request.headers.get("X-Request-ID", str(uuid.uuid4()))
     return response
 
 app = FastAPI(
