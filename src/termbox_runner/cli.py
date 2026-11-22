@@ -32,6 +32,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_diff.add_argument('run_a')
     p_diff.add_argument('run_b')
     subparsers.add_parser('stats', help='Show runner metrics summary')
+    subparsers.add_parser('top', help='Show slowest runs')
     subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
@@ -148,3 +149,12 @@ def cmd_stats(server_url: str):
         print(f"Total Wall-clock Time: {data.get('total_duration_ms', 0):.1f}ms")
         for st, cnt in data.get("status_counts", {}).items():
             print(f"- {st}: {cnt}")
+
+def cmd_top(server_url: str, limit: int = 5):
+    """Display slowest runs by duration."""
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        res = client.get(f"/runs/slowest?limit={limit}")
+        runs = res.json()
+        print(f"=== Top {limit} Slowest Runs ===")
+        for r in runs:
+            print(f"{r['run_id']}: {r['duration_ms']:.1f}ms")
