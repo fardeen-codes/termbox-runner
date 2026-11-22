@@ -213,6 +213,14 @@ class RunStorage:
             rows = await cursor.fetchall()
             return [{"image": r["image"], "count": r["usage_count"]} for r in rows]
 
+
+    async def get_slowest_runs(self, limit: int = 10) -> list:
+        """Return run IDs ordered by total duration descending."""
+        conn = await self.get_connection()
+        async with conn.execute("SELECT run_id, duration_ms FROM runs ORDER BY duration_ms DESC LIMIT ?", (limit,)) as cursor:
+            rows = await cursor.fetchall()
+            return [{"run_id": r["run_id"], "duration_ms": r["duration_ms"]} for r in rows]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
