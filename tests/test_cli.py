@@ -15,3 +15,20 @@ def test_cli_parser_commands():
 
 def test_cli_colorize():
     assert "\033[92m" in colorize("OK", "green")
+
+
+def test_cli_additional_subcommands():
+    from termbox_runner.cli import build_parser, render_box_separator, format_network_error
+
+    parser = build_parser()
+    args_stats = parser.parse_args(["stats"])
+    assert args_stats.command == "stats"
+
+    args_top = parser.parse_args(["top"])
+    assert args_top.command == "top"
+
+    args_ver = parser.parse_args(["version"])
+    assert args_ver.command == "version"
+
+    assert "───" in render_box_separator(10)
+    assert "Connection Error" in format_network_error(Exception(), "http://localhost:8000")
