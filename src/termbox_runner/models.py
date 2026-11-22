@@ -330,3 +330,12 @@ class NotificationPayload(BaseModel):
     title: str
     body: str
     severity: str = "INFO"
+
+
+class RunAuditEntry(BaseModel):
+    """Audit record capturing security state at task inception."""
+    run_id: str
+    image: str
+    network_mode: str
+    no_new_privileges: bool = True
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
