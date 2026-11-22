@@ -188,6 +188,14 @@ class RunStorage:
             rows = await cursor.fetchall()
             return [row["parent_run_id"] for row in rows]
 
+
+    async def get_run_count_by_date_histogram(self) -> dict:
+        """Group run counts by UTC execution date (YYYY-MM-DD)."""
+        conn = await self.get_connection()
+        async with conn.execute("SELECT substr(created_at, 1, 10) as day, COUNT(*) as cnt FROM runs GROUP BY day ORDER BY day DESC LIMIT 30") as cursor:
+            rows = await cursor.fetchall()
+            return {row["day"]: row["cnt"] for row in rows}
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
