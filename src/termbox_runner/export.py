@@ -138,3 +138,15 @@ def format_github_action_annotation(manifest: RunManifest) -> str:
     level = "notice" if manifest.failure_mode == FailureMode.PASSED else "error"
     msg = manifest.failure_reason or (manifest.failure_mode.value if manifest.failure_mode else "Passed")
     return f"::{level} title=Termbox Run {manifest.run_id}::{msg}"
+
+def format_slack_blocks_payload(manifest: RunManifest) -> dict:
+    """Build rich Slack Block Kit notification message."""
+    icon = ":white_check_mark:" if manifest.failure_mode == FailureMode.PASSED else ":x:"
+    return {
+        "blocks": [
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": f"{icon} *Termbox Run {manifest.run_id}* finished with *{manifest.status.value}* ({manifest.duration_ms:.1f}ms)"}
+            }
+        ]
+    }
