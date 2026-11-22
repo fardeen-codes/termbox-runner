@@ -220,3 +220,14 @@ async def test_artifact_keys_and_zip_endpoints(async_client):
 async def test_runs_diff_endpoint_missing(async_client):
     res = await async_client.get("/runs/nonexistent_1/diff/nonexistent_2")
     assert res.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_slowest_and_dbsize_endpoints(async_client):
+    res_slow = await async_client.get("/runs/slowest")
+    assert res_slow.status_code == 200
+    assert isinstance(res_slow.json(), list)
+
+    res_db = await async_client.get("/system/db-size")
+    assert res_db.status_code == 200
+    assert "db_size_bytes" in res_db.json()
