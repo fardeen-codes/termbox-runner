@@ -90,6 +90,11 @@ def classify_run(
         if "indexerror: list index out of range" in (step.stderr + " " + step.stdout).lower() or "keyerror:" in (step.stderr + " " + step.stdout).lower():
             return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Index or Key lookup failure."
 
+        # Check for syntax error in Python code
+        if "syntaxerror: invalid syntax" in (step.stderr + " " + step.stdout).lower():
+            mode = FailureMode.SETUP_ERROR if step.step == CommandStep.SETUP else FailureMode.RUNTIME_ERROR
+            return mode, f"Step '{step.step.value}' failed with Python SyntaxError."
+
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
