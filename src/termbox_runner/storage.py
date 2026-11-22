@@ -205,6 +205,14 @@ class RunStorage:
             await conn.commit()
             return cursor.rowcount
 
+
+    async def get_most_frequently_used_images(self, limit: int = 5) -> list:
+        """Return most frequently executed container images and their counts."""
+        conn = await self.get_connection()
+        async with conn.execute("SELECT image, COUNT(*) as usage_count FROM runs GROUP BY image ORDER BY usage_count DESC LIMIT ?", (limit,)) as cursor:
+            rows = await cursor.fetchall()
+            return [{"image": r["image"], "count": r["usage_count"]} for r in rows]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
