@@ -229,6 +229,15 @@ class RunStorage:
             rows = await cursor.fetchall()
             return [{"command": r["main_cmd"], "failures": r["fail_count"]} for r in rows]
 
+
+    async def update_run_notes(self, run_id: str, notes: str) -> bool:
+        """Persist reviewer notes for a specific run."""
+        conn = await self.get_connection()
+        async with self._lock:
+            cursor = await conn.execute("UPDATE runs SET failure_reason = COALESCE(failure_reason || ' | Note: ' || ?, ?) WHERE run_id = ?", (notes, notes, run_id))
+            await conn.commit()
+            return cursor.rowcount > 0
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
