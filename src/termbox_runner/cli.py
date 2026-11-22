@@ -178,3 +178,7 @@ def cmd_logs(server_url: str, run_id: str, stderr: bool = False):
     with httpx.Client(base_url=server_url, timeout=10.0) as client:
         res = client.get(endpoint)
         print(res.text)
+
+def render_box_separator(width: int = 70) -> str:
+    """Draw clean terminal divider line."""
+    return "─" * width
