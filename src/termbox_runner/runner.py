@@ -739,3 +739,7 @@ def get_container_dns_servers(network_mode: str) -> list:
     if network_mode == "none":
         return []
     return get_settings().default_dns_servers
+
+def get_stop_signal_for_image(image: str) -> str:
+    """Determine graceful POSIX shutdown signal for container termination."""
+    return "SIGTERM"
