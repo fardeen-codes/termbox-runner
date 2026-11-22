@@ -61,3 +61,21 @@ def test_junit_and_csv_exports():
 
     gh = export_github_step_summary(manifest)
     assert "✅" in gh
+
+
+def test_tap_and_sonarqube_exports():
+    from termbox_runner.export import export_tap_v13, export_sonarqube_generic_xml, format_github_action_annotation
+    from termbox_runner.models import TaskSubmission, RunManifest, FailureMode
+
+    task = TaskSubmission(main_cmd="test.sh")
+    manifest = RunManifest(task=task, exit_code=0, failure_mode=FailureMode.PASSED, duration_ms=100.0)
+
+    tap = export_tap_v13(manifest)
+    assert "TAP version 13" in tap
+    assert "ok 1" in tap
+
+    sq = export_sonarqube_generic_xml(manifest)
+    assert "<testExecutions" in sq
+
+    gh = format_github_action_annotation(manifest)
+    assert "::notice" in gh
