@@ -188,3 +188,16 @@ def describe_signal(exit_code: int) -> Optional[str]:
         8: "SIGFPE", 9: "SIGKILL", 11: "SIGSEGV", 13: "SIGPIPE", 14: "SIGALRM", 15: "SIGTERM"
     }
     return signals.get(sig, f"SIG#{sig}")
+
+def get_failure_severity(failure_mode: Optional[FailureMode]) -> str:
+    """Assign alert severity (CRITICAL, HIGH, MEDIUM, LOW, INFO) to failure mode."""
+    if not failure_mode or failure_mode == FailureMode.PASSED:
+        return "INFO"
+    severities = {
+        FailureMode.OOM_KILLED: "CRITICAL",
+        FailureMode.TIMEOUT: "HIGH",
+        FailureMode.SETUP_ERROR: "MEDIUM",
+        FailureMode.ASSERTION_FAILED: "LOW",
+        FailureMode.RUNTIME_ERROR: "LOW",
+    }
+    return severities.get(failure_mode, "MEDIUM")
