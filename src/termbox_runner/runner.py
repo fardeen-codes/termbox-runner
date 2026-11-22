@@ -750,3 +750,9 @@ def build_security_opt(no_new_privs: bool = True) -> list:
     if no_new_privs:
         opts.append("no-new-privileges:true")
     return opts
+
+def build_capability_lists(drop_all: bool = True, retain_caps: list = None) -> tuple:
+    """Construct dropped and retained Linux capability sets."""
+    dropped = ["ALL"] if drop_all else []
+    retained = retain_caps or []
+    return dropped, retained
