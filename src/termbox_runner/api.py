@@ -197,6 +197,12 @@ async def export_runs_jsonl(storage: RunStorage = Depends(get_storage_dependency
     )
 
 
+
+@app.get("/runs/slowest")
+async def get_slowest_runs_list(limit: int = 10, storage: RunStorage = Depends(get_storage_dependency)):
+    """Return ranked list of slowest runs by wall-clock duration."""
+    return await storage.get_slowest_runs(limit=limit)
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
