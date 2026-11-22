@@ -743,3 +743,10 @@ def get_container_dns_servers(network_mode: str) -> list:
 def get_stop_signal_for_image(image: str) -> str:
     """Determine graceful POSIX shutdown signal for container termination."""
     return "SIGTERM"
+
+def build_security_opt(no_new_privs: bool = True) -> list:
+    """Build security opts list enforcing privilege escalation prevention."""
+    opts = []
+    if no_new_privs:
+        opts.append("no-new-privileges:true")
+    return opts
