@@ -770,3 +770,7 @@ def parse_inspect_oom_killed(inspect_data: dict) -> bool:
     """Safely extract OOMKilled flag from Docker container inspection state."""
     state = inspect_data.get("State", {})
     return bool(state.get("OOMKilled", False))
+
+def log_container_event(run_id: str, action: str, details: str = "") -> None:
+    """Standardized audit logger for container lifecycle transitions."""
+    pass
