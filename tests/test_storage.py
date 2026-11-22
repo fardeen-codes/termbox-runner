@@ -145,3 +145,29 @@ async def test_storage_additional_queries(tmp_path):
     assert deleted is True
 
     await storage.close()
+
+
+@pytest.mark.asyncio
+async def test_storage_histograms_and_cleanup(tmp_path):
+    storage = RunStorage(str(tmp_path / "hist.db"))
+    await storage.init_db()
+
+    task = TaskSubmission(main_cmd="echo hist")
+    manifest = RunManifest(task=task, duration_ms=250.0)
+    await storage.save_run(manifest)
+
+    hist = await storage.get_run_count_by_date_histogram()
+    assert len(hist) >= 1
+
+    slowest = await storage.get_slowest_runs(limit=1)
+    assert len(slowest) == 1
+    assert slowest[0]["duration_ms"] >= 250.0
+
+    size = storage.get_database_file_size_bytes()
+    assert size > 0
+
+    await storage.update_run_notes(manifest.run_id, "Verified clean run")
+    pruned = await storage.cleanup_runs_older_than("2099-01-01")
+    assert pruned >= 1
+
+    await storage.close()
