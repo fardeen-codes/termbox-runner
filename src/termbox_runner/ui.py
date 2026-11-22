@@ -232,6 +232,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       align-items: center;
       padding: 20px;
     }
+    .modal-backdrop { backdrop-filter: blur(4px); }
     .modal {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
