@@ -630,3 +630,9 @@ async def download_run_artifacts_zip(run_id: str, storage: RunStorage = Depends(
 async def rerun_failed_batch_runs(batch_id: str):
     """Re-trigger execution only for failed tasks in a batch."""
     return {"batch_id": batch_id, "rerun_count": 0, "status": "queued"}
+
+@app.post("/maintenance/cleanup")
+async def prune_historical_runs(older_than: str = Query(..., description="ISO 8601 date cutoff"), storage: RunStorage = Depends(get_storage_dependency)):
+    """Prune completed runs older than specified cutoff date."""
+    pruned_count = await storage.cleanup_runs_older_than(older_than)
+    return {"pruned_count": pruned_count, "cutoff": older_than}
