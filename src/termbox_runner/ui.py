@@ -816,6 +816,13 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       return (ms / 1000).toFixed(2) + 's';
     }
 
+
+    function getExitCodeBadge(code) {
+      if (code === null || code === undefined) return '-';
+      const color = code === 0 ? '#10b981' : '#ef4444';
+      return `<span style="color:${color}; font-weight:600;">${code}</span>`;
+    }
+
     function escapeHtml(text) {
       if (!text) return '';
       return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
