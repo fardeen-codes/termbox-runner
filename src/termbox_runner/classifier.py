@@ -95,6 +95,11 @@ def classify_run(
             mode = FailureMode.SETUP_ERROR if step.step == CommandStep.SETUP else FailureMode.RUNTIME_ERROR
             return mode, f"Step '{step.step.value}' failed with Python SyntaxError."
 
+        # Check for indentation error
+        if "indentationerror:" in (step.stderr + " " + step.stdout).lower():
+            mode = FailureMode.SETUP_ERROR if step.step == CommandStep.SETUP else FailureMode.RUNTIME_ERROR
+            return mode, f"Step '{step.step.value}' failed with IndentationError."
+
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
