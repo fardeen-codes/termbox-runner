@@ -196,6 +196,15 @@ class RunStorage:
             rows = await cursor.fetchall()
             return {row["day"]: row["cnt"] for row in rows}
 
+
+    async def cleanup_runs_older_than(self, iso_cutoff: str) -> int:
+        """Prune completed run manifests older than specified cutoff date."""
+        conn = await self.get_connection()
+        async with self._lock:
+            cursor = await conn.execute("DELETE FROM runs WHERE created_at < ? AND parent_run_id IS NULL", (iso_cutoff,))
+            await conn.commit()
+            return cursor.rowcount
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
