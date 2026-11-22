@@ -823,6 +823,11 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       return `<span style="color:${color}; font-weight:600;">${code}</span>`;
     }
 
+
+    function renderStepProgressBar(percent) {
+      return `<div style="background:#334155; border-radius:4px; height:6px; width:100%;"><div style="background:#3b82f6; width:${percent}%; height:100%;"></div></div>`;
+    }
+
     function escapeHtml(text) {
       if (!text) return '';
       return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
