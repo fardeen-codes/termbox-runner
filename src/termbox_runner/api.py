@@ -651,3 +651,11 @@ async def get_run_environment(run_id: str, storage: RunStorage = Depends(get_sto
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.runner import sanitize_environment_variables
     return {"run_id": run_id, "environment": sanitize_environment_variables(manifest.task.environment)}
+
+@app.get("/runs/{run_id}/status")
+async def get_run_status_lightweight(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Lightweight endpoint for polling execution status and duration."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return {"run_id": run_id, "status": manifest.status, "duration_ms": manifest.duration_ms}
