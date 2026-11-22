@@ -729,3 +729,7 @@ def is_potentially_harmful_command(cmd: str) -> bool:
     dangerous_patterns = [":(){ :|:& };:", "rm -rf / --no-preserve-root", "> /dev/sda"]
     clean = cmd.strip()
     return any(p in clean for p in dangerous_patterns)
+
+def build_tmpfs_config(size_mb: int = 64) -> dict:
+    """Construct secure in-memory tmpfs mounts for ephemeral run scratch space."""
+    return {"/tmp": f"size={size_mb}m,noexec,nosuid,nodev"}
