@@ -420,6 +420,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     <button class="filter-btn active" onclick="setFilter('')">All Runs</button>
     <button class="filter-btn" onclick="setFilter('PASSED')">Passed</button>
     <button class="filter-btn" onclick="setFilter('ASSERTION_FAILED')">Assertion Failed</button>
+              <button class="filter-btn" onclick="setFilter('TIMEOUT')">Timeouts</button>
     <button class="filter-btn" onclick="setFilter('TIMEOUT')">Timeout</button>
     <button class="filter-btn" onclick="setFilter('OOM_KILLED')">OOM Killed</button>
     <button class="filter-btn" onclick="setFilter('SETUP_ERROR')">Setup Error</button>
