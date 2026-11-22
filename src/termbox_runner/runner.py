@@ -733,3 +733,9 @@ def is_potentially_harmful_command(cmd: str) -> bool:
 def build_tmpfs_config(size_mb: int = 64) -> dict:
     """Construct secure in-memory tmpfs mounts for ephemeral run scratch space."""
     return {"/tmp": f"size={size_mb}m,noexec,nosuid,nodev"}
+
+def get_container_dns_servers(network_mode: str) -> list:
+    """Return safe fallback DNS resolvers when network mode permits connectivity."""
+    if network_mode == "none":
+        return []
+    return get_settings().default_dns_servers
