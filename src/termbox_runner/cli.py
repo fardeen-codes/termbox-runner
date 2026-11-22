@@ -40,6 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_lg = subparsers.add_parser('logs', help='Stream run logs')
     p_lg.add_argument('run_id')
     p_lg.add_argument('--stderr', action='store_true')
+    subparsers.add_parser('version', help='Show CLI version')
     subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
@@ -186,3 +187,7 @@ def render_box_separator(width: int = 70) -> str:
 def format_network_error(exc: Exception, server_url: str) -> str:
     """Friendly diagnostic error when Termbox server daemon is not reachable."""
     return f"Connection Error: Could not connect to Termbox Runner at {server_url}. Is server running?"
+
+def cmd_version():
+    """Print CLI version information."""
+    print(f"termbox CLI v0.1.0")
