@@ -440,7 +440,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
           <th>Failure Mode</th>
           <th>Main Command</th>
           <th>Exit Code</th>
-          <th>Duration</th>
+          <th style="cursor:pointer;">Duration ↕</th>
           <th>Executed At</th>
           <th>Actions</th>
         </tr>
@@ -626,7 +626,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         if (run.steps && run.steps.length) {
           stepsHtml = `
             <table class="steps-table">
-              <thead><tr><th>Step</th><th>Exit</th><th>Duration</th><th>Command</th></tr></thead>
+              <thead><tr><th>Step</th><th>Exit</th><th style="cursor:pointer;">Duration ↕</th><th>Command</th></tr></thead>
               <tbody>
                 ${run.steps.map(s => `
                   <tr>
