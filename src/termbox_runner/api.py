@@ -659,3 +659,11 @@ async def get_run_status_lightweight(run_id: str, storage: RunStorage = Depends(
     if not manifest:
         raise HTTPException(status_code=404, detail="Run not found")
     return {"run_id": run_id, "status": manifest.status, "duration_ms": manifest.duration_ms}
+
+@app.get("/runs/{run_id}/steps")
+async def get_run_steps(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Return detailed step timings and per-step telemetry."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return {"run_id": run_id, "steps": [s.model_dump() for s in manifest.steps]}
