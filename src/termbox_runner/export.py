@@ -124,3 +124,11 @@ def export_sonarqube_generic_xml(manifest: RunManifest) -> str:
     </testCase>
   </file>
 </testExecutions>'''
+
+def export_tap_v13(manifest: RunManifest) -> str:
+    """Export results conforming to Test Anything Protocol v13."""
+    ok_str = "ok" if manifest.failure_mode == FailureMode.PASSED else "not ok"
+    return f'''TAP version 13
+1..1
+{ok_str} 1 - {manifest.run_id} ({manifest.duration_ms:.1f}ms)
+'''
