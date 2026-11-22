@@ -86,6 +86,10 @@ def classify_run(
         if "zerodivisionerror: division by zero" in (step.stderr + " " + step.stdout).lower():
             return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with ZeroDivisionError: division by zero."
 
+        # Check for index or key lookup error
+        if "indexerror: list index out of range" in (step.stderr + " " + step.stdout).lower() or "keyerror:" in (step.stderr + " " + step.stdout).lower():
+            return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Index or Key lookup failure."
+
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
