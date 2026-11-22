@@ -636,3 +636,9 @@ async def prune_historical_runs(older_than: str = Query(..., description="ISO 86
     """Prune completed runs older than specified cutoff date."""
     pruned_count = await storage.cleanup_runs_older_than(older_than)
     return {"pruned_count": pruned_count, "cutoff": older_than}
+
+@app.get("/system/db-size")
+async def get_db_file_size(storage: RunStorage = Depends(get_storage_dependency)):
+    """Return database disk file size in bytes."""
+    size_bytes = storage.get_database_file_size_bytes()
+    return {"db_size_bytes": size_bytes, "db_path": storage.db_path}
