@@ -25,6 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_run = subparsers.add_parser('run', help='Execute sandboxed command')
     p_run.add_argument('task_cmd', help='Command to execute inside sandbox')
     p_run.add_argument('--image', default='python:3.12-slim')
+    p_run.add_argument('-q', '--quiet', action='store_true', help='Suppress output')
     p_rep = subparsers.add_parser('replay', help='Replay a prior run')
     p_rep.add_argument('run_id')
     p_search = subparsers.add_parser('search', help='Search runs by command query')
