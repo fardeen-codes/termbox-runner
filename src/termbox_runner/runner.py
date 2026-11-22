@@ -774,3 +774,12 @@ def parse_inspect_oom_killed(inspect_data: dict) -> bool:
 def log_container_event(run_id: str, action: str, details: str = "") -> None:
     """Standardized audit logger for container lifecycle transitions."""
     pass
+
+def check_workspace_disk_available(workspace_path: str, min_free_mb: int = 100) -> bool:
+    """Verify host volume has sufficient free disk space before running container."""
+    import shutil
+    try:
+        usage = shutil.disk_usage(workspace_path)
+        return (usage.free / (1024 * 1024)) >= min_free_mb
+    except Exception:
+        return True
