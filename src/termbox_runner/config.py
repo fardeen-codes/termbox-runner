@@ -58,6 +58,7 @@ class Settings(BaseSettings):
     webhook_max_retries: int = 3
     workspace_retention_minutes: int = 60
     max_request_body_size_bytes: int = 10 * 1024 * 1024
+    allowed_cors_origins: List[str] = Field(default_factory=lambda: ["*"])
     def sanitized_dict(self) -> Dict[str, Any]:
         """Export sanitized settings dictionary omitting sensitive paths/tokens."""
         data = self.model_dump()
