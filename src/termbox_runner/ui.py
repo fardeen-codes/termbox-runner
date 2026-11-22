@@ -841,6 +841,13 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       }
     });
 
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'r' && !e.target.matches('input, textarea')) {
+        fetchRuns();
+      }
+    });
+
     // Init
     checkHealth();
     fetchRuns();
