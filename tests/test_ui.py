@@ -8,3 +8,9 @@ def test_dashboard_contains_critical_ui_elements():
     assert "Export CSV" in DASHBOARD_HTML
     assert "submitPreset" in DASHBOARD_HTML
     assert "openNewRunModal" in DASHBOARD_HTML
+
+
+def test_ui_additional_controls():
+    assert "copyCommand" in DASHBOARD_HTML
+    assert "toggleAutoRefresh" in DASHBOARD_HTML
+    assert "getExitCodeBadge" in DASHBOARD_HTML
