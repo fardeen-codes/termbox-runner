@@ -221,6 +221,14 @@ class RunStorage:
             rows = await cursor.fetchall()
             return [{"run_id": r["run_id"], "duration_ms": r["duration_ms"]} for r in rows]
 
+
+    async def get_top_failing_tasks(self, limit: int = 5) -> list:
+        """Identify task commands with highest rate of failure."""
+        conn = await self.get_connection()
+        async with conn.execute("SELECT main_cmd, COUNT(*) as fail_count FROM runs WHERE failure_mode != 'PASSED' GROUP BY main_cmd ORDER BY fail_count DESC LIMIT ?", (limit,)) as cursor:
+            rows = await cursor.fetchall()
+            return [{"command": r["main_cmd"], "failures": r["fail_count"]} for r in rows]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
