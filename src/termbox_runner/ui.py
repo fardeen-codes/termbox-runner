@@ -795,6 +795,13 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       }
     }
 
+
+    let autoRefreshActive = true;
+    function toggleAutoRefresh() {
+      autoRefreshActive = !autoRefreshActive;
+      showToast(autoRefreshActive ? 'Auto-refresh resumed' : 'Auto-refresh paused');
+    }
+
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
