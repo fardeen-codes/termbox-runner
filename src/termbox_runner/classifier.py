@@ -201,3 +201,9 @@ def get_failure_severity(failure_mode: Optional[FailureMode]) -> str:
         FailureMode.RUNTIME_ERROR: "LOW",
     }
     return severities.get(failure_mode, "MEDIUM")
+
+def extract_stacktrace_snippet(stderr_text: str, max_lines: int = 6) -> str:
+    """Extract innermost Python stacktrace frames from stderr."""
+    lines = stderr_text.splitlines()
+    frames = [line for line in lines if "File \"" in line or "line " in line]
+    return "\n".join(frames[-max_lines:]) if frames else ""
