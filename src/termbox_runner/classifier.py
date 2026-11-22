@@ -108,6 +108,10 @@ def classify_run(
         if "timeoutexpired:" in (step.stderr + " " + step.stdout).lower():
             return FailureMode.TIMEOUT, f"Step '{step.step.value}' subprocess timed out (TimeoutExpired)."
 
+        # Check for git merge conflict markers
+        if "conflict (content): merge conflict in" in (step.stderr + " " + step.stdout).lower():
+            return FailureMode.SETUP_ERROR, "Git merge conflict encountered while preparing patch."
+
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
