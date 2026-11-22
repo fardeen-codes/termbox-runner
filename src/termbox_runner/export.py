@@ -112,3 +112,15 @@ def export_runs_to_ndjson(runs: list) -> str:
 def xml_escape(text: str) -> str:
     """Escape string for safe inclusion in XML attributes and elements."""
     return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+
+def export_sonarqube_generic_xml(manifest: RunManifest) -> str:
+    """Export test results in SonarQube generic test execution XML format."""
+    dur_ms = int(manifest.duration_ms)
+    status_tag = "" if manifest.failure_mode == FailureMode.PASSED else f'<skipped message="{manifest.failure_mode.value}"/>'
+    return f'''<testExecutions version="1">
+  <file path="{manifest.task.main_cmd}">
+    <testCase name="{manifest.run_id}" duration="{dur_ms}">
+      {status_tag}
+    </testCase>
+  </file>
+</testExecutions>'''
