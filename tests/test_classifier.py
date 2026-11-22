@@ -149,3 +149,19 @@ def test_classify_signals_and_exit_codes():
     assert describe_signal(137) == "SIGKILL"
     assert describe_signal(139) == "SIGSEGV"
     assert describe_signal(0) is None
+
+
+def test_classifier_python_exceptions():
+    from termbox_runner.classifier import get_failure_severity, extract_stacktrace_snippet
+
+    step_div = StepResult(step=CommandStep.MAIN, command="calc.py", exit_code=1, stderr="ZeroDivisionError: division by zero")
+    mode, reason = classify_run([step_div])
+    assert mode == FailureMode.RUNTIME_ERROR
+    assert "ZeroDivisionError" in reason
+
+    assert get_failure_severity(FailureMode.OOM_KILLED) == "CRITICAL"
+    assert get_failure_severity(FailureMode.PASSED) == "INFO"
+
+    trace = 'File "test.py", line 12, in <module>\nZeroDivisionError'
+    snippet = extract_stacktrace_snippet(trace)
+    assert 'line 12' in snippet
