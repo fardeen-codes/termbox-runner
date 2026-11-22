@@ -250,6 +250,12 @@ class RunStorage:
         except OSError:
             return 0
 
+
+    async def execute_in_savepoint(self, savepoint_name: str) -> None:
+        """Establish named SQL savepoint for nested rollbacks."""
+        conn = await self.get_connection()
+        await conn.execute(f"SAVEPOINT {savepoint_name};")
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
