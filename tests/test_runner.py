@@ -168,3 +168,32 @@ def test_runner_utilities():
     assert sanitized["SAFE_VAR"] == "hello"
 
     assert get_sandbox_hostname() == "sandbox"
+
+
+def test_runner_sandboxing_helpers():
+    from termbox_runner.runner import (
+        build_tmpfs_config,
+        get_container_dns_servers,
+        build_security_opt,
+        calculate_swap_limit,
+        calculate_cgroup_cpu_quota,
+        parse_inspect_oom_killed,
+    )
+
+    tmpfs = build_tmpfs_config(32)
+    assert "/tmp" in tmpfs
+    assert "size=32m" in tmpfs["/tmp"]
+
+    assert get_container_dns_servers("none") == []
+
+    sec = build_security_opt(True)
+    assert "no-new-privileges:true" in sec
+
+    assert calculate_swap_limit(1024) == 1024
+
+    period, quota = calculate_cgroup_cpu_quota(1.5, 100000)
+    assert period == 100000
+    assert quota == 150000
+
+    assert parse_inspect_oom_killed({"State": {"OOMKilled": True}}) is True
+    assert parse_inspect_oom_killed({}) is False
