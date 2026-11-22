@@ -48,6 +48,7 @@ CREATE INDEX IF NOT EXISTS idx_runs_status ON runs(status);
 CREATE INDEX IF NOT EXISTS idx_runs_failure_mode ON runs(failure_mode);
 CREATE INDEX IF NOT EXISTS idx_runs_parent_run_id ON runs(parent_run_id);
 CREATE INDEX IF NOT EXISTS idx_runs_created_at ON runs(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_runs_status_created ON runs(status, created_at DESC);
 """
 
 
