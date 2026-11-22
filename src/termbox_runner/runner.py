@@ -760,3 +760,8 @@ def build_capability_lists(drop_all: bool = True, retain_caps: list = None) -> t
 def calculate_swap_limit(mem_limit_bytes: int) -> int:
     """Enforce zero-swap isolation by equating memory and swap boundaries."""
     return mem_limit_bytes
+
+def calculate_cgroup_cpu_quota(cpu_cores: float, period_us: int = 100000) -> tuple:
+    """Compute CFS CPU quota and period microseconds for Docker container."""
+    quota_us = int(cpu_cores * period_us)
+    return period_us, quota_us
