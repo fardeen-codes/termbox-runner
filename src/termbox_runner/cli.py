@@ -33,6 +33,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_diff.add_argument('run_b')
     subparsers.add_parser('stats', help='Show runner metrics summary')
     subparsers.add_parser('top', help='Show slowest runs')
+    p_pr = subparsers.add_parser('prune', help='Prune old runs')
+    p_pr.add_argument('cutoff')
     subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
@@ -158,3 +160,9 @@ def cmd_top(server_url: str, limit: int = 5):
         print(f"=== Top {limit} Slowest Runs ===")
         for r in runs:
             print(f"{r['run_id']}: {r['duration_ms']:.1f}ms")
+
+def cmd_prune(server_url: str, older_than: str):
+    """Prune runs older than date."""
+    with httpx.Client(base_url=server_url, timeout=10.0) as client:
+        res = client.post(f"/maintenance/cleanup?older_than={older_than}")
+        print(f"Pruned {res.json().get('pruned_count')} historical runs.")
