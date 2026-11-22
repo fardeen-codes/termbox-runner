@@ -182,3 +182,7 @@ def cmd_logs(server_url: str, run_id: str, stderr: bool = False):
 def render_box_separator(width: int = 70) -> str:
     """Draw clean terminal divider line."""
     return "─" * width
+
+def format_network_error(exc: Exception, server_url: str) -> str:
+    """Friendly diagnostic error when Termbox server daemon is not reachable."""
+    return f"Connection Error: Could not connect to Termbox Runner at {server_url}. Is server running?"
