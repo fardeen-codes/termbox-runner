@@ -783,3 +783,8 @@ def check_workspace_disk_available(workspace_path: str, min_free_mb: int = 100) 
         return (usage.free / (1024 * 1024)) >= min_free_mb
     except Exception:
         return True
+
+def validate_container_name(name: str) -> bool:
+    """Validate container name conforms to Docker naming constraints."""
+    import re
+    return bool(re.match(r"^[a-zA-Z0-9][a-zA-Z0-9_.-]+$", name))
