@@ -780,6 +780,14 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       }
     }
 
+
+    function copyCommand(cmd) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(cmd);
+        showToast('Command copied: ' + cmd);
+      }
+    }
+
     function copyRunId(id) {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(id);
