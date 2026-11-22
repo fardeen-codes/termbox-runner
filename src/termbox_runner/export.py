@@ -150,3 +150,16 @@ def format_slack_blocks_payload(manifest: RunManifest) -> dict:
             }
         ]
     }
+
+def format_discord_embed(manifest: RunManifest) -> dict:
+    """Build Discord webhook embed notification payload."""
+    color = 0x10B981 if manifest.failure_mode == FailureMode.PASSED else 0xEF4444
+    return {
+        "embeds": [
+            {
+                "title": f"Run {manifest.run_id}",
+                "description": f"Status: {manifest.status.value} | Mode: {manifest.failure_mode.value if manifest.failure_mode else 'PASSED'}",
+                "color": color
+            }
+        ]
+    }
