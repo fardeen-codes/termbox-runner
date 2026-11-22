@@ -1,3 +1,14 @@
+
+## [0.2.0] - Extensibility & Observability Milestone
+
+### Added
+- System telemetry and host load average recording.
+- Real-time run differential analysis and unified diff generation.
+- Chat webhook notifications for Slack and Discord.
+- SonarQube XML and TAP v13 test export formatters.
+- Enhanced CLI commands: `stats`, `top`, `prune`, `logs`, `diff`, `search`.
+- Configurable tmpfs mounts and Linux capabilities dropping.
+
 # Changelog
 
 ## [0.1.0] - Production Release
