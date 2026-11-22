@@ -322,3 +322,11 @@ class BatchFilterParams(BaseModel):
     status: Optional[RunStatus] = None
     failure_mode: Optional[FailureMode] = None
     min_duration_ms: Optional[float] = None
+
+
+class NotificationPayload(BaseModel):
+    """Generic notification envelope for chat and alerting channels."""
+    channel: str = "slack"
+    title: str
+    body: str
+    severity: str = "INFO"
