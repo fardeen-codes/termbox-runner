@@ -31,6 +31,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_diff = subparsers.add_parser('diff', help='Compare two runs')
     p_diff.add_argument('run_a')
     p_diff.add_argument('run_b')
+    subparsers.add_parser('stats', help='Show runner metrics summary')
     subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
@@ -137,3 +138,13 @@ def cmd_diff(server_url: str, run_a: str, run_b: str):
         print(f"Diff: {run_a} vs {run_b}")
         print(f"Duration Delta: {data.get('duration_diff_ms')}ms")
         print(f"Status Changed: {data.get('status_changed')}")
+
+def cmd_stats(server_url: str):
+    """Display aggregate stats summary from terminal."""
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        res = client.get("/stats/summary")
+        data = res.json()
+        print("=== Termbox Aggregate Metrics ===")
+        print(f"Total Wall-clock Time: {data.get('total_duration_ms', 0):.1f}ms")
+        for st, cnt in data.get("status_counts", {}).items():
+            print(f"- {st}: {cnt}")
