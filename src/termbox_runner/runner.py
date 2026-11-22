@@ -765,3 +765,8 @@ def calculate_cgroup_cpu_quota(cpu_cores: float, period_us: int = 100000) -> tup
     """Compute CFS CPU quota and period microseconds for Docker container."""
     quota_us = int(cpu_cores * period_us)
     return period_us, quota_us
+
+def parse_inspect_oom_killed(inspect_data: dict) -> bool:
+    """Safely extract OOMKilled flag from Docker container inspection state."""
+    state = inspect_data.get("State", {})
+    return bool(state.get("OOMKilled", False))
