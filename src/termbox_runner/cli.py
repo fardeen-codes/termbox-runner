@@ -35,6 +35,9 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser('top', help='Show slowest runs')
     p_pr = subparsers.add_parser('prune', help='Prune old runs')
     p_pr.add_argument('cutoff')
+    p_lg = subparsers.add_parser('logs', help='Stream run logs')
+    p_lg.add_argument('run_id')
+    p_lg.add_argument('--stderr', action='store_true')
     subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
@@ -166,3 +169,10 @@ def cmd_prune(server_url: str, older_than: str):
     with httpx.Client(base_url=server_url, timeout=10.0) as client:
         res = client.post(f"/maintenance/cleanup?older_than={older_than}")
         print(f"Pruned {res.json().get('pruned_count')} historical runs.")
+
+def cmd_logs(server_url: str, run_id: str, stderr: bool = False):
+    """Stream raw stdout or stderr directly."""
+    endpoint = f"/runs/{run_id}/raw-stderr" if stderr else f"/runs/{run_id}/raw-stdout"
+    with httpx.Client(base_url=server_url, timeout=10.0) as client:
+        res = client.get(endpoint)
+        print(res.text)
