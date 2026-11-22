@@ -667,3 +667,11 @@ async def get_run_steps(run_id: str, storage: RunStorage = Depends(get_storage_d
     if not manifest:
         raise HTTPException(status_code=404, detail="Run not found")
     return {"run_id": run_id, "steps": [s.model_dump() for s in manifest.steps]}
+
+@app.post("/runs/{run_id}/notes")
+async def add_run_notes(run_id: str, notes: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
+    """Attach human evaluation notes or review remarks to a run."""
+    success = await storage.update_run_notes(run_id, notes)
+    if not success:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return {"status": "ok", "run_id": run_id, "notes": notes}
