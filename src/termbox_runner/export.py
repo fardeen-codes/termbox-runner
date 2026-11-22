@@ -163,3 +163,7 @@ def format_discord_embed(manifest: RunManifest) -> dict:
             }
         ]
     }
+
+def sanitize_slack_mrkdwn(text: str) -> str:
+    """Sanitize text to prevent Slack markdown injection."""
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
