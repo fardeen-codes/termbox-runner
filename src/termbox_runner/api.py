@@ -675,3 +675,7 @@ async def add_run_notes(run_id: str, notes: str = Query(..., min_length=1), stor
     if not success:
         raise HTTPException(status_code=404, detail="Run not found")
     return {"status": "ok", "run_id": run_id, "notes": notes}
+
+def format_problem_detail(status: int, title: str, detail: str) -> dict:
+    """RFC 7807 problem details error payload generator."""
+    return {"type": "about:blank", "title": title, "status": status, "detail": detail}
