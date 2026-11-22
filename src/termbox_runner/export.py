@@ -132,3 +132,9 @@ def export_tap_v13(manifest: RunManifest) -> str:
 1..1
 {ok_str} 1 - {manifest.run_id} ({manifest.duration_ms:.1f}ms)
 '''
+
+def format_github_action_annotation(manifest: RunManifest) -> str:
+    """Produce GitHub Actions ::error or ::notice command string."""
+    level = "notice" if manifest.failure_mode == FailureMode.PASSED else "error"
+    msg = manifest.failure_reason or (manifest.failure_mode.value if manifest.failure_mode else "Passed")
+    return f"::{level} title=Termbox Run {manifest.run_id}::{msg}"
