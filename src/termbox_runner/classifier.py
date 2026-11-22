@@ -104,6 +104,10 @@ def classify_run(
         if "typeerror:" in (step.stderr + " " + step.stdout).lower():
             return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with TypeError."
 
+        # Check for subprocess timeout
+        if "timeoutexpired:" in (step.stderr + " " + step.stdout).lower():
+            return FailureMode.TIMEOUT, f"Step '{step.step.value}' subprocess timed out (TimeoutExpired)."
+
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
