@@ -239,6 +239,17 @@ class RunStorage:
             await conn.commit()
             return cursor.rowcount > 0
 
+
+    def get_database_file_size_bytes(self) -> int:
+        """Return current SQLite database file size in bytes."""
+        import os
+        if self.db_path == ":memory:":
+            return 0
+        try:
+            return os.path.getsize(self.db_path)
+        except OSError:
+            return 0
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
