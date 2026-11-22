@@ -688,3 +688,12 @@ async def get_run_export_tap(run_id: str, storage: RunStorage = Depends(get_stor
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.export import export_tap_v13
     return PlainTextResponse(export_tap_v13(manifest))
+
+@app.get("/runs/{run_id}/export/sonarqube", response_class=Response)
+async def get_run_export_sonarqube(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Export run outcome in SonarQube generic test execution XML format."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import export_sonarqube_generic_xml
+    return Response(content=export_sonarqube_generic_xml(manifest), media_type="application/xml")
