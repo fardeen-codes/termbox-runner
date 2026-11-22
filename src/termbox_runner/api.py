@@ -679,3 +679,12 @@ async def add_run_notes(run_id: str, notes: str = Query(..., min_length=1), stor
 def format_problem_detail(status: int, title: str, detail: str) -> dict:
     """RFC 7807 problem details error payload generator."""
     return {"type": "about:blank", "title": title, "status": status, "detail": detail}
+
+@app.get("/runs/{run_id}/export/tap", response_class=PlainTextResponse)
+async def get_run_export_tap(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    """Export run outcome in TAP (Test Anything Protocol) format."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import export_tap_v13
+    return PlainTextResponse(export_tap_v13(manifest))
