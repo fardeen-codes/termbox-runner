@@ -342,6 +342,13 @@ class RunStorage:
         async with conn.execute("SELECT run_id FROM runs WHERE failure_mode = 'PASSED' ORDER BY created_at DESC LIMIT ?", (limit,)) as cursor:
             return [r["run_id"] for r in await cursor.fetchall()]
 
+
+    async def get_total_replays_count(self) -> int:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT SUM(replay_count) as total FROM runs") as cursor:
+            row = await cursor.fetchone()
+            return int(row["total"]) if row and row["total"] else 0
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
