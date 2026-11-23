@@ -797,3 +797,7 @@ def get_container_swappiness(limits: ResourceLimits) -> Optional[int]:
     return limits.swappiness
 def validate_container_sysctls(sysctls: Dict[str, str]) -> bool:
     return all(isinstance(k, str) and isinstance(v, str) for k, v in sysctls.items())
+def build_container_labels(manifest: RunManifest) -> Dict[str, str]:
+    labels = {'managed-by': 'termbox-runner', 'run-id': manifest.run_id}
+    labels.update(manifest.task.container_labels)
+    return labels
