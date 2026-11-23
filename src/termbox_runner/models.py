@@ -357,3 +357,11 @@ class RunAuditEntry(BaseModel):
     network_mode: str
     no_new_privileges: bool = True
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class StepTimelineEntry(BaseModel):
+    """Timeline slice representation for step Gantt execution."""
+    step_name: str
+    start_offset_ms: float
+    duration_ms: float
+    exit_code: Optional[int]
