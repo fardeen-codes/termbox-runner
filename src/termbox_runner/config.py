@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     workspace_retention_minutes: int = 60
     max_request_body_size_bytes: int = 10 * 1024 * 1024
     allowed_cors_origins: List[str] = Field(default_factory=lambda: ["*"])
+    default_cpuset_cpus: Optional[str] = None
     container_shm_size: str = '64m'
     max_concurrent_runs: int = 16
     enable_audit_logging: bool = True
