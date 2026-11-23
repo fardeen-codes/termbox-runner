@@ -399,3 +399,10 @@ class RunFilterOptions(BaseModel):
     min_duration_ms: Optional[float] = None
     max_duration_ms: Optional[float] = None
     image: Optional[str] = None
+
+
+class SystemDiskStats(BaseModel):
+    """Storage volume statistics."""
+    total_bytes: int
+    used_bytes: int
+    free_bytes: int
