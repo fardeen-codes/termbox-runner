@@ -794,7 +794,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function copyRunId(id) {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(id);
-        alert('Copied run ID to clipboard: ' + id);
+        showToast('Copied Run ID: ' + id);
       }
     }
 
@@ -863,6 +863,9 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     window.addEventListener('keydown', (e) => {
       if (e.key === 'r' && !e.target.matches('input, textarea')) {
         fetchRuns();
+      }
+      if (e.key === '?' && !e.target.matches('input, textarea')) {
+        showToast('Shortcuts: [r] Refresh, [c] Create Run, [t] Templates, [Esc] Close');
       }
     });
 
