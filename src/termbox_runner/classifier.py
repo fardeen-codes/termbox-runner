@@ -233,3 +233,7 @@ def extract_stacktrace_snippet(stderr_text: str, max_lines: int = 6) -> str:
     lines = stderr_text.splitlines()
     frames = [line for line in lines if "File \"" in line or "line " in line]
     return "\n".join(frames[-max_lines:]) if frames else ""
+
+def get_diagnostic_action_hint(mode: FailureMode) -> str:
+    hints = {FailureMode.OOM_KILLED: 'Increase container mem_limit in limits', FailureMode.TIMEOUT: 'Increase timeout_seconds in limits', FailureMode.SETUP_ERROR: 'Check dependency installation in setup_cmd'}
+    return hints.get(mode, 'Inspect command execution logs')
