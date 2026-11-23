@@ -826,3 +826,5 @@ def format_not_found_json(item: str) -> dict:
     return {'error': 'not_found', 'message': f'{item} not found'}
 def format_server_error_json() -> dict:
     return {'error': 'internal_error', 'message': 'An unexpected error occurred'}
+def get_api_contact_metadata() -> dict:
+    return {'name': 'Termbox Team', 'url': 'https://github.com/fardeen-codes/termbox-runner'}
