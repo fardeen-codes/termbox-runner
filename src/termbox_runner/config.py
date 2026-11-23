@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     workspace_retention_minutes: int = 60
     max_request_body_size_bytes: int = 10 * 1024 * 1024
     allowed_cors_origins: List[str] = Field(default_factory=lambda: ["*"])
+    enable_api_rate_limiting: bool = False
     api_rate_limit_per_minute: int = 120
     task_queue_workers: int = 4
     task_queue_capacity: int = 256
