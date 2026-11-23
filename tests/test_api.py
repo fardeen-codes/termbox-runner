@@ -231,3 +231,17 @@ async def test_slowest_and_dbsize_endpoints(async_client):
     res_db = await async_client.get("/system/db-size")
     assert res_db.status_code == 200
     assert "db_size_bytes" in res_db.json()
+
+
+@pytest.mark.asyncio
+async def test_api_part2_endpoints(async_client):
+    res_pct = await async_client.get("/runs/percentiles")
+    assert res_pct.status_code == 200
+
+    res_live = await async_client.get("/health/live")
+    assert res_live.status_code == 200
+    assert res_live.json()["status"] == "alive"
+
+    res_metrics = await async_client.get("/metrics")
+    assert res_metrics.status_code == 200
+    assert "termbox_active_runs" in res_metrics.text
