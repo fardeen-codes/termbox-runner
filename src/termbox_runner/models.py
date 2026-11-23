@@ -89,6 +89,7 @@ class ResourceLimits(BaseModel):
     max_open_files: int = Field(default=1024, ge=64, le=65536, description="Max open file descriptors (ulimit nofile)")
     shm_size: Optional[str] = Field(default='64m', description='Size of /dev/shm')
     cpuset_cpus: Optional[str] = Field(default=None, description='CPUs in which to allow execution (e.g. 0-3)')
+    swappiness: Optional[int] = Field(default=0, ge=0, le=100, description='Memory swappiness')
     security: SecurityOptions = Field(default_factory=SecurityOptions, description="Security sandbox controls")
 
     @field_validator("mem_limit")
