@@ -272,6 +272,12 @@ class RunStorage:
                 "p99": vals[min(n - 1, int(n * 0.99))],
             }
 
+
+    async def get_runs_by_status_and_image(self, status_val: str, image_name: str, limit: int = 20) -> list:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT run_id FROM runs WHERE status = ? AND image = ? LIMIT ?", (status_val, image_name, limit)) as cursor:
+            return [r["run_id"] for r in await cursor.fetchall()]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
