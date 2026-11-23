@@ -18,6 +18,18 @@ def extract_diagnostic_summary(output: str, max_lines: int = 4) -> str:
     return summary
 
 
+def detect_jvm_exception(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Detect Java / JVM fatal errors such as OutOfMemoryError or NullPointerException."""
+    lowered = combined_output.lower()
+    if "java.lang.outofmemoryerror" in lowered:
+        return FailureMode.OOM_KILLED, "JVM heap exhausted (java.lang.OutOfMemoryError)."
+    if "java.lang.stackoverflowerror" in lowered:
+        return FailureMode.RUNTIME_ERROR, "JVM stack overflow (java.lang.StackOverflowError)."
+    if "java.lang.nullpointerexception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Java NullPointerException encountered."
+    return None
+
+
 def classify_run(
     steps: List[StepResult],
     container_oom: bool = False,
@@ -138,6 +150,10 @@ def classify_run(
         if 'error while loading shared libraries:' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' missing dynamically linked library (.so)."
         if 'core dumped' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' process dumped core."
         if 'killed' in (step.stderr + ' ' + step.stdout).lower() and step.exit_code == 137: return FailureMode.OOM_KILLED, f"Step '{step.step.value}' was killed by host kernel (SIGKILL 137)."
+        jvm_diag = detect_jvm_exception(step.stderr + " " + step.stdout)
+        if jvm_diag:
+            mode, msg = jvm_diag
+            return mode, f"Step '{step.step.value}' {msg}"
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
