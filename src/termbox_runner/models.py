@@ -77,6 +77,7 @@ class SecurityOptions(BaseModel):
     no_new_privileges: bool = Field(default=True, description="Disallow acquiring additional privileges")
     seccomp_profile_path: Optional[str] = None
     apparmor_profile: Optional[str] = None
+    cap_add: List[str] = Field(default_factory=list)
     seccomp_profile: Optional[str] = Field(default=None, description="Custom seccomp profile JSON string or path")
 
 
