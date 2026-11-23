@@ -837,3 +837,8 @@ async def get_version_info():
 @app.get("/health/live")
 async def get_k8s_live():
     return {"status": "alive"}
+
+
+@app.get("/health/ready")
+async def get_k8s_ready():
+    return {"status": "ready"}
