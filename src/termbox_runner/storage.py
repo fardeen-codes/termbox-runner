@@ -284,6 +284,12 @@ class RunStorage:
         async with conn.execute("SELECT run_id FROM runs WHERE peak_memory_bytes >= ? ORDER BY peak_memory_bytes DESC LIMIT ?", (min_bytes, limit)) as cursor:
             return [r["run_id"] for r in await cursor.fetchall()]
 
+
+    async def get_runs_by_max_duration(self, max_ms: float, limit: int = 10) -> list:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT run_id FROM runs WHERE duration_ms <= ? ORDER BY duration_ms DESC LIMIT ?", (max_ms, limit)) as cursor:
+            return [r["run_id"] for r in await cursor.fetchall()]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
