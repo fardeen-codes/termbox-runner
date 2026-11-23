@@ -852,3 +852,5 @@ def get_cleanup_timeout() -> float:
     return 5.0
 def is_named_volume(vol_str: str) -> bool:
     return not vol_str.startswith('/') and not vol_str.startswith('.')
+def log_removal_failure(cid: str, err: Exception) -> None:
+    pass
