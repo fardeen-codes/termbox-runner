@@ -816,6 +816,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function bindEscapeShortcut() { window.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('new-run-modal'); closeModal('run-detail-modal'); } }); }
     function toggleTheme() { document.body.classList.toggle('light-theme'); showToast('Theme switched'); }
     function filterCancelled() { setFilter('CANCELLED'); }
+    function filterSetupError() { setFilter('SETUP_ERROR'); }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
