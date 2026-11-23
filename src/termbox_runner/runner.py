@@ -831,3 +831,5 @@ def record_step_metrics(step: StepResult, start: float, end: float) -> None:
     step.duration_ms = round((end - start) * 1000.0, 2)
 def simulate_memory_jitter(base_bytes: int) -> int:
     return int(base_bytes * 1.05)
+def simulate_cpu_usage_jitter(base_percent: float = 25.0) -> float:
+    return round(base_percent, 1)
