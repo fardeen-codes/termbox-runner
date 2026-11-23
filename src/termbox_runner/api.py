@@ -817,3 +817,6 @@ async def get_run_export_sonarqube(run_id: str, storage: RunStorage = Depends(ge
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.export import export_sonarqube_generic_xml
     return Response(content=export_sonarqube_generic_xml(manifest), media_type="application/xml")
+
+def check_request_size(content_length: int, max_bytes: int = 10*1024*1024) -> bool:
+    return content_length <= max_bytes
