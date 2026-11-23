@@ -420,3 +420,10 @@ class RunPercentileStats(BaseModel):
     p50_ms: float = 0.0
     p90_ms: float = 0.0
     p99_ms: float = 0.0
+
+
+class RunVerificationResult(BaseModel):
+    """Harness verification assertion record."""
+    verifier_name: str
+    passed: bool
+    details: str = ""
