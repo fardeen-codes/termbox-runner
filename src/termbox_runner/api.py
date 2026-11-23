@@ -281,6 +281,11 @@ async def get_run_tree_depth(run_id: str, storage: RunStorage = Depends(get_stor
 async def get_dow_stats(storage: RunStorage = Depends(get_storage_dependency)):
     return await storage.count_runs_by_day_of_week()
 
+
+@app.get("/stats/exit-codes")
+async def get_exit_codes_stats(storage: RunStorage = Depends(get_storage_dependency)):
+    return await storage.count_runs_by_exit_code()
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
