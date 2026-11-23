@@ -817,6 +817,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function toggleTheme() { document.body.classList.toggle('light-theme'); showToast('Theme switched'); }
     function filterCancelled() { setFilter('CANCELLED'); }
     function filterSetupError() { setFilter('SETUP_ERROR'); }
+    function formatPeakMemory(bytes) { return bytes ? (bytes / (1024*1024)).toFixed(1) + 'MB' : '-'; }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
