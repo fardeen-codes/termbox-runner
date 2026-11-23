@@ -199,3 +199,5 @@ TEMPLATES["json-validator"] = BenchmarkTemplate(id="json-validator", name="JSON 
 TEMPLATES["yaml-validator"] = BenchmarkTemplate(id="yaml-validator", name="YAML Syntax Validator", category="Validation", description="Parses YAML structures.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print("Valid YAML")'", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
 TEMPLATES["git-patch"] = BenchmarkTemplate(id="git-patch", name="Git Patch Apply Test", category="Git", description="Tests clean git patch application.", task=TaskSubmission(image="alpine/git:latest", main_cmd="git --version", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
 TEMPLATES["rego-opa"] = BenchmarkTemplate(id="rego-opa", name="Open Policy Agent Rego", category="Security", description="Evaluates Rego policies.", task=TaskSubmission(image="openpolicyagent/opa:latest", main_cmd="opa version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=10.0)))
+def search_templates_by_tag(tag: str) -> list:
+    return [t for t in TEMPLATES.values() if tag.lower() in t.category.lower() or tag.lower() in t.name.lower()]
