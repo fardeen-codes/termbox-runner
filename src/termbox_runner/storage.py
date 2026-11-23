@@ -436,6 +436,13 @@ class RunStorage:
             row = await cursor.fetchone()
             return row["main_cmd"] if row else None
 
+
+    async def count_artifacts_stored(self) -> int:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT COUNT(*) as cnt FROM runs WHERE artifacts_json != '{}'") as cursor:
+            row = await cursor.fetchone()
+            return int(row["cnt"]) if row else 0
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
