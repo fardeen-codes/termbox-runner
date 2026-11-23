@@ -132,6 +132,7 @@ def classify_run(
         if 'unrecognized arguments:' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' failed with CLI argument parsing error."
         if 'no space left on device' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with disk quota exceeded (ENOSPC)."
         if 'cannot allocate memory' in (step.stderr + ' ' + step.stdout).lower() or 'resource temporarily unavailable' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with process/fork resource limit (EAGAIN)."
+        if 'connection refused' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' network connection refused (ECONNREFUSED)."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
