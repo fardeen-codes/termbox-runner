@@ -450,6 +450,16 @@ class RunStorage:
             row = await cursor.fetchone()
             return int(row[0]) if row else 0
 
+
+    async def ping_database(self) -> bool:
+        try:
+            conn = await self.get_connection()
+            async with conn.execute("SELECT 1;") as cursor:
+                row = await cursor.fetchone()
+                return bool(row and row[0] == 1)
+        except Exception:
+            return False
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
