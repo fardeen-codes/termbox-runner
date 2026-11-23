@@ -185,6 +185,7 @@ class RunManifest(BaseModel):
     container_id: Optional[str] = None
     runner_node_id: str = 'node-default'
     scheduling_delay_ms: float = 0.0
+    container_exit_signal: Optional[str] = None
     replay_count: int = 0
     annotations: Dict[str, str] = Field(default_factory=dict, description="User notes or review annotations")
 
