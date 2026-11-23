@@ -365,3 +365,10 @@ class StepTimelineEntry(BaseModel):
     start_offset_ms: float
     duration_ms: float
     exit_code: Optional[int]
+
+
+class ExecutionTimeline(BaseModel):
+    """Full execution timeline traces for task analysis."""
+    run_id: str
+    total_duration_ms: float
+    entries: List[StepTimelineEntry] = Field(default_factory=list)
