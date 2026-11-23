@@ -137,6 +137,7 @@ def classify_run(
         if 'exec format error' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' binary architecture incompatible (Exec format error)."
         if 'error while loading shared libraries:' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' missing dynamically linked library (.so)."
         if 'core dumped' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' process dumped core."
+        if 'killed' in (step.stderr + ' ' + step.stdout).lower() and step.exit_code == 137: return FailureMode.OOM_KILLED, f"Step '{step.step.value}' was killed by host kernel (SIGKILL 137)."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
