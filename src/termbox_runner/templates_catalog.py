@@ -201,3 +201,5 @@ TEMPLATES["git-patch"] = BenchmarkTemplate(id="git-patch", name="Git Patch Apply
 TEMPLATES["rego-opa"] = BenchmarkTemplate(id="rego-opa", name="Open Policy Agent Rego", category="Security", description="Evaluates Rego policies.", task=TaskSubmission(image="openpolicyagent/opa:latest", main_cmd="opa version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=10.0)))
 def search_templates_by_tag(tag: str) -> list:
     return [t for t in TEMPLATES.values() if tag.lower() in t.category.lower() or tag.lower() in t.name.lower()]
+def get_template_timeout_estimate(t: BenchmarkTemplate) -> float:
+    return t.task.limits.timeout_seconds
