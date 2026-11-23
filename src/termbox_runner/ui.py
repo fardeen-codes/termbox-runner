@@ -351,6 +351,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       text-decoration: none;
     }
     .lineage-badge:hover { text-decoration: underline; }
+    .terminal-box { font-family: ui-monospace, SFMono-Regular, monospace; line-height: 1.45; }
   </style>
 </head>
 <body>
