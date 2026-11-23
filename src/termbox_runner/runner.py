@@ -805,3 +805,5 @@ def get_container_stop_timeout(limits: ResourceLimits) -> int:
     return int(get_settings().stop_grace_period_seconds)
 def should_auto_remove_container() -> bool:
     return False
+def validate_workdir_path(workdir: str) -> bool:
+    return workdir.startswith('/')
