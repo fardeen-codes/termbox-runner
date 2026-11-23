@@ -827,3 +827,5 @@ def enforce_memory_limit_minimum(bytes_val: int) -> int:
     return max(16 * 1024 * 1024, bytes_val)
 def format_cpu_quota_summary(cores: float) -> str:
     return f'{cores:.2f} cores'
+def record_step_metrics(step: StepResult, start: float, end: float) -> None:
+    step.duration_ms = round((end - start) * 1000.0, 2)
