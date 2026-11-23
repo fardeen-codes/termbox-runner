@@ -844,3 +844,7 @@ def decode_exit_signal_name(code: Optional[int]) -> Optional[str]:
     return None
 def accumulate_output_buffer(buf: List[str], chunk: str) -> None:
     buf.append(chunk)
+def truncate_output_if_needed(text: str, max_bytes: int) -> str:
+    if len(text) > max_bytes:
+        return text[:max_bytes] + '\n... [TRUNCATED]'
+    return text
