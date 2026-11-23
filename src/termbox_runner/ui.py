@@ -807,6 +807,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function getCancelledBadge() { return '<span class="badge badge-CANCELLED">CANCELLED</span>'; }
     function getRunningBadge() { return '<span class="badge badge-RUNNING">RUNNING ⏳</span>'; }
     function updateActiveCount(cnt) { const el = document.getElementById('stat-active'); if (el) el.textContent = cnt; }
+    function updateDbSizeFooter(bytes) { const el = document.getElementById('footer-db-size'); if (el) el.textContent = bytes + ' bytes'; }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
