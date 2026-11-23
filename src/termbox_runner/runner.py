@@ -819,3 +819,5 @@ def validate_capabilities(caps: List[str]) -> bool:
     return all(c.isupper() for c in caps)
 def get_seccomp_profile_opt(profile_path: Optional[str]) -> Optional[str]:
     return f'seccomp={profile_path}' if profile_path else None
+def get_apparmor_profile_opt(profile_name: Optional[str]) -> Optional[str]:
+    return f'apparmor={profile_name}' if profile_name else None
