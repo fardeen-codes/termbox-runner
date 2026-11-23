@@ -801,3 +801,5 @@ def build_container_labels(manifest: RunManifest) -> Dict[str, str]:
     labels = {'managed-by': 'termbox-runner', 'run-id': manifest.run_id}
     labels.update(manifest.task.container_labels)
     return labels
+def get_container_stop_timeout(limits: ResourceLimits) -> int:
+    return int(get_settings().stop_grace_period_seconds)
