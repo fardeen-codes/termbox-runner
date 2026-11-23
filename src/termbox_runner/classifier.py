@@ -124,6 +124,7 @@ def classify_run(
         if 'std::bad_alloc' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.OOM_KILLED, f"Step '{step.step.value}' threw C++ std::bad_alloc exception."
         if 'std::out_of_range' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' threw C++ std::out_of_range exception."
         if 'assertion failed:' in (step.stderr + ' ' + step.stdout).lower() or 'assert(' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.ASSERTION_FAILED, f"Step '{step.step.value}' failed C/C++ assertion."
+        if step.exit_code == 130: return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' terminated by user interrupt (SIGINT, exit 130)."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
