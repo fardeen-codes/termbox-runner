@@ -848,3 +848,5 @@ def truncate_output_if_needed(text: str, max_bytes: int) -> str:
     if len(text) > max_bytes:
         return text[:max_bytes] + '\n... [TRUNCATED]'
     return text
+def get_cleanup_timeout() -> float:
+    return 5.0
