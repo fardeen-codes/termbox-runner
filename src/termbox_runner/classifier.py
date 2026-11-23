@@ -114,6 +114,7 @@ def classify_run(
 
         if 'cannot borrow' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with Rust borrow checker error."
         if 'error[e0425]' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with Rust unresolved name error (E0425)."
+        if 'error[e0308]' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with Rust mismatched types error (E0308)."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
