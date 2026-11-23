@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     workspace_retention_minutes: int = 60
     max_request_body_size_bytes: int = 10 * 1024 * 1024
     allowed_cors_origins: List[str] = Field(default_factory=lambda: ["*"])
+    enable_debug_stacktraces: bool = True
     runner_health_check_interval: float = 10.0
     container_network_bridge_name: str = 'bridge'
     artifact_zip_compression_level: int = 6
