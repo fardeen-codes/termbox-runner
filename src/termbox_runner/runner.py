@@ -850,3 +850,5 @@ def truncate_output_if_needed(text: str, max_bytes: int) -> str:
     return text
 def get_cleanup_timeout() -> float:
     return 5.0
+def is_named_volume(vol_str: str) -> bool:
+    return not vol_str.startswith('/') and not vol_str.startswith('.')
