@@ -290,6 +290,12 @@ class RunStorage:
         async with conn.execute("SELECT run_id FROM runs WHERE duration_ms <= ? ORDER BY duration_ms DESC LIMIT ?", (max_ms, limit)) as cursor:
             return [r["run_id"] for r in await cursor.fetchall()]
 
+
+    async def count_runs_by_day_of_week(self) -> dict:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT strftime('%w', created_at) as dow, COUNT(*) as cnt FROM runs GROUP BY dow") as cursor:
+            return {r["dow"]: r["cnt"] for r in await cursor.fetchall()}
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
