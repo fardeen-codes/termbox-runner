@@ -329,6 +329,14 @@ async def inspect_run_env(run_id: str, storage: RunStorage = Depends(get_storage
 async def get_db_pages(storage: RunStorage = Depends(get_storage_dependency)):
     return {"page_count": await storage.get_database_page_count()}
 
+
+@app.get("/templates/{template_id}/preview")
+async def preview_template(template_id: str):
+    from termbox_runner.templates_catalog import get_benchmark_template
+    tmpl = get_benchmark_template(template_id)
+    if not tmpl: raise HTTPException(status_code=404, detail="Template not found")
+    return {"id": tmpl.id, "name": tmpl.name, "category": tmpl.category, "command": tmpl.task.main_cmd}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
