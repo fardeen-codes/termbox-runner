@@ -807,3 +807,5 @@ def should_auto_remove_container() -> bool:
     return False
 def validate_workdir_path(workdir: str) -> bool:
     return workdir.startswith('/')
+def build_workspace_bind_mode(read_only: bool) -> str:
+    return 'ro' if read_only else 'rw'
