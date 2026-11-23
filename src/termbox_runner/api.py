@@ -265,6 +265,12 @@ async def get_run_cmd_text(run_id: str, storage: RunStorage = Depends(get_storag
     if cmd is None: raise HTTPException(status_code=404, detail="Run not found")
     return PlainTextResponse(cmd)
 
+
+@app.get("/runs/{run_id}/lineage/root")
+async def get_run_lineage_root(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    root = await storage.get_root_lineage_run(run_id)
+    return {"run_id": run_id, "root_run_id": root}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
