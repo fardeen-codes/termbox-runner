@@ -825,3 +825,5 @@ def enforce_pids_limit_bounds(pids: int) -> int:
     return max(16, min(pids, 4096))
 def enforce_memory_limit_minimum(bytes_val: int) -> int:
     return max(16 * 1024 * 1024, bytes_val)
+def format_cpu_quota_summary(cores: float) -> str:
+    return f'{cores:.2f} cores'
