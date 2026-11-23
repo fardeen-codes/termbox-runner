@@ -795,3 +795,5 @@ def get_container_cpuset_cpus(limits: ResourceLimits) -> Optional[str]:
     return limits.cpuset_cpus
 def get_container_swappiness(limits: ResourceLimits) -> Optional[int]:
     return limits.swappiness
+def validate_container_sysctls(sysctls: Dict[str, str]) -> bool:
+    return all(isinstance(k, str) and isinstance(v, str) for k, v in sysctls.items())
