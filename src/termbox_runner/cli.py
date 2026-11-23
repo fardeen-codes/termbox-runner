@@ -41,6 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_lg.add_argument('run_id')
     p_lg.add_argument('--stderr', action='store_true')
     subparsers.add_parser('version', help='Show CLI version')
+    subparsers.add_parser('export-tap', help='CLI export-tap command')
     subparsers.add_parser('notes-view', help='CLI notes-view command')
     subparsers.add_parser('cancel-all', help='CLI cancel-all command')
     subparsers.add_parser('active', help='CLI active command')
@@ -225,3 +226,5 @@ def cmd_cancel_all(server_url: str):
     print('Cancelled 0 active tasks')
 def cmd_notes_view(server_url: str):
     print('No notes specified')
+def cmd_export_tap(server_url: str):
+    print('TAP version 13\n1..0')
