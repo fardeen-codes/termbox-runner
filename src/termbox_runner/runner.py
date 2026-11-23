@@ -823,3 +823,5 @@ def get_apparmor_profile_opt(profile_name: Optional[str]) -> Optional[str]:
     return f'apparmor={profile_name}' if profile_name else None
 def enforce_pids_limit_bounds(pids: int) -> int:
     return max(16, min(pids, 4096))
+def enforce_memory_limit_minimum(bytes_val: int) -> int:
+    return max(16 * 1024 * 1024, bytes_val)
