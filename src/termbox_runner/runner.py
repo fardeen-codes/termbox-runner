@@ -842,3 +842,5 @@ def decode_exit_signal_name(code: Optional[int]) -> Optional[str]:
         from termbox_runner.classifier import describe_signal
         return describe_signal(code)
     return None
+def accumulate_output_buffer(buf: List[str], chunk: str) -> None:
+    buf.append(chunk)
