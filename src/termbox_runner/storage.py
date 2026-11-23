@@ -422,6 +422,13 @@ class RunStorage:
             row = await cursor.fetchone()
             return row["created_at"] if row else None
 
+
+    async def get_run_finished_timestamp(self, run_id: str) -> Optional[str]:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT finished_at FROM runs WHERE run_id = ?", (run_id,)) as cursor:
+            row = await cursor.fetchone()
+            return row["finished_at"] if row else None
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
