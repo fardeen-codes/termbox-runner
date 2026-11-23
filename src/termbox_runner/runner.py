@@ -815,3 +815,5 @@ def check_env_length_safe(env: Dict[str, str], max_chars: int = 100000) -> bool:
     return sum(len(k) + len(v) for k, v in env.items()) <= max_chars
 def build_log_config() -> dict:
     return {'type': 'json-file', 'config': {'max-size': '10m', 'max-file': '3'}}
+def validate_capabilities(caps: List[str]) -> bool:
+    return all(c.isupper() for c in caps)
