@@ -113,6 +113,7 @@ def classify_run(
             return FailureMode.SETUP_ERROR, "Git merge conflict encountered while preparing patch."
 
         if 'cannot borrow' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with Rust borrow checker error."
+        if 'error[e0425]' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with Rust unresolved name error (E0425)."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
