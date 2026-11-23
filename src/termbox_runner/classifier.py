@@ -135,6 +135,7 @@ def classify_run(
         if 'connection refused' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' network connection refused (ECONNREFUSED)."
         if 'network is unreachable' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' network unreachable (ENETUNREACH)."
         if 'exec format error' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' binary architecture incompatible (Exec format error)."
+        if 'error while loading shared libraries:' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' missing dynamically linked library (.so)."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
