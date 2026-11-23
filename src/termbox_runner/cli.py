@@ -265,3 +265,7 @@ def terminal_bold(text: str) -> str:
     return f'\033[1m{text}\033[0m'
 def terminal_dim(text: str) -> str:
     return f'\033[2m{text}\033[0m'
+def safe_json_loads(raw: str) -> dict:
+    import json
+    try: return json.loads(raw)
+    except Exception: return {}
