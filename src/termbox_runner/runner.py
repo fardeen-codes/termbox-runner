@@ -837,3 +837,8 @@ def extract_container_inspect_status(data: dict) -> str:
     return data.get('State', {}).get('Status', 'unknown')
 def extract_container_ip_address(data: dict) -> Optional[str]:
     return data.get('NetworkSettings', {}).get('IPAddress')
+def decode_exit_signal_name(code: Optional[int]) -> Optional[str]:
+    if code and code > 128:
+        from termbox_runner.classifier import describe_signal
+        return describe_signal(code)
+    return None
