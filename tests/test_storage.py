@@ -171,3 +171,27 @@ async def test_storage_histograms_and_cleanup(tmp_path):
     assert pruned >= 1
 
     await storage.close()
+
+
+@pytest.mark.asyncio
+async def test_storage_additional_queries_part2(tmp_path):
+    storage = RunStorage(str(tmp_path / "part2.db"))
+    await storage.init_db()
+
+    assert await storage.ping_database() is True
+    assert await storage.check_database_integrity() == "ok"
+
+    task = TaskSubmission(main_cmd="echo part2", tags=["batch"])
+    manifest = RunManifest(task=task, duration_ms=150.0)
+    await storage.save_run(manifest)
+
+    p = await storage.get_duration_percentiles()
+    assert "p50" in p
+
+    assert await storage.get_root_lineage_run(manifest.run_id) == manifest.run_id
+    assert await storage.get_run_task_command(manifest.run_id) == "echo part2"
+
+    deleted = await storage.delete_runs_by_ids([manifest.run_id])
+    assert deleted == 1
+
+    await storage.close()
