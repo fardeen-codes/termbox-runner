@@ -177,3 +177,28 @@ def test_classifier_multilang_detections():
 
     assert "mem_limit" in get_diagnostic_action_hint(FailureMode.OOM_KILLED)
     assert "failures#" in get_failure_mode_doc_url(FailureMode.TIMEOUT)
+
+
+def test_classifier_jvm_and_fatal_signals():
+    from termbox_runner.classifier import (
+        detect_jvm_exception,
+        format_fatal_signal_summary,
+    )
+
+    # JVM OOM detection
+    diag = detect_jvm_exception("Exception in thread \"main\" java.lang.OutOfMemoryError: Java heap space")
+    assert diag is not None
+    assert diag[0] == FailureMode.OOM_KILLED
+    assert "heap exhausted" in diag[1]
+
+    # JVM NPE detection
+    step_npe = StepResult(step=CommandStep.MAIN, command="mvn test", exit_code=1, stderr="java.lang.NullPointerException at com.example.App.main")
+    mode, reason = classify_run([step_npe])
+    assert mode == FailureMode.RUNTIME_ERROR
+    assert "NullPointerException" in reason
+
+    # Fatal signal formatting
+    assert "SIGSEGV" in format_fatal_signal_summary(139)
+    assert "SIGABRT" in format_fatal_signal_summary(134)
+    assert format_fatal_signal_summary(0) is None
+
