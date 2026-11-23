@@ -384,3 +384,9 @@ class RunMetricPoint(BaseModel):
 class BulkRunDeleteRequest(BaseModel):
     """Bulk deletion parameters."""
     run_ids: List[str]
+
+
+class BulkRunDeleteResponse(BaseModel):
+    """Bulk deletion summary output."""
+    deleted_count: int
+    requested_count: int
