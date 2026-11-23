@@ -302,6 +302,12 @@ class RunStorage:
         async with conn.execute("SELECT exit_code, COUNT(*) as cnt FROM runs WHERE exit_code IS NOT NULL GROUP BY exit_code") as cursor:
             return {r["exit_code"]: r["cnt"] for r in await cursor.fetchall()}
 
+
+    async def get_runs_with_artifacts(self, limit: int = 20) -> list:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT run_id FROM runs WHERE artifacts_json != '{}' LIMIT ?", (limit,)) as cursor:
+            return [r["run_id"] for r in await cursor.fetchall()]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
