@@ -239,3 +239,5 @@ def get_diagnostic_action_hint(mode: FailureMode) -> str:
     return hints.get(mode, 'Inspect command execution logs')
 def get_failure_mode_doc_url(mode: FailureMode) -> str:
     return f'https://github.com/fardeen-codes/termbox-runner/docs/failures#{mode.value.lower()}'
+def clean_error_prefix(text: str) -> str:
+    return text.lstrip(' \t\n')
