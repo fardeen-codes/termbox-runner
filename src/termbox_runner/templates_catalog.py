@@ -180,3 +180,4 @@ def get_templates_by_category(category: str) -> List[BenchmarkTemplate]:
     return [t for t in TEMPLATES.values() if t.category.lower() == category.lower()]
 
 TEMPLATES["ts-vitest"] = BenchmarkTemplate(id="ts-vitest", name="TypeScript Vitest Suite", category="TypeScript", description="Compiles TS and verifies with Vitest.", task=TaskSubmission(image="node:20-slim", main_cmd="npx vitest run", limits=ResourceLimits(mem_limit="512m", timeout_seconds=20.0)))
+TEMPLATES["fastapi-mock"] = BenchmarkTemplate(id="fastapi-mock", name="FastAPI Microservice", category="Python", description="Launches FastAPI mock endpoint.", task=TaskSubmission(image="python:3.12-slim", main_cmd="pytest -v", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
