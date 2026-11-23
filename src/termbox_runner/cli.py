@@ -62,6 +62,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser('cli-metrics', help='CLI cli-metrics command')
     subparsers.add_parser('timeline', help='CLI timeline command')
     subparsers.add_parser('templates', help='List benchmark templates')
+    subparsers.add_parser('doctor', help='Diagnose host environment, permissions, and Docker daemon')
     return parser
 
 
@@ -123,6 +124,31 @@ def cmd_templates(server_url: str):
         for t in items:
             print(f"- {t['id']} [{t['category']}]: {t['name']}")
 
+def cmd_doctor(server_url: str):
+    """Diagnose local Python environment, SQLite database write access, and Docker daemon socket."""
+    import os
+    import sys
+    import shutil
+
+    print("=== Termbox Runner Diagnostic Doctor ===")
+    print(f"Python Runtime: {sys.version.split()[0]} ({sys.executable})")
+    docker_bin = shutil.which("docker")
+    print(f"Docker Binary: {docker_bin or 'NOT FOUND'}")
+    docker_sock = "/var/run/docker.sock"
+    has_sock = os.path.exists(docker_sock)
+    print(f"Docker Socket ({docker_sock}): {'FOUND' if has_sock else 'MISSING'}")
+    try:
+        with httpx.Client(base_url=server_url, timeout=3.0) as client:
+            res = client.get("/health")
+            if res.status_code == 200:
+                data = res.json()
+                print(f"Server Connection: OK (Docker connected: {data.get('docker_available')})")
+            else:
+                print(f"Server Connection: HTTP {res.status_code}")
+    except Exception as e:
+        print(f"Server Connection: FAILED ({e.__class__.__name__})")
+
+
 def main(args=None):
     parser = build_parser()
     parsed = parser.parse_args(args)
@@ -132,6 +158,8 @@ def main(args=None):
     server = parsed.server
     if parsed.command == "health":
         cmd_health(server)
+    elif parsed.command == "doctor":
+        cmd_doctor(server)
     elif parsed.command == "list":
         cmd_list(server)
     elif parsed.command == "inspect":
