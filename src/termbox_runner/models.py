@@ -118,6 +118,7 @@ class ResourceUsage(BaseModel):
     io_write_bytes: int = Field(default=0, description="Disk/volume bytes written")
     load_average: Optional[float] = Field(default=None, description="System 1-min load average at execution time")
     peak_cpu_cores: float = 0.0
+    network_rx_bytes: int = 0
 
 
 class StepResult(BaseModel):
