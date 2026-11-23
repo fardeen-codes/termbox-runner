@@ -209,6 +209,11 @@ async def get_popular_images(limit: int = 5, storage: RunStorage = Depends(get_s
     """Return most executed container images and execution counts."""
     return await storage.get_most_frequently_used_images(limit=limit)
 
+
+@app.get("/runs/percentiles")
+async def get_run_duration_percentiles(storage: RunStorage = Depends(get_storage_dependency)):
+    return await storage.get_duration_percentiles()
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
