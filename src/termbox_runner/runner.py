@@ -865,3 +865,5 @@ def safe_parse_memory_bytes(mem_str: str, default: int = 512*1024*1024) -> int:
         return parse_memory_to_bytes(mem_str)
     except Exception:
         return default
+def build_standard_container_kwargs(image: str, command: str) -> dict:
+    return {'image': image, 'command': command, 'detach': True}
