@@ -41,6 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_lg.add_argument('run_id')
     p_lg.add_argument('--stderr', action='store_true')
     subparsers.add_parser('version', help='Show CLI version')
+    subparsers.add_parser('root-find', help='CLI root-find command')
     subparsers.add_parser('replays', help='CLI replays command')
     subparsers.add_parser('popular-images', help='CLI popular-images command')
     subparsers.add_parser('status-check', help='CLI status-check command')
@@ -256,3 +257,5 @@ def cmd_popular_images(server_url: str):
         print(client.get('/runs/images/popular').json())
 def cmd_replays(server_url: str):
     print('Replays: []')
+def cmd_root_find(server_url: str):
+    print('Root: None')
