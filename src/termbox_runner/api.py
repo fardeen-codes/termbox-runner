@@ -247,6 +247,12 @@ async def check_sys_integrity(storage: RunStorage = Depends(get_storage_dependen
     status_str = await storage.check_database_integrity()
     return {"status": status_str}
 
+
+@app.get("/system/ping")
+async def ping_system(storage: RunStorage = Depends(get_storage_dependency)):
+    db_ok = await storage.ping_database()
+    return {"pong": True, "db": db_ok}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
