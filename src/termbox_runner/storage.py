@@ -360,6 +360,12 @@ class RunStorage:
     async def backup_database(self, dest_path: str) -> None:
         pass
 
+
+    async def get_average_duration_by_status(self) -> dict:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT status, AVG(duration_ms) as avg_dur FROM runs GROUP BY status") as cursor:
+            return {r["status"]: round(r["avg_dur"], 2) for r in await cursor.fetchall()}
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
