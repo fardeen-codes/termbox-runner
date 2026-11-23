@@ -120,6 +120,7 @@ def classify_run(
         if 'panic: runtime error: index out of range' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Go slice index out of range panic."
         if 'unhandledpromiserejection' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Node.js UnhandledPromiseRejection."
         if 'cannot find module' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR if step.step == CommandStep.SETUP else FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with Node.js module resolution failure."
+        if 'rangeerror: maximum call stack size exceeded' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Node.js call stack overflow."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
