@@ -788,3 +788,6 @@ def validate_container_name(name: str) -> bool:
     """Validate container name conforms to Docker naming constraints."""
     import re
     return bool(re.match(r"^[a-zA-Z0-9][a-zA-Z0-9_.-]+$", name))
+
+def get_container_shm_size(limits: ResourceLimits) -> str:
+    return limits.shm_size or '64m'
