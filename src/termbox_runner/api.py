@@ -214,6 +214,12 @@ async def get_popular_images(limit: int = 5, storage: RunStorage = Depends(get_s
 async def get_run_duration_percentiles(storage: RunStorage = Depends(get_storage_dependency)):
     return await storage.get_duration_percentiles()
 
+
+@app.get("/runs/active")
+async def get_active_runs_list(storage: RunStorage = Depends(get_storage_dependency)):
+    ids = await storage.get_active_running_runs()
+    return {"active_run_ids": ids, "count": len(ids)}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
