@@ -372,6 +372,13 @@ class RunStorage:
         async with conn.execute("SELECT run_id, peak_memory_bytes FROM runs ORDER BY peak_memory_bytes DESC LIMIT ?", (limit,)) as cursor:
             return [dict(r) for r in await cursor.fetchall()]
 
+
+    async def get_runs_by_tag(self, tag: str, limit: int = 20) -> list:
+        conn = await self.get_connection()
+        pattern = f'%"{tag}"%'
+        async with conn.execute("SELECT run_id FROM runs WHERE task_json LIKE ? LIMIT ?", (pattern, limit)) as cursor:
+            return [r["run_id"] for r in await cursor.fetchall()]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
