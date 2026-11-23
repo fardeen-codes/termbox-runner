@@ -299,6 +299,16 @@ async def cancel_run_execution(run_id: str, storage: RunStorage = Depends(get_st
     await storage.mark_run_cancelled(run_id)
     return {"run_id": run_id, "cancelled": cancelled}
 
+
+@app.get("/metrics", response_class=PlainTextResponse)
+async def get_prometheus_metrics(storage: RunStorage = Depends(get_storage_dependency)):
+    lines = [
+        "# HELP termbox_active_runs Current active runs",
+        "# TYPE termbox_active_runs gauge",
+        f"termbox_active_runs {_active_runs_count}",
+    ]
+    return PlainTextResponse("\n".join(lines) + "\n")
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
