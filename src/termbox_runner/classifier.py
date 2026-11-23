@@ -257,3 +257,20 @@ def get_failure_mode_doc_url(mode: FailureMode) -> str:
     return f'https://github.com/fardeen-codes/termbox-runner/docs/failures#{mode.value.lower()}'
 def clean_error_prefix(text: str) -> str:
     return text.lstrip(' \t\n')
+
+
+def format_fatal_signal_summary(exit_code: Optional[int]) -> Optional[str]:
+    """Return a descriptive explanation of standard Linux fatal signals."""
+    if not exit_code or exit_code <= 128:
+        return None
+    sig = exit_code - 128
+    descriptions = {
+        6: "Aborted (SIGABRT): Process called abort() or assertion failed.",
+        8: "Floating Point Exception (SIGFPE): Arithmetic overflow or divide by zero.",
+        9: "Killed (SIGKILL): Hard termination by OS kernel (often OOM killer).",
+        11: "Segmentation Fault (SIGSEGV): Invalid memory reference or memory corruption.",
+        13: "Broken Pipe (SIGPIPE): Write to pipe with no readers.",
+        14: "Alarm Clock (SIGALRM): Timed out waiting for timer signal.",
+        15: "Terminated (SIGTERM): Graceful termination request received.",
+    }
+    return descriptions.get(sig, f"Signal {sig} terminated process.")
