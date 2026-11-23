@@ -237,3 +237,5 @@ def extract_stacktrace_snippet(stderr_text: str, max_lines: int = 6) -> str:
 def get_diagnostic_action_hint(mode: FailureMode) -> str:
     hints = {FailureMode.OOM_KILLED: 'Increase container mem_limit in limits', FailureMode.TIMEOUT: 'Increase timeout_seconds in limits', FailureMode.SETUP_ERROR: 'Check dependency installation in setup_cmd'}
     return hints.get(mode, 'Inspect command execution logs')
+def get_failure_mode_doc_url(mode: FailureMode) -> str:
+    return f'https://github.com/fardeen-codes/termbox-runner/docs/failures#{mode.value.lower()}'
