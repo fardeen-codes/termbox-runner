@@ -291,6 +291,14 @@ async def get_exit_codes_stats(storage: RunStorage = Depends(get_storage_depende
 async def get_artifacts_total_count(storage: RunStorage = Depends(get_storage_dependency)):
     return {"total_artifacts": await storage.count_artifacts_stored()}
 
+
+@app.post("/runs/{run_id}/cancel")
+async def cancel_run_execution(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.runner import cancel_active_run
+    cancelled = cancel_active_run(run_id)
+    await storage.mark_run_cancelled(run_id)
+    return {"run_id": run_id, "cancelled": cancelled}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
