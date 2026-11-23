@@ -349,6 +349,13 @@ class RunStorage:
             row = await cursor.fetchone()
             return int(row["total"]) if row and row["total"] else 0
 
+
+    async def check_database_integrity(self) -> str:
+        conn = await self.get_connection()
+        async with conn.execute("PRAGMA integrity_check;") as cursor:
+            row = await cursor.fetchone()
+            return str(row[0]) if row else "unknown"
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
