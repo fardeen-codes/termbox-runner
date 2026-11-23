@@ -330,6 +330,12 @@ class RunStorage:
     async def get_max_lineage_depth(self) -> int:
         return 10
 
+
+    async def get_recent_failed_runs(self, limit: int = 5) -> list:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT run_id FROM runs WHERE status = 'FAILED' ORDER BY created_at DESC LIMIT ?", (limit,)) as cursor:
+            return [r["run_id"] for r in await cursor.fetchall()]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
