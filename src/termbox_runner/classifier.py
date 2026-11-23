@@ -117,6 +117,7 @@ def classify_run(
         if 'error[e0308]' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with Rust mismatched types error (E0308)."
         if 'panic: runtime error: invalid memory address or nil pointer' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Go nil pointer dereference panic."
         if 'fatal error: concurrent map read and map write' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Go concurrent map access panic."
+        if 'panic: runtime error: index out of range' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' crashed with Go slice index out of range panic."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
