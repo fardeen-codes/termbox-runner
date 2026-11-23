@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     workspace_retention_minutes: int = 60
     max_request_body_size_bytes: int = 10 * 1024 * 1024
     allowed_cors_origins: List[str] = Field(default_factory=lambda: ["*"])
+    artifact_zip_compression_level: int = 6
     webhook_concurrency: int = 8
     webhook_max_backoff_seconds: float = 60.0
     enable_api_rate_limiting: bool = False
