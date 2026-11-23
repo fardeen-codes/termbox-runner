@@ -791,3 +791,5 @@ def validate_container_name(name: str) -> bool:
 
 def get_container_shm_size(limits: ResourceLimits) -> str:
     return limits.shm_size or '64m'
+def get_container_cpuset_cpus(limits: ResourceLimits) -> Optional[str]:
+    return limits.cpuset_cpus
