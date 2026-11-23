@@ -235,6 +235,12 @@ async def get_recent_failures(limit: int = 5, storage: RunStorage = Depends(get_
 async def get_recent_passes(limit: int = 5, storage: RunStorage = Depends(get_storage_dependency)):
     return await storage.get_recent_passed_runs(limit=limit)
 
+
+@app.post("/runs/bulk-delete")
+async def bulk_delete_runs(run_ids: List[str], storage: RunStorage = Depends(get_storage_dependency)):
+    count = await storage.delete_runs_by_ids(run_ids)
+    return {"deleted_count": count, "requested_count": len(run_ids)}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
