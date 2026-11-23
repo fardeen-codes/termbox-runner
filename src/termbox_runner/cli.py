@@ -41,6 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_lg.add_argument('run_id')
     p_lg.add_argument('--stderr', action='store_true')
     subparsers.add_parser('version', help='Show CLI version')
+    subparsers.add_parser('replays', help='CLI replays command')
     subparsers.add_parser('popular-images', help='CLI popular-images command')
     subparsers.add_parser('status-check', help='CLI status-check command')
     subparsers.add_parser('steps-view', help='CLI steps-view command')
@@ -253,3 +254,5 @@ def cmd_status_check(server_url: str):
 def cmd_popular_images(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get('/runs/images/popular').json())
+def cmd_replays(server_url: str):
+    print('Replays: []')
