@@ -296,6 +296,12 @@ class RunStorage:
         async with conn.execute("SELECT strftime('%w', created_at) as dow, COUNT(*) as cnt FROM runs GROUP BY dow") as cursor:
             return {r["dow"]: r["cnt"] for r in await cursor.fetchall()}
 
+
+    async def count_runs_by_exit_code(self) -> dict:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT exit_code, COUNT(*) as cnt FROM runs WHERE exit_code IS NOT NULL GROUP BY exit_code") as cursor:
+            return {r["exit_code"]: r["cnt"] for r in await cursor.fetchall()}
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
