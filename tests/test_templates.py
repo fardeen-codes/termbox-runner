@@ -53,3 +53,14 @@ def test_new_multilang_templates():
     js_templates = get_templates_by_category("javascript")
     assert len(js_templates) >= 1
     assert js_templates[0].id == "nodejs-jest"
+
+
+def test_templates_part3_additions():
+    from termbox_runner.templates_catalog import get_benchmark_template, search_templates_by_tag
+
+    assert get_benchmark_template("ts-vitest") is not None
+    assert get_benchmark_template("dotnet-xunit") is not None
+    assert get_benchmark_template("rego-opa") is not None
+
+    matches = search_templates_by_tag("Python")
+    assert len(matches) >= 1
