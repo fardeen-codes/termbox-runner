@@ -121,6 +121,7 @@ class ResourceUsage(BaseModel):
     network_rx_bytes: int = 0
     network_tx_bytes: int = 0
     disk_read_iops: int = 0
+    disk_write_iops: int = 0
 
 
 class StepResult(BaseModel):
