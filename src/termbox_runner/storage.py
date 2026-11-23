@@ -308,6 +308,12 @@ class RunStorage:
         async with conn.execute("SELECT run_id FROM runs WHERE artifacts_json != '{}' LIMIT ?", (limit,)) as cursor:
             return [r["run_id"] for r in await cursor.fetchall()]
 
+
+    async def get_replayed_runs_summary(self, limit: int = 10) -> list:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT run_id, parent_run_id, replay_count FROM runs WHERE replay_count > 0 LIMIT ?", (limit,)) as cursor:
+            return [dict(r) for r in await cursor.fetchall()]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
