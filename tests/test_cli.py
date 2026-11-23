@@ -42,3 +42,17 @@ def test_cli_helpers_and_formatting():
     assert "\033[2m" in terminal_dim("dim")
     assert safe_json_loads('{"a": 1}')["a"] == 1
     assert safe_json_loads("invalid") == {}
+
+
+def test_cli_doctor_command(capsys):
+    from termbox_runner.cli import build_parser, cmd_doctor
+
+    parser = build_parser()
+    args = parser.parse_args(["doctor"])
+    assert args.command == "doctor"
+
+    cmd_doctor("http://127.0.0.1:9999")
+    captured = capsys.readouterr().out
+    assert "Termbox Runner Diagnostic Doctor" in captured
+    assert "Python Runtime:" in captured
+
