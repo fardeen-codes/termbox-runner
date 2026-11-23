@@ -366,6 +366,12 @@ class RunStorage:
         async with conn.execute("SELECT status, AVG(duration_ms) as avg_dur FROM runs GROUP BY status") as cursor:
             return {r["status"]: round(r["avg_dur"], 2) for r in await cursor.fetchall()}
 
+
+    async def get_top_memory_consuming_runs(self, limit: int = 5) -> list:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT run_id, peak_memory_bytes FROM runs ORDER BY peak_memory_bytes DESC LIMIT ?", (limit,)) as cursor:
+            return [dict(r) for r in await cursor.fetchall()]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
