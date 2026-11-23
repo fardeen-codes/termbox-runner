@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     workspace_retention_minutes: int = 60
     max_request_body_size_bytes: int = 10 * 1024 * 1024
     allowed_cors_origins: List[str] = Field(default_factory=lambda: ["*"])
+    default_apparmor_profile: Optional[str] = None
     default_seccomp_profile: Optional[str] = None
     default_working_dir: str = '/workspace'
     prometheus_metrics_path: str = '/metrics'
