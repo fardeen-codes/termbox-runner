@@ -813,6 +813,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function renderGanttTimeline(entries) { return entries.map(e => `<div style="margin:4px 0;">${e.step}: ${e.duration_ms}ms</div>`).join(''); }
     function bindTemplatesShortcut() { window.addEventListener('keydown', e => { if (e.key === 't' && !e.target.matches('input, textarea')) showToast('Templates shortcut triggered'); }); }
     function bindNewRunShortcut() { window.addEventListener('keydown', e => { if (e.key === 'c' && !e.target.matches('input, textarea')) openNewRunModal(); }); }
+    function bindEscapeShortcut() { window.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('new-run-modal'); closeModal('run-detail-modal'); } }); }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
