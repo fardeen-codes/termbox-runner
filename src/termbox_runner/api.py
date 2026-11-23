@@ -276,6 +276,11 @@ async def get_run_lineage_root(run_id: str, storage: RunStorage = Depends(get_st
 async def get_run_tree_depth(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
     return {"run_id": run_id, "depth": 1}
 
+
+@app.get("/stats/day-of-week")
+async def get_dow_stats(storage: RunStorage = Depends(get_storage_dependency)):
+    return await storage.count_runs_by_day_of_week()
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
