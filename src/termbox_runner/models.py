@@ -372,3 +372,10 @@ class ExecutionTimeline(BaseModel):
     run_id: str
     total_duration_ms: float
     entries: List[StepTimelineEntry] = Field(default_factory=list)
+
+
+class RunMetricPoint(BaseModel):
+    """Timeseries metric point for monitoring."""
+    timestamp: datetime
+    metric_name: str
+    value: float
