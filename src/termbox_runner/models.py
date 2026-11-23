@@ -390,3 +390,12 @@ class BulkRunDeleteResponse(BaseModel):
     """Bulk deletion summary output."""
     deleted_count: int
     requested_count: int
+
+
+class RunFilterOptions(BaseModel):
+    """Advanced filtering options for run querying."""
+    status: Optional[RunStatus] = None
+    failure_mode: Optional[FailureMode] = None
+    min_duration_ms: Optional[float] = None
+    max_duration_ms: Optional[float] = None
+    image: Optional[str] = None
