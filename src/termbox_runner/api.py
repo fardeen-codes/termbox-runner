@@ -324,6 +324,11 @@ async def inspect_run_env(run_id: str, storage: RunStorage = Depends(get_storage
     if not manifest: raise HTTPException(status_code=404, detail="Run not found")
     return {"run_id": run_id, "keys": list(manifest.task.environment.keys())}
 
+
+@app.get("/system/database-pages")
+async def get_db_pages(storage: RunStorage = Depends(get_storage_dependency)):
+    return {"page_count": await storage.get_database_page_count()}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
