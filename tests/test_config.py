@@ -24,3 +24,12 @@ def test_get_settings_caching():
     s1 = get_settings()
     s2 = get_settings()
     assert s1 is s2
+
+
+def test_config_advanced_settings():
+    s = Settings()
+    assert s.max_concurrent_runs == 16
+    assert s.container_shm_size == "64m"
+    assert s.default_swappiness == 0
+    assert s.enable_prometheus_metrics is True
+    assert s.artifact_zip_compression_level == 6
