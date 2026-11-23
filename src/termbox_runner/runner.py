@@ -809,3 +809,5 @@ def validate_workdir_path(workdir: str) -> bool:
     return workdir.startswith('/')
 def build_workspace_bind_mode(read_only: bool) -> str:
     return 'ro' if read_only else 'rw'
+def is_valid_network_mode(mode: str) -> bool:
+    return mode in {'none', 'bridge', 'host'}
