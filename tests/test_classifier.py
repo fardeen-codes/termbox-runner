@@ -165,3 +165,15 @@ def test_classifier_python_exceptions():
     trace = 'File "test.py", line 12, in <module>\nZeroDivisionError'
     snippet = extract_stacktrace_snippet(trace)
     assert 'line 12' in snippet
+
+
+def test_classifier_multilang_detections():
+    from termbox_runner.classifier import get_diagnostic_action_hint, get_failure_mode_doc_url
+
+    step_rust = StepResult(step=CommandStep.MAIN, command="cargo build", exit_code=1, stderr="error[E0425]: cannot find value in this scope")
+    mode, reason = classify_run([step_rust])
+    assert mode == FailureMode.RUNTIME_ERROR
+    assert "E0425" in reason
+
+    assert "mem_limit" in get_diagnostic_action_hint(FailureMode.OOM_KILLED)
+    assert "failures#" in get_failure_mode_doc_url(FailureMode.TIMEOUT)
