@@ -197,3 +197,28 @@ def test_runner_sandboxing_helpers():
 
     assert parse_inspect_oom_killed({"State": {"OOMKilled": True}}) is True
     assert parse_inspect_oom_killed({}) is False
+
+
+def test_runner_advanced_kwargs_helpers():
+    from termbox_runner.runner import (
+        is_valid_network_mode,
+        enforce_pids_limit_bounds,
+        truncate_output_if_needed,
+        safe_parse_memory_bytes,
+        build_standard_container_kwargs,
+    )
+
+    assert is_valid_network_mode("none") is True
+    assert is_valid_network_mode("invalid_mode") is False
+
+    assert enforce_pids_limit_bounds(5) == 16
+    assert enforce_pids_limit_bounds(100) == 100
+
+    truncated = truncate_output_if_needed("abcdefghij", 5)
+    assert "[TRUNCATED]" in truncated
+
+    assert safe_parse_memory_bytes("256m") == 256 * 1024 * 1024
+    assert safe_parse_memory_bytes("invalid_format", 123) == 123
+
+    kwargs = build_standard_container_kwargs("python:3.12-slim", "echo 1")
+    assert kwargs["image"] == "python:3.12-slim"
