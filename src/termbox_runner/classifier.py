@@ -130,6 +130,7 @@ def classify_run(
         if 'errors during collection' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' failed during Pytest test collection."
         if 'fixture' in (step.stderr + ' ' + step.stdout).lower() and 'not found' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' failed resolving Pytest test fixture."
         if 'unrecognized arguments:' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' failed with CLI argument parsing error."
+        if 'no space left on device' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' failed with disk quota exceeded (ENOSPC)."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
