@@ -256,6 +256,22 @@ class RunStorage:
         conn = await self.get_connection()
         await conn.execute(f"SAVEPOINT {savepoint_name};")
 
+
+    async def get_duration_percentiles(self) -> dict:
+        """Compute p50, p90, p99 durations from stored execution history."""
+        conn = await self.get_connection()
+        async with conn.execute("SELECT duration_ms FROM runs WHERE duration_ms > 0 ORDER BY duration_ms ASC") as cursor:
+            rows = await cursor.fetchall()
+            if not rows:
+                return {"p50": 0.0, "p90": 0.0, "p99": 0.0}
+            vals = [r["duration_ms"] for r in rows]
+            n = len(vals)
+            return {
+                "p50": vals[int(n * 0.50)],
+                "p90": vals[int(n * 0.90)],
+                "p99": vals[min(n - 1, int(n * 0.99))],
+            }
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
