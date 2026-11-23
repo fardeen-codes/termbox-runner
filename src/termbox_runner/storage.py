@@ -387,6 +387,16 @@ class RunStorage:
             await conn.commit()
             return cursor.rowcount
 
+
+    async def delete_runs_by_ids(self, run_ids: list) -> int:
+        if not run_ids: return 0
+        conn = await self.get_connection()
+        placeholders = ",".join("?" for _ in run_ids)
+        async with self._lock:
+            cursor = await conn.execute(f"DELETE FROM runs WHERE run_id IN ({placeholders})", run_ids)
+            await conn.commit()
+            return cursor.rowcount
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
