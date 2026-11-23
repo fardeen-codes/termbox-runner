@@ -413,3 +413,10 @@ class DockerDaemonInfo(BaseModel):
     server_version: str = "unknown"
     containers_running: int = 0
     driver: str = "overlay2"
+
+
+class RunPercentileStats(BaseModel):
+    """Latency percentiles across recorded runs."""
+    p50_ms: float = 0.0
+    p90_ms: float = 0.0
+    p99_ms: float = 0.0
