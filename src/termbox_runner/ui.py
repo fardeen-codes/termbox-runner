@@ -805,6 +805,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 
     function getQueuedBadge() { return '<span class="badge badge-QUEUED">QUEUED</span>'; }
     function getCancelledBadge() { return '<span class="badge badge-CANCELLED">CANCELLED</span>'; }
+    function getRunningBadge() { return '<span class="badge badge-RUNNING">RUNNING ⏳</span>'; }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
