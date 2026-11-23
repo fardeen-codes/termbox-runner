@@ -14,3 +14,9 @@ def test_ui_additional_controls():
     assert "copyCommand" in DASHBOARD_HTML
     assert "toggleAutoRefresh" in DASHBOARD_HTML
     assert "getExitCodeBadge" in DASHBOARD_HTML
+
+
+def test_ui_part3_features():
+    assert "renderGanttTimeline" in DASHBOARD_HTML
+    assert "bindEscapeShortcut" in DASHBOARD_HTML
+    assert "toggleTheme" in DASHBOARD_HTML
