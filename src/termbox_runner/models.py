@@ -88,6 +88,7 @@ class ResourceLimits(BaseModel):
     timeout_seconds: float = Field(default=30.0, ge=1.0, le=600.0, description="Hard wall-clock timeout in seconds")
     max_open_files: int = Field(default=1024, ge=64, le=65536, description="Max open file descriptors (ulimit nofile)")
     shm_size: Optional[str] = Field(default='64m', description='Size of /dev/shm')
+    cpuset_cpus: Optional[str] = Field(default=None, description='CPUs in which to allow execution (e.g. 0-3)')
     security: SecurityOptions = Field(default_factory=SecurityOptions, description="Security sandbox controls")
 
     @field_validator("mem_limit")
