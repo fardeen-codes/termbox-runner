@@ -259,3 +259,5 @@ def cmd_replays(server_url: str):
     print('Replays: []')
 def cmd_root_find(server_url: str):
     print('Root: None')
+def pad_cell(text: str, width: int) -> str:
+    return text[:width].ljust(width)
