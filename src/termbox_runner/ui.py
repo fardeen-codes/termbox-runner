@@ -814,6 +814,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function bindTemplatesShortcut() { window.addEventListener('keydown', e => { if (e.key === 't' && !e.target.matches('input, textarea')) showToast('Templates shortcut triggered'); }); }
     function bindNewRunShortcut() { window.addEventListener('keydown', e => { if (e.key === 'c' && !e.target.matches('input, textarea')) openNewRunModal(); }); }
     function bindEscapeShortcut() { window.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('new-run-modal'); closeModal('run-detail-modal'); } }); }
+    function toggleTheme() { document.body.classList.toggle('light-theme'); showToast('Theme switched'); }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
