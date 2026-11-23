@@ -107,3 +107,13 @@ def test_manifest_exit_signal_and_step_success():
     assert step.is_success is True
     step_fail = StepResult(step=CommandStep.MAIN, command="test", exit_code=1)
     assert step_fail.is_success is False
+
+
+def test_models_additional_schemas():
+    entry = StepTimelineEntry(step_name="MAIN", start_offset_ms=10.0, duration_ms=50.0, exit_code=0)
+    timeline = ExecutionTimeline(run_id="run_123", total_duration_ms=60.0, entries=[entry])
+    assert len(timeline.entries) == 1
+    assert timeline.entries[0].duration_ms == 50.0
+
+    percentiles = RunPercentileStats(p50_ms=100.0, p90_ms=250.0, p99_ms=500.0)
+    assert percentiles.p90_ms == 250.0
