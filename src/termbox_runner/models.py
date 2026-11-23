@@ -406,3 +406,10 @@ class SystemDiskStats(BaseModel):
     total_bytes: int
     used_bytes: int
     free_bytes: int
+
+
+class DockerDaemonInfo(BaseModel):
+    """Host Docker engine operational details."""
+    server_version: str = "unknown"
+    containers_running: int = 0
+    driver: str = "overlay2"
