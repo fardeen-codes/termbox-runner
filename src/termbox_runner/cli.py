@@ -41,6 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_lg.add_argument('run_id')
     p_lg.add_argument('--stderr', action='store_true')
     subparsers.add_parser('version', help='Show CLI version')
+    subparsers.add_parser('export-junit', help='CLI export-junit command')
     subparsers.add_parser('export-markdown', help='CLI export-markdown command')
     subparsers.add_parser('export-sonarqube', help='CLI export-sonarqube command')
     subparsers.add_parser('export-tap', help='CLI export-tap command')
@@ -234,3 +235,5 @@ def cmd_export_sonarqube(server_url: str):
     print('<testExecutions version="1"/>')
 def cmd_export_markdown(server_url: str):
     print('# Report')
+def cmd_export_junit(server_url: str):
+    print('<testsuite/>')
