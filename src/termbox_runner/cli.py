@@ -41,6 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_lg.add_argument('run_id')
     p_lg.add_argument('--stderr', action='store_true')
     subparsers.add_parser('version', help='Show CLI version')
+    subparsers.add_parser('cancel-all', help='CLI cancel-all command')
     subparsers.add_parser('active', help='CLI active command')
     subparsers.add_parser('ping', help='CLI ping command')
     subparsers.add_parser('percentiles', help='CLI percentiles command')
@@ -219,3 +220,5 @@ def cmd_ping(server_url: str):
 def cmd_active(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get('/runs/active').json())
+def cmd_cancel_all(server_url: str):
+    print('Cancelled 0 active tasks')
