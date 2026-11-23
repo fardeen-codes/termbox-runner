@@ -810,6 +810,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function updateDbSizeFooter(bytes) { const el = document.getElementById('footer-db-size'); if (el) el.textContent = bytes + ' bytes'; }
     function copyMarkdownReport(md) { if (navigator.clipboard) { navigator.clipboard.writeText(md); showToast('Markdown report copied!'); } }
     function copyTapReport(tap) { if (navigator.clipboard) { navigator.clipboard.writeText(tap); showToast('TAP export copied!'); } }
+    function renderGanttTimeline(entries) { return entries.map(e => `<div style="margin:4px 0;">${e.step}: ${e.duration_ms}ms</div>`).join(''); }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
