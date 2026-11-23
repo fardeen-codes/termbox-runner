@@ -253,6 +253,11 @@ async def ping_system(storage: RunStorage = Depends(get_storage_dependency)):
     db_ok = await storage.ping_database()
     return {"pong": True, "db": db_ok}
 
+
+@app.get("/system/readiness")
+async def check_system_ready(executor: TaskExecutor = Depends(get_executor_dependency), storage: RunStorage = Depends(get_storage_dependency)):
+    return {"ready": True, "docker": executor.is_available(), "db": await storage.ping_database()}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
