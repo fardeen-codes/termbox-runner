@@ -817,3 +817,5 @@ def build_log_config() -> dict:
     return {'type': 'json-file', 'config': {'max-size': '10m', 'max-file': '3'}}
 def validate_capabilities(caps: List[str]) -> bool:
     return all(c.isupper() for c in caps)
+def get_seccomp_profile_opt(profile_path: Optional[str]) -> Optional[str]:
+    return f'seccomp={profile_path}' if profile_path else None
