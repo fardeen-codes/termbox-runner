@@ -41,6 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_lg.add_argument('run_id')
     p_lg.add_argument('--stderr', action='store_true')
     subparsers.add_parser('version', help='Show CLI version')
+    subparsers.add_parser('percentiles', help='CLI percentiles command')
     subparsers.add_parser('integrity', help='CLI integrity command')
     subparsers.add_parser('db-size', help='CLI db-size command')
     subparsers.add_parser('cli-metrics', help='CLI cli-metrics command')
@@ -207,3 +208,6 @@ def cmd_db_size(server_url: str):
 def cmd_integrity(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get('/system/integrity').json())
+def cmd_percentiles(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get('/runs/percentiles').json())
