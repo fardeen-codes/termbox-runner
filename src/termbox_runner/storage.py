@@ -429,6 +429,13 @@ class RunStorage:
             row = await cursor.fetchone()
             return row["finished_at"] if row else None
 
+
+    async def get_run_task_command(self, run_id: str) -> Optional[str]:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT main_cmd FROM runs WHERE run_id = ?", (run_id,)) as cursor:
+            row = await cursor.fetchone()
+            return row["main_cmd"] if row else None
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
