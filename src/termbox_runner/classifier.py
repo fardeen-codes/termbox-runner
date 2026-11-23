@@ -127,6 +127,7 @@ def classify_run(
         if step.exit_code == 130: return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' terminated by user interrupt (SIGINT, exit 130)."
         if step.exit_code == 141: return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' broken pipe (SIGPIPE, exit 141)."
         if step.exit_code == 143: return FailureMode.RUNTIME_ERROR, f"Step '{step.step.value}' received graceful termination (SIGTERM, exit 143)."
+        if 'errors during collection' in (step.stderr + ' ' + step.stdout).lower(): return FailureMode.SETUP_ERROR, f"Step '{step.step.value}' failed during Pytest test collection."
         # Exit code 137 = 128 + 9 (SIGKILL), often OOM when not explicitly timed out
         if step.exit_code == 137:
             combined = (step.stderr + " " + step.stdout).lower()
