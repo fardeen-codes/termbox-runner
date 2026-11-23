@@ -379,6 +379,14 @@ class RunStorage:
         async with conn.execute("SELECT run_id FROM runs WHERE task_json LIKE ? LIMIT ?", (pattern, limit)) as cursor:
             return [r["run_id"] for r in await cursor.fetchall()]
 
+
+    async def delete_runs_by_status(self, status_val: str) -> int:
+        conn = await self.get_connection()
+        async with self._lock:
+            cursor = await conn.execute("DELETE FROM runs WHERE status = ?", (status_val,))
+            await conn.commit()
+            return cursor.rowcount
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
