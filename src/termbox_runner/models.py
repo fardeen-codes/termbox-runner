@@ -427,3 +427,10 @@ class RunVerificationResult(BaseModel):
     verifier_name: str
     passed: bool
     details: str = ""
+
+
+class TaskFingerprint(BaseModel):
+    """SHA-256 fingerprint for deduplicating identical task definitions."""
+    hash_value: str
+    image: str
+    command: str
