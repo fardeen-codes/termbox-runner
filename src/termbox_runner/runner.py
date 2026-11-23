@@ -858,3 +858,5 @@ def parse_docker_timestamp(ts: Optional[str]) -> Optional[str]:
     return ts.split('.')[0] if ts else None
 def format_docker_started_at(data: dict) -> Optional[str]:
     return parse_docker_timestamp(data.get('State', {}).get('StartedAt'))
+def compute_elapsed_ms(started: float, finished: float) -> float:
+    return round(max(0.0, finished - started) * 1000.0, 2)
