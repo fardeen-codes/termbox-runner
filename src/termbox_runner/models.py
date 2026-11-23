@@ -94,6 +94,7 @@ class ResourceLimits(BaseModel):
     shm_size: Optional[str] = Field(default='64m', description='Size of /dev/shm')
     cpuset_cpus: Optional[str] = Field(default=None, description='CPUs in which to allow execution (e.g. 0-3)')
     swappiness: Optional[int] = Field(default=0, ge=0, le=100, description='Memory swappiness')
+    sysctls: Dict[str, str] = Field(default_factory=dict, description='Container sysctls')
     security: SecurityOptions = Field(default_factory=SecurityOptions, description="Security sandbox controls")
 
     @field_validator("mem_limit")
