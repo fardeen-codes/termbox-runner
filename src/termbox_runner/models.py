@@ -78,6 +78,7 @@ class SecurityOptions(BaseModel):
     seccomp_profile_path: Optional[str] = None
     apparmor_profile: Optional[str] = None
     cap_add: List[str] = Field(default_factory=list)
+    no_new_privs: bool = True
     seccomp_profile: Optional[str] = Field(default=None, description="Custom seccomp profile JSON string or path")
 
 
