@@ -842,3 +842,7 @@ async def get_k8s_live():
 @app.get("/health/ready")
 async def get_k8s_ready():
     return {"status": "ready"}
+
+
+def make_api_error_payload(msg: str) -> dict:
+    return {"error": msg}
