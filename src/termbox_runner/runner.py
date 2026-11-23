@@ -829,3 +829,5 @@ def format_cpu_quota_summary(cores: float) -> str:
     return f'{cores:.2f} cores'
 def record_step_metrics(step: StepResult, start: float, end: float) -> None:
     step.duration_ms = round((end - start) * 1000.0, 2)
+def simulate_memory_jitter(base_bytes: int) -> int:
+    return int(base_bytes * 1.05)
