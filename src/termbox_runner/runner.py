@@ -835,3 +835,5 @@ def simulate_cpu_usage_jitter(base_percent: float = 25.0) -> float:
     return round(base_percent, 1)
 def extract_container_inspect_status(data: dict) -> str:
     return data.get('State', {}).get('Status', 'unknown')
+def extract_container_ip_address(data: dict) -> Optional[str]:
+    return data.get('NetworkSettings', {}).get('IPAddress')
