@@ -336,6 +336,12 @@ class RunStorage:
         async with conn.execute("SELECT run_id FROM runs WHERE status = 'FAILED' ORDER BY created_at DESC LIMIT ?", (limit,)) as cursor:
             return [r["run_id"] for r in await cursor.fetchall()]
 
+
+    async def get_recent_passed_runs(self, limit: int = 5) -> list:
+        conn = await self.get_connection()
+        async with conn.execute("SELECT run_id FROM runs WHERE failure_mode = 'PASSED' ORDER BY created_at DESC LIMIT ?", (limit,)) as cursor:
+            return [r["run_id"] for r in await cursor.fetchall()]
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
