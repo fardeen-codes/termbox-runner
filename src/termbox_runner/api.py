@@ -225,6 +225,11 @@ async def get_active_runs_list(storage: RunStorage = Depends(get_storage_depende
 async def get_top_memory_runs(limit: int = 5, storage: RunStorage = Depends(get_storage_dependency)):
     return await storage.get_top_memory_consuming_runs(limit=limit)
 
+
+@app.get("/runs/recent/failed")
+async def get_recent_failures(limit: int = 5, storage: RunStorage = Depends(get_storage_dependency)):
+    return await storage.get_recent_failed_runs(limit=limit)
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
