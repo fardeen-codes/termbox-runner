@@ -397,6 +397,14 @@ class RunStorage:
             await conn.commit()
             return cursor.rowcount
 
+
+    async def update_run_status(self, run_id: str, new_status: str) -> bool:
+        conn = await self.get_connection()
+        async with self._lock:
+            cursor = await conn.execute("UPDATE runs SET status = ? WHERE run_id = ?", (new_status, run_id))
+            await conn.commit()
+            return cursor.rowcount > 0
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
