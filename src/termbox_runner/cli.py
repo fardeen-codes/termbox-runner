@@ -261,3 +261,5 @@ def cmd_root_find(server_url: str):
     print('Root: None')
 def pad_cell(text: str, width: int) -> str:
     return text[:width].ljust(width)
+def terminal_bold(text: str) -> str:
+    return f'\033[1m{text}\033[0m'
