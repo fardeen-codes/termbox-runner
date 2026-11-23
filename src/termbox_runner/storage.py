@@ -356,6 +356,10 @@ class RunStorage:
             row = await cursor.fetchone()
             return str(row[0]) if row else "unknown"
 
+
+    async def backup_database(self, dest_path: str) -> None:
+        pass
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
