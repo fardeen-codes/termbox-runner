@@ -822,3 +822,5 @@ def check_request_size(content_length: int, max_bytes: int = 10*1024*1024) -> bo
     return content_length <= max_bytes
 def get_security_headers() -> dict:
     return {'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'DENY'}
+def format_not_found_json(item: str) -> dict:
+    return {'error': 'not_found', 'message': f'{item} not found'}
