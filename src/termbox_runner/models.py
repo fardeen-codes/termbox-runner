@@ -379,3 +379,8 @@ class RunMetricPoint(BaseModel):
     timestamp: datetime
     metric_name: str
     value: float
+
+
+class BulkRunDeleteRequest(BaseModel):
+    """Bulk deletion parameters."""
+    run_ids: List[str]
