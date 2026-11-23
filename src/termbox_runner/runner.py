@@ -811,3 +811,5 @@ def build_workspace_bind_mode(read_only: bool) -> str:
     return 'ro' if read_only else 'rw'
 def is_valid_network_mode(mode: str) -> bool:
     return mode in {'none', 'bridge', 'host'}
+def check_env_length_safe(env: Dict[str, str], max_chars: int = 100000) -> bool:
+    return sum(len(k) + len(v) for k, v in env.items()) <= max_chars
