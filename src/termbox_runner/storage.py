@@ -405,6 +405,10 @@ class RunStorage:
             await conn.commit()
             return cursor.rowcount > 0
 
+
+    async def mark_run_cancelled(self, run_id: str) -> bool:
+        return await self.update_run_status(run_id, "CANCELLED")
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
