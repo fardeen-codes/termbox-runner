@@ -41,6 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_lg.add_argument('run_id')
     p_lg.add_argument('--stderr', action='store_true')
     subparsers.add_parser('version', help='Show CLI version')
+    subparsers.add_parser('env-view', help='CLI env-view command')
     subparsers.add_parser('keys', help='CLI keys command')
     subparsers.add_parser('export-junit', help='CLI export-junit command')
     subparsers.add_parser('export-markdown', help='CLI export-markdown command')
@@ -240,3 +241,5 @@ def cmd_export_junit(server_url: str):
     print('<testsuite/>')
 def cmd_keys(server_url: str):
     print('Artifacts: []')
+def cmd_env_view(server_url: str):
+    print('Environment: {}')
