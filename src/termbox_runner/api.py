@@ -286,6 +286,11 @@ async def get_dow_stats(storage: RunStorage = Depends(get_storage_dependency)):
 async def get_exit_codes_stats(storage: RunStorage = Depends(get_storage_dependency)):
     return await storage.count_runs_by_exit_code()
 
+
+@app.get("/stats/artifacts-count")
+async def get_artifacts_total_count(storage: RunStorage = Depends(get_storage_dependency)):
+    return {"total_artifacts": await storage.count_artifacts_stored()}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
