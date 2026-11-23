@@ -1,4 +1,13 @@
 
+## [0.3.0] - Enterprise Sandboxing & Multi-Language Milestone
+
+### Added
+- 20+ Multi-language benchmark presets (TypeScript, C#, Kotlin, Elixir, Scala, Swift, Rego OPA).
+- CLI companion utilities: timeline, metrics, integrity, percentiles, export formatters.
+- Interactive Gantt timeline visualization and theme customization.
+- Strict container security options: tmpfs mounts, zero-swap limits, seccomp profiles.
+
+
 ## [0.2.0] - Extensibility & Observability Milestone
 
 ### Added
