@@ -41,6 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_lg.add_argument('run_id')
     p_lg.add_argument('--stderr', action='store_true')
     subparsers.add_parser('version', help='Show CLI version')
+    subparsers.add_parser('timeline', help='CLI timeline command')
     subparsers.add_parser('templates', help='List benchmark templates')
     return parser
 
@@ -191,3 +192,6 @@ def format_network_error(exc: Exception, server_url: str) -> str:
 def cmd_version():
     """Print CLI version information."""
     print(f"termbox CLI v0.1.0")
+
+def cmd_timeline(server_url: str):
+    print('Timeline chart: No active run specified')
