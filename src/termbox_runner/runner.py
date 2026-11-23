@@ -821,3 +821,5 @@ def get_seccomp_profile_opt(profile_path: Optional[str]) -> Optional[str]:
     return f'seccomp={profile_path}' if profile_path else None
 def get_apparmor_profile_opt(profile_name: Optional[str]) -> Optional[str]:
     return f'apparmor={profile_name}' if profile_name else None
+def enforce_pids_limit_bounds(pids: int) -> int:
+    return max(16, min(pids, 4096))
