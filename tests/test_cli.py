@@ -32,3 +32,13 @@ def test_cli_additional_subcommands():
 
     assert "───" in render_box_separator(10)
     assert "Connection Error" in format_network_error(Exception(), "http://localhost:8000")
+
+
+def test_cli_helpers_and_formatting():
+    from termbox_runner.cli import pad_cell, terminal_bold, terminal_dim, safe_json_loads
+
+    assert pad_cell("test", 10) == "test      "
+    assert "\033[1m" in terminal_bold("bold")
+    assert "\033[2m" in terminal_dim("dim")
+    assert safe_json_loads('{"a": 1}')["a"] == 1
+    assert safe_json_loads("invalid") == {}
