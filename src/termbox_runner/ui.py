@@ -815,6 +815,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function bindNewRunShortcut() { window.addEventListener('keydown', e => { if (e.key === 'c' && !e.target.matches('input, textarea')) openNewRunModal(); }); }
     function bindEscapeShortcut() { window.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('new-run-modal'); closeModal('run-detail-modal'); } }); }
     function toggleTheme() { document.body.classList.toggle('light-theme'); showToast('Theme switched'); }
+    function filterCancelled() { setFilter('CANCELLED'); }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
