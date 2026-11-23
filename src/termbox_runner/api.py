@@ -832,3 +832,8 @@ def get_api_contact_metadata() -> dict:
 @app.get("/health/version")
 async def get_version_info():
     return {"version": get_settings().app_version}
+
+
+@app.get("/health/live")
+async def get_k8s_live():
+    return {"status": "alive"}
