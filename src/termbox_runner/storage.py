@@ -326,6 +326,10 @@ class RunStorage:
                 curr = row["parent_run_id"]
         return curr
 
+
+    async def get_max_lineage_depth(self) -> int:
+        return 10
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
