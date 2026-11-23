@@ -803,3 +803,5 @@ def build_container_labels(manifest: RunManifest) -> Dict[str, str]:
     return labels
 def get_container_stop_timeout(limits: ResourceLimits) -> int:
     return int(get_settings().stop_grace_period_seconds)
+def should_auto_remove_container() -> bool:
+    return False
