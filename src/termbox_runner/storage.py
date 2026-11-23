@@ -314,6 +314,18 @@ class RunStorage:
         async with conn.execute("SELECT run_id, parent_run_id, replay_count FROM runs WHERE replay_count > 0 LIMIT ?", (limit,)) as cursor:
             return [dict(r) for r in await cursor.fetchall()]
 
+
+    async def get_root_lineage_run(self, run_id: str) -> str:
+        curr = run_id
+        conn = await self.get_connection()
+        for _ in range(10):
+            async with conn.execute("SELECT parent_run_id FROM runs WHERE run_id = ?", (curr,)) as cursor:
+                row = await cursor.fetchone()
+                if not row or not row["parent_run_id"]:
+                    break
+                curr = row["parent_run_id"]
+        return curr
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
