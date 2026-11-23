@@ -803,6 +803,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       showToast(autoRefreshActive ? 'Auto-refresh resumed' : 'Auto-refresh paused');
     }
 
+    function getQueuedBadge() { return '<span class="badge badge-QUEUED">QUEUED</span>'; }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
