@@ -203,3 +203,5 @@ def search_templates_by_tag(tag: str) -> list:
     return [t for t in TEMPLATES.values() if tag.lower() in t.category.lower() or tag.lower() in t.name.lower()]
 def get_template_timeout_estimate(t: BenchmarkTemplate) -> float:
     return t.task.limits.timeout_seconds
+def validate_template_limits(t: BenchmarkTemplate) -> bool:
+    return t.task.limits.timeout_seconds <= 300.0
