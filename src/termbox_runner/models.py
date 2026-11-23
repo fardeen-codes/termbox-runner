@@ -160,6 +160,7 @@ class TaskSubmission(BaseModel):
     webhook_url: Optional[str] = Field(default=None, description="HTTP callback URL to invoke upon run completion")
     webhook_secret: Optional[str] = Field(default=None, description="Shared secret for HMAC-SHA256 callback signing")
     container_labels: Dict[str, str] = Field(default_factory=dict, description='Custom container labels')
+    client_ip: Optional[str] = None
     limits: ResourceLimits = Field(default_factory=ResourceLimits, description="Resource bounds for the run")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Arbitrary task metadata or tags")
 
