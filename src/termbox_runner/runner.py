@@ -860,3 +860,8 @@ def format_docker_started_at(data: dict) -> Optional[str]:
     return parse_docker_timestamp(data.get('State', {}).get('StartedAt'))
 def compute_elapsed_ms(started: float, finished: float) -> float:
     return round(max(0.0, finished - started) * 1000.0, 2)
+def safe_parse_memory_bytes(mem_str: str, default: int = 512*1024*1024) -> int:
+    try:
+        return parse_memory_to_bytes(mem_str)
+    except Exception:
+        return default
