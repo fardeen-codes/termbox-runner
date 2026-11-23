@@ -828,3 +828,7 @@ def format_server_error_json() -> dict:
     return {'error': 'internal_error', 'message': 'An unexpected error occurred'}
 def get_api_contact_metadata() -> dict:
     return {'name': 'Termbox Team', 'url': 'https://github.com/fardeen-codes/termbox-runner'}
+
+@app.get("/health/version")
+async def get_version_info():
+    return {"version": get_settings().app_version}
