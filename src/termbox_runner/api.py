@@ -258,6 +258,13 @@ async def ping_system(storage: RunStorage = Depends(get_storage_dependency)):
 async def check_system_ready(executor: TaskExecutor = Depends(get_executor_dependency), storage: RunStorage = Depends(get_storage_dependency)):
     return {"ready": True, "docker": executor.is_available(), "db": await storage.ping_database()}
 
+
+@app.get("/runs/{run_id}/command", response_class=PlainTextResponse)
+async def get_run_cmd_text(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    cmd = await storage.get_run_task_command(run_id)
+    if cmd is None: raise HTTPException(status_code=404, detail="Run not found")
+    return PlainTextResponse(cmd)
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
