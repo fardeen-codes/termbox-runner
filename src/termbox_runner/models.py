@@ -75,6 +75,7 @@ class SecurityOptions(BaseModel):
         description="Explicit Linux capabilities to retain (e.g. ['CHOWN'])",
     )
     no_new_privileges: bool = Field(default=True, description="Disallow acquiring additional privileges")
+    seccomp_profile_path: Optional[str] = None
     seccomp_profile: Optional[str] = Field(default=None, description="Custom seccomp profile JSON string or path")
 
 
