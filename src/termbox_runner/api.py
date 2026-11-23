@@ -241,6 +241,12 @@ async def bulk_delete_runs(run_ids: List[str], storage: RunStorage = Depends(get
     count = await storage.delete_runs_by_ids(run_ids)
     return {"deleted_count": count, "requested_count": len(run_ids)}
 
+
+@app.get("/system/integrity")
+async def check_sys_integrity(storage: RunStorage = Depends(get_storage_dependency)):
+    status_str = await storage.check_database_integrity()
+    return {"status": status_str}
+
 @app.get("/runs/search")
 async def search_runs(q: str = Query(..., min_length=1), storage: RunStorage = Depends(get_storage_dependency)):
     """Search stored task executions by main command keyword."""
