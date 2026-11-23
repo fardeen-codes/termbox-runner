@@ -443,6 +443,13 @@ class RunStorage:
             row = await cursor.fetchone()
             return int(row["cnt"]) if row else 0
 
+
+    async def get_database_page_count(self) -> int:
+        conn = await self.get_connection()
+        async with conn.execute("PRAGMA page_count;") as cursor:
+            row = await cursor.fetchone()
+            return int(row[0]) if row else 0
+
     async def close(self) -> None:
         """Close the database connection if open."""
         async with self._lock:
