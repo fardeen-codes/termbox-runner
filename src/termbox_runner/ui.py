@@ -818,6 +818,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function filterCancelled() { setFilter('CANCELLED'); }
     function filterSetupError() { setFilter('SETUP_ERROR'); }
     function formatPeakMemory(bytes) { return bytes ? (bytes / (1024*1024)).toFixed(1) + 'MB' : '-'; }
+    function formatLineageTree(run) { return run.parent_run_id ? '↳ ' + run.parent_run_id.slice(-6) : 'root'; }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
