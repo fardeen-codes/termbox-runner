@@ -809,6 +809,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function updateActiveCount(cnt) { const el = document.getElementById('stat-active'); if (el) el.textContent = cnt; }
     function updateDbSizeFooter(bytes) { const el = document.getElementById('footer-db-size'); if (el) el.textContent = bytes + ' bytes'; }
     function copyMarkdownReport(md) { if (navigator.clipboard) { navigator.clipboard.writeText(md); showToast('Markdown report copied!'); } }
+    function copyTapReport(tap) { if (navigator.clipboard) { navigator.clipboard.writeText(tap); showToast('TAP export copied!'); } }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
