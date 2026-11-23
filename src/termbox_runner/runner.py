@@ -833,3 +833,5 @@ def simulate_memory_jitter(base_bytes: int) -> int:
     return int(base_bytes * 1.05)
 def simulate_cpu_usage_jitter(base_percent: float = 25.0) -> float:
     return round(base_percent, 1)
+def extract_container_inspect_status(data: dict) -> str:
+    return data.get('State', {}).get('Status', 'unknown')
