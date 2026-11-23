@@ -811,6 +811,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     function copyMarkdownReport(md) { if (navigator.clipboard) { navigator.clipboard.writeText(md); showToast('Markdown report copied!'); } }
     function copyTapReport(tap) { if (navigator.clipboard) { navigator.clipboard.writeText(tap); showToast('TAP export copied!'); } }
     function renderGanttTimeline(entries) { return entries.map(e => `<div style="margin:4px 0;">${e.step}: ${e.duration_ms}ms</div>`).join(''); }
+    function bindTemplatesShortcut() { window.addEventListener('keydown', e => { if (e.key === 't' && !e.target.matches('input, textarea')) showToast('Templates shortcut triggered'); }); }
     function openNewRunModal() {
       document.getElementById('new-run-modal').style.display = 'flex';
     }
