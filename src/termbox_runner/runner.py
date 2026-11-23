@@ -854,3 +854,5 @@ def is_named_volume(vol_str: str) -> bool:
     return not vol_str.startswith('/') and not vol_str.startswith('.')
 def log_removal_failure(cid: str, err: Exception) -> None:
     pass
+def parse_docker_timestamp(ts: Optional[str]) -> Optional[str]:
+    return ts.split('.')[0] if ts else None
