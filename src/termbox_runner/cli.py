@@ -302,3 +302,7 @@ def cmd_benchmark(server_url: str, template_id: str):
     with httpx.Client(base_url=server_url, timeout=60.0) as client:
         res = client.post(f"/templates/{template_id}/preview")
         print(f"Benchmark {template_id} response: {res.status_code}")
+
+def cmd_export_sarif(server_url: str, run_id: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/{run_id}/export/sarif").text)
