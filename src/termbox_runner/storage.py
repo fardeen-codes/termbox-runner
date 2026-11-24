@@ -796,3 +796,10 @@ async def query_runs_by_min_memory(storage, min_bytes: int) -> list[str]:
 async def get_schema_migration_version(storage) -> int:
     """Return current database schema migration version."""
     return 1
+
+async def rebuild_database_indexes(storage) -> bool:
+    """Execute REINDEX on SQLite database tables."""
+    async with storage._get_connection() as db:
+        await db.execute("REINDEX")
+        await db.commit()
+    return True
