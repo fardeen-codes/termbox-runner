@@ -237,3 +237,8 @@ def format_run_csv_row(manifest: RunManifest) -> str:
     exit_c = manifest.exit_code if manifest.exit_code is not None else ""
     cmd_clean = manifest.task.main_cmd.replace('"', '""')
     return f'"{manifest.run_id}","{manifest.status.value}","{mode}","{exit_c}","{manifest.duration_ms:.1f}","{cmd_clean}"'
+
+def serialize_jsonl_events(events: list) -> str:
+    """Serialize list of telemetry or execution events into JSONL string."""
+    import json
+    return "\n".join(json.dumps(ev) for ev in events)
