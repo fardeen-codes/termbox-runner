@@ -58,3 +58,7 @@ def parse_traceparent(header: str) -> dict:
     if len(parts) != 4:
         return {}
     return {"version": parts[0], "trace_id": parts[1], "parent_id": parts[2], "flags": parts[3]}
+
+def inject_trace_context_env(traceparent: str) -> dict[str, str]:
+    """Inject W3C traceparent into subprocess environment dictionary."""
+    return {"TRACEPARENT": traceparent, "OTEL_TRACE_ID": traceparent.split("-")[1]}
