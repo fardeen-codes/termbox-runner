@@ -167,3 +167,21 @@ def format_discord_embed(manifest: RunManifest) -> dict:
 def sanitize_slack_mrkdwn(text: str) -> str:
     """Sanitize text to prevent Slack markdown injection."""
     return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+def generate_github_step_summary(manifest: RunManifest) -> str:
+    """Generate GitHub Actions $GITHUB_STEP_SUMMARY Markdown format."""
+    status_icon = "✅" if manifest.status == RunStatus.COMPLETED and manifest.failure_mode == FailureMode.PASSED else "❌"
+    lines = [
+        f"### {status_icon} Termbox Execution Summary ({manifest.run_id})",
+        "",
+        "| Attribute | Value |",
+        "| :--- | :--- |",
+        f"| **Status** | `{manifest.status.value}` |",
+        f"| **Failure Mode** | `{manifest.failure_mode.value if manifest.failure_mode else 'PASSED'}` |",
+        f"| **Exit Code** | `{manifest.exit_code if manifest.exit_code is not None else '-'}` |",
+        f"| **Duration** | `{manifest.duration_ms:.1f}ms` |",
+        "",
+        "#### Command",
+        f"```bash\n{manifest.task.main_cmd}\n```",
+    ]
+    return "\n".join(lines)
