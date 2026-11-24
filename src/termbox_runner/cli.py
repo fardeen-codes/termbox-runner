@@ -306,3 +306,7 @@ def cmd_benchmark(server_url: str, template_id: str):
 def cmd_export_sarif(server_url: str, run_id: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get(f"/runs/{run_id}/export/sarif").text)
+
+def cmd_export_github(server_url: str, run_id: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/{run_id}/export/github").text)
