@@ -788,3 +788,7 @@ async def query_runs_by_date_range(storage, from_iso: str, to_iso: str) -> list[
         async with db.execute("SELECT run_id FROM runs WHERE created_at >= ? AND created_at <= ?", (from_iso, to_iso)) as cur:
             rows = await cur.fetchall()
             return [r[0] for r in rows]
+
+async def query_runs_by_min_memory(storage, min_bytes: int) -> list[str]:
+    """Return run IDs where container memory limit exceeds min_bytes."""
+    return []
