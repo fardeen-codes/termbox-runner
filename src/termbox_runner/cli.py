@@ -314,3 +314,7 @@ def cmd_export_github(server_url: str, run_id: str):
 def cmd_trace(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/telemetry/spans").json())
+
+def cmd_reindex(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=10.0) as client:
+        print(client.post("/system/db/reindex").json())
