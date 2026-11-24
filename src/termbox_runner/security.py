@@ -17,3 +17,9 @@ def get_security_opts(no_new_privs: bool = True) -> list[str]:
 def get_whitelisted_capabilities() -> list[str]:
     """Return safe capabilities required for basic sandboxed unprivileged CLI tasks."""
     return ["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETGID", "SETUID"]
+
+def validate_read_only_rootfs(is_read_only: bool, tmpfs_configured: bool) -> bool:
+    """Validate that read-only root filesystems provide /tmp via tmpfs mount."""
+    if is_read_only and not tmpfs_configured:
+        return False
+    return True
