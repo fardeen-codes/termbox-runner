@@ -2,7 +2,7 @@
 
 import json
 from typing import Any, Dict, List
-from termbox_runner.models import FailureMode, RunManifest
+from termbox_runner.models import FailureMode, RunManifest, RunStatus
 
 
 def to_sarif(manifest: RunManifest) -> Dict[str, Any]:

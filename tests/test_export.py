@@ -101,7 +101,7 @@ def test_export_additional_ci_formats():
     tc = generate_teamcity_messages(manifest)
     assert len(tc) >= 2
     cob = generate_cobertura_xml(85.0)
-    assert "line-rate="0.85"" in cob
+    assert 'line-rate="0.85"' in cob
     sarif = generate_sarif_report(manifest)
     assert sarif["version"] == "2.1.0"
     lcov = generate_lcov_coverage()

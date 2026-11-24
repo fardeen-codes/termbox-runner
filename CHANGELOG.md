@@ -30,3 +30,11 @@
 - Multi-language benchmark templates catalog.
 - CLI interface (`termbox`) with health, list, inspect, run, and replay commands.
 - Export formats: SARIF v2.1.0, JUnit XML, CSV, and Markdown.
+
+## [0.4.0] - 2026-11-24
+### Added
+- AppArmor and Seccomp security profiles with read-only rootfs validation.
+- SWE-bench and security benchmark templates (Django, Flask, SQLi, ReDoS).
+- OpenTelemetry span schemas and W3C traceparent context injection.
+- Multi-format CI test reporters: GitHub Step Summary, GitLab JUnit, SARIF v2.1.0, Cobertura, LCOV.
+- SQLite query optimization pragmas, log compression, and schema migrations.
