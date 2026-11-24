@@ -56,3 +56,9 @@ def test_cli_doctor_command(capsys):
     assert "Termbox Runner Diagnostic Doctor" in captured
     assert "Python Runtime:" in captured
 
+
+def test_cli_color_helpers():
+    from termbox_runner.cli import terminal_green, terminal_red, terminal_cyan
+    assert "\033[32m" in terminal_green("PASS")
+    assert "\033[31m" in terminal_red("FAIL")
+    assert "\033[36m" in terminal_cyan("INFO")
