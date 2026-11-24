@@ -79,3 +79,34 @@ def test_tap_and_sonarqube_exports():
 
     gh = format_github_action_annotation(manifest)
     assert "::notice" in gh
+
+def test_export_additional_ci_formats():
+    from termbox_runner.models import RunManifest, TaskSubmission, RunStatus, FailureMode
+    from termbox_runner.export import (
+        generate_github_step_summary,
+        generate_gitlab_junit_xml,
+        generate_teamcity_messages,
+        generate_cobertura_xml,
+        generate_sarif_report,
+        generate_lcov_coverage,
+        format_run_csv_row,
+        serialize_jsonl_events,
+    )
+    manifest = RunManifest(task=TaskSubmission(main_cmd="echo 1"), status=RunStatus.COMPLETED, failure_mode=FailureMode.PASSED, duration_ms=12.5)
+    gh = generate_github_step_summary(manifest)
+    assert "Termbox Execution Summary" in gh
+    assert "echo 1" in gh
+    gitlab = generate_gitlab_junit_xml(manifest)
+    assert "<testsuite" in gitlab
+    tc = generate_teamcity_messages(manifest)
+    assert len(tc) >= 2
+    cob = generate_cobertura_xml(85.0)
+    assert "line-rate="0.85"" in cob
+    sarif = generate_sarif_report(manifest)
+    assert sarif["version"] == "2.1.0"
+    lcov = generate_lcov_coverage()
+    assert "end_of_record" in lcov
+    csv_row = format_run_csv_row(manifest)
+    assert "echo 1" in csv_row
+    jsonl = serialize_jsonl_events([{"a": 1}, {"b": 2}])
+    assert "\n" in jsonl
