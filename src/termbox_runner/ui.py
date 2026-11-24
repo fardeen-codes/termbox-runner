@@ -518,6 +518,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         <button class="btn btn-primary" id="btn-modal-replay">🔁 Replay Run</button>
         <a id="btn-download-stdout" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">⬇ Download Logs</a>
         <a id="btn-download-junit" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">JUnit XML</a>
+        <a id="btn-download-sarif" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">🛡️ SARIF</a>
         <button class="btn" onclick="closeModal('run-detail-modal')">Close</button>
       </div>
     </div>
