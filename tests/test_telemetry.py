@@ -42,3 +42,35 @@ def test_telemetry_helpers():
 
     load = get_system_load_average()
     assert len(load) == 3
+
+def test_telemetry_part1_utilities():
+    from termbox_runner.telemetry import (
+        generate_traceparent,
+        parse_traceparent,
+        inject_trace_context_env,
+        record_rss_metric,
+        record_disk_io_metric,
+        record_network_drop_metric,
+        calculate_percentile_buckets,
+        format_prometheus_histogram_buckets,
+        format_audit_log_entry,
+        generate_correlation_id,
+        mask_sensitive_env_vars,
+    )
+    tp = generate_traceparent()
+    parsed = parse_traceparent(tp)
+    assert "trace_id" in parsed
+    assert "TRACEPARENT" in inject_trace_context_env(tp)
+    assert record_rss_metric("r1", 1024)["value"] == 1024
+    assert record_disk_io_metric("r1", 50, 100)["write_bytes"] == 100
+    assert record_network_drop_metric("r1", 3)["drops"] == 3
+    buckets = calculate_percentile_buckets([10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+    assert buckets["p50"] >= 50
+    lines = format_prometheus_histogram_buckets("test_hist", {0.1: 5, 0.5: 10})
+    assert len(lines) == 2
+    audit = format_audit_log_entry("login", "admin", "runner", "SUCCESS")
+    assert "admin" in audit
+    assert generate_correlation_id().startswith("corr_")
+    masked = mask_sensitive_env_vars({"API_KEY": "secret123", "PORT": "8000"})
+    assert masked["API_KEY"] == "********"
+    assert masked["PORT"] == "8000"
