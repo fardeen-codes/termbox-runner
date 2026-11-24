@@ -771,3 +771,13 @@ def get_optimized_sqlite_pragmas() -> list[str]:
         "PRAGMA temp_store=MEMORY",
         "PRAGMA mmap_size=268435456",
     ]
+
+def compress_log_output(text: str) -> bytes:
+    """Compress log output using zlib to save storage space."""
+    import zlib
+    return zlib.compress(text.encode("utf-8"))
+
+def decompress_log_output(data: bytes) -> str:
+    """Decompress zlib compressed log payload."""
+    import zlib
+    return zlib.decompress(data).decode("utf-8")
