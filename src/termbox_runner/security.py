@@ -13,3 +13,7 @@ def get_security_opts(no_new_privs: bool = True) -> list[str]:
     if no_new_privs:
         opts.append("no-new-privileges:true")
     return opts
+
+def get_whitelisted_capabilities() -> list[str]:
+    """Return safe capabilities required for basic sandboxed unprivileged CLI tasks."""
+    return ["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETGID", "SETUID"]
