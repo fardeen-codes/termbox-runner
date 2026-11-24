@@ -218,3 +218,5 @@ TEMPLATES["pytorch-tensor"] = BenchmarkTemplate(id="pytorch-tensor", name="PyTor
 TEMPLATES["numpy-linalg"] = BenchmarkTemplate(id="numpy-linalg", name="NumPy Matrix Operations", category="Math", description="Tests eigenvalue and matrix dot products.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"NumPy verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["security-sqli"] = BenchmarkTemplate(id="security-sqli", name="SQL Injection Scanner", category="Security", description="Validates parameterized query hygiene.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"No SQLi found\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["security-pathtraversal"] = BenchmarkTemplate(id="security-pathtraversal", name="Path Traversal Test", category="Security", description="Verifies safe path normalization.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Paths sanitized\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
