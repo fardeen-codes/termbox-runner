@@ -858,3 +858,11 @@ async def get_telemetry_spans(limit: int = 50):
 async def get_security_audit_logs(limit: int = 50):
     """Fetch security audit log entries."""
     return {"audit_events": [], "limit": limit}
+
+@app.middleware("http")
+async def add_correlation_id_header(request, call_next):
+    from termbox_runner.telemetry import generate_correlation_id
+    cid = request.headers.get("X-Correlation-ID") or generate_correlation_id()
+    response = await call_next(request)
+    response.headers["X-Correlation-ID"] = cid
+    return response
