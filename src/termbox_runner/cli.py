@@ -297,3 +297,8 @@ def safe_json_loads(raw: str) -> dict:
     import json
     try: return json.loads(raw)
     except Exception: return {}
+def cmd_benchmark(server_url: str, template_id: str):
+    """Execute a benchmark template directly."""
+    with httpx.Client(base_url=server_url, timeout=60.0) as client:
+        res = client.post(f"/templates/{template_id}/preview")
+        print(f"Benchmark {template_id} response: {res.status_code}")
