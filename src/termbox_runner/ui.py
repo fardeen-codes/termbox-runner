@@ -877,6 +877,8 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     setInterval(fetchRuns, 8000);
   </script>
   <div id="toast" style="display:none; position:fixed; bottom:20px; right:20px; background:#1e293b; color:#fff; border:1px solid #3b82f6; padding:10px 18px; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.5); z-index:9999;"></div>
+  <!-- Keyboard shortcuts drawer hint -->
+  <div id="shortcuts-hint" style="position:fixed; bottom:12px; left:12px; color:#64748b; font-size:11px;">Press <kbd style="background:#1e293b; padding:2px 5px; border-radius:3px;">?</kbd> for shortcuts</div>
 </body>
 </html>
 """
