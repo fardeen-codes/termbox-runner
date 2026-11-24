@@ -322,3 +322,7 @@ def cmd_reindex(server_url: str):
 def cmd_config_dump(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/system/config").json() if hasattr(client, 'get') else {})
+
+def cmd_migrations(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/system/db/migrations").json())
