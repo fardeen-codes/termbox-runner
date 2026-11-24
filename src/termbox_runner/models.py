@@ -97,6 +97,7 @@ class ResourceLimits(BaseModel):
     sysctls: Dict[str, str] = Field(default_factory=dict, description='Container sysctls')
     security: SecurityOptions = Field(default_factory=SecurityOptions, description="Security sandbox controls")
     ulimit_nofile: Optional[int] = Field(default=1024, description="Max open file descriptors")
+    ulimit_nproc: Optional[int] = Field(default=512, description="Max child processes")
 
     @field_validator("mem_limit")
     @classmethod
