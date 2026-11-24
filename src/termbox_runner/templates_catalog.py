@@ -224,3 +224,5 @@ TEMPLATES["security-pathtraversal"] = BenchmarkTemplate(id="security-pathtravers
 TEMPLATES["security-redos"] = BenchmarkTemplate(id="security-redos", name="ReDoS Vulnerability Check", category="Security", description="Tests catastrophic backtracking prevention.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Regex safe\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["security-secretleak"] = BenchmarkTemplate(id="security-secretleak", name="Secret Leakage Detector", category="Security", description="Scans git logs for API tokens.", task=TaskSubmission(image="alpine/git:latest", main_cmd="git --version", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
+
+TEMPLATES["network-ping"] = BenchmarkTemplate(id="network-ping", name="ICMP Ping Simulator", category="Networking", description="Tests network round-trip timing.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo 64 bytes from localhost", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
