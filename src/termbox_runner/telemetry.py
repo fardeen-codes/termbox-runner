@@ -107,3 +107,16 @@ def generate_correlation_id() -> str:
     """Generate correlation ID for request tracing."""
     import uuid
     return f"corr_{uuid.uuid4().hex[:12]}"
+
+def mask_sensitive_env_vars(env: dict[str, str], secret_keys: list[str] = None) -> dict[str, str]:
+    """Mask passwords, tokens, and secrets in environment dictionary."""
+    secrets = {"token", "key", "secret", "password", "auth", "credential"}
+    if secret_keys:
+        secrets.update(k.lower() for k in secret_keys)
+    masked = {}
+    for k, v in env.items():
+        if any(s in k.lower() for s in secrets):
+            masked[k] = "********"
+        else:
+            masked[k] = v
+    return masked
