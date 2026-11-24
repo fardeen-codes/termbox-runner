@@ -853,3 +853,8 @@ def make_api_error_payload(msg: str) -> dict:
 async def get_telemetry_spans(limit: int = 50):
     """Fetch recent OpenTelemetry trace spans."""
     return {"spans": [], "limit": limit}
+
+@app.get("/telemetry/audit")
+async def get_security_audit_logs(limit: int = 50):
+    """Fetch security audit log entries."""
+    return {"audit_events": [], "limit": limit}
