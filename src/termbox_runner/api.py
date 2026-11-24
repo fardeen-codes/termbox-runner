@@ -898,3 +898,12 @@ async def export_teamcity(run_id: str, storage: RunStorage = Depends(get_storage
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.export import generate_teamcity_messages
     return PlainTextResponse("\n".join(generate_teamcity_messages(manifest)))
+
+@app.get("/runs/{run_id}/export/csv", response_class=PlainTextResponse)
+async def export_csv(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import format_run_csv_row
+    header = "run_id,status,failure_mode,exit_code,duration_ms,command"
+    return PlainTextResponse(f"{header}\n{format_run_csv_row(manifest)}")
