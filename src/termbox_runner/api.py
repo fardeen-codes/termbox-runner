@@ -921,3 +921,9 @@ async def export_lcov(run_id: str, storage: RunStorage = Depends(get_storage_dep
 @app.get("/system/db/migrations")
 async def get_db_migrations():
     return {"current_version": 1, "applied_migrations": ["001_initial_schema"]}
+
+@app.post("/system/db/reindex")
+async def trigger_db_reindex(storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import rebuild_database_indexes
+    success = await rebuild_database_indexes(storage)
+    return {"reindexed": success}
