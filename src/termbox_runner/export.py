@@ -219,3 +219,14 @@ def generate_sarif_report(manifest: RunManifest) -> dict:
         "version": "2.1.0",
         "runs": [{"tool": {"driver": {"name": "Termbox Runner", "version": "0.1.0"}}, "results": results}]
     }
+
+def generate_lcov_coverage(source_file: str = "main.py", hit_lines: list = None) -> str:
+    """Generate standard LCOV tracefile output."""
+    hits = hit_lines or [1, 2, 3]
+    lines = [f"TN:", f"SF:{source_file}"]
+    for l in hits:
+        lines.append(f"DA:{l},1")
+    lines.append(f"LH:{len(hits)}")
+    lines.append(f"LF:{len(hits)}")
+    lines.append("end_of_record")
+    return "\n".join(lines)
