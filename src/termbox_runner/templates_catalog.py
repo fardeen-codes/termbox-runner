@@ -206,3 +206,5 @@ def get_template_timeout_estimate(t: BenchmarkTemplate) -> float:
 def validate_template_limits(t: BenchmarkTemplate) -> bool:
     return t.task.limits.timeout_seconds <= 300.0
 TEMPLATES["django-orm"] = BenchmarkTemplate(id="django-orm", name="Django ORM Test Suite", category="SWE-bench", description="Tests Django ORM model queries.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Django tests passed\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["flask-route"] = BenchmarkTemplate(id="flask-route", name="Flask Route Suite", category="SWE-bench", description="Tests Flask endpoints.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Flask routes verified\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
