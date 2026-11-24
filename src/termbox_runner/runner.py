@@ -867,3 +867,10 @@ def safe_parse_memory_bytes(mem_str: str, default: int = 512*1024*1024) -> int:
         return default
 def build_standard_container_kwargs(image: str, command: str) -> dict:
     return {'image': image, 'command': command, 'detach': True}
+def compute_cfs_quota(nano_cpus: Optional[int]) -> tuple[int, int]:
+    """Compute CFS period and quota in microseconds from nano_cpus."""
+    cfs_period = 100000
+    if not nano_cpus:
+        return -1, cfs_period
+    cfs_quota = int(nano_cpus / 1_000_000_000 * cfs_period)
+    return max(1000, cfs_quota), cfs_period
