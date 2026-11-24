@@ -326,3 +326,7 @@ def cmd_config_dump(server_url: str):
 def cmd_migrations(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/system/db/migrations").json())
+
+def cmd_memory_filter(server_url: str, min_mb: int = 128):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/filter/memory?min_bytes={min_mb * 1024 * 1024}").json())
