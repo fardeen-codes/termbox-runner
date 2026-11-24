@@ -781,3 +781,10 @@ def decompress_log_output(data: bytes) -> str:
     """Decompress zlib compressed log payload."""
     import zlib
     return zlib.decompress(data).decode("utf-8")
+
+async def query_runs_by_date_range(storage, from_iso: str, to_iso: str) -> list[str]:
+    """Return run IDs created between from_iso and to_iso dates."""
+    async with storage._get_connection() as db:
+        async with db.execute("SELECT run_id FROM runs WHERE created_at >= ? AND created_at <= ?", (from_iso, to_iso)) as cur:
+            rows = await cur.fetchall()
+            return [r[0] for r in rows]
