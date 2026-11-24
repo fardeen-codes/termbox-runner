@@ -203,3 +203,19 @@ def generate_cobertura_xml(coverage_pct: float = 100.0, packages: list = None) -
     """Generate Cobertura code coverage XML report."""
     line_rate = coverage_pct / 100.0
     return f'<?xml version="1.0"?><coverage line-rate="{line_rate:.2f}" branch-rate="{line_rate:.2f}" version="2.0.3"><packages/></coverage>'
+
+def generate_sarif_report(manifest: RunManifest) -> dict:
+    """Construct OASIS SARIF v2.1.0 diagnostic output structure."""
+    results = []
+    if manifest.failure_mode and manifest.failure_mode != FailureMode.PASSED:
+        results.append({
+            "ruleId": manifest.failure_mode.value,
+            "level": "error",
+            "message": {"text": manifest.failure_reason or f"Execution failed with {manifest.failure_mode.value}"},
+            "locations": [{"physicalLocation": {"artifactLocation": {"uri": "sandbox://task"}}}]
+        })
+    return {
+        "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+        "version": "2.1.0",
+        "runs": [{"tool": {"driver": {"name": "Termbox Runner", "version": "0.1.0"}}, "results": results}]
+    }
