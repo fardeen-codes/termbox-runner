@@ -66,3 +66,7 @@ def inject_trace_context_env(traceparent: str) -> dict[str, str]:
 def record_rss_metric(run_id: str, rss_bytes: int) -> dict:
     """Construct RSS memory telemetry datapoint."""
     return {"metric": "container_memory_rss_bytes", "run_id": run_id, "value": rss_bytes, "unit": "bytes"}
+
+def record_disk_io_metric(run_id: str, read_bytes: int, write_bytes: int) -> dict:
+    """Construct disk I/O telemetry datapoint."""
+    return {"metric": "container_disk_io_bytes", "run_id": run_id, "read_bytes": read_bytes, "write_bytes": write_bytes}
