@@ -803,3 +803,10 @@ async def rebuild_database_indexes(storage) -> bool:
         await db.execute("REINDEX")
         await db.commit()
     return True
+
+async def search_runs_by_command_pattern(storage, pattern: str) -> list[str]:
+    """Find run IDs where main_cmd matches SQL LIKE pattern."""
+    async with storage._get_connection() as db:
+        async with db.execute("SELECT run_id FROM runs WHERE main_cmd LIKE ?", (f"%{pattern}%",)) as cur:
+            rows = await cur.fetchall()
+            return [r[0] for r in rows]
