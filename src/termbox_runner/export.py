@@ -185,3 +185,7 @@ def generate_github_step_summary(manifest: RunManifest) -> str:
         f"```bash\n{manifest.task.main_cmd}\n```",
     ]
     return "\n".join(lines)
+
+def generate_gitlab_junit_xml(manifest: RunManifest) -> str:
+    """Generate GitLab CI compliant JUnit XML format."""
+    return f'<?xml version="1.0" encoding="UTF-8"?><testsuites><testsuite name="termbox" tests="1" failures="{1 if manifest.failure_mode and manifest.failure_mode != FailureMode.PASSED else 0}"><testcase name="{manifest.run_id}" classname="termbox.runner" time="{manifest.duration_ms / 1000.0:.3f}"/></testsuite></testsuites>'
