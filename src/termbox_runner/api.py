@@ -927,3 +927,9 @@ async def trigger_db_reindex(storage: RunStorage = Depends(get_storage_dependenc
     from termbox_runner.storage import rebuild_database_indexes
     success = await rebuild_database_indexes(storage)
     return {"reindexed": success}
+
+@app.get("/runs/filter/memory")
+async def filter_runs_by_memory(min_bytes: int = 1048576, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import query_runs_by_min_memory
+    ids = await query_runs_by_min_memory(storage, min_bytes)
+    return {"run_ids": ids}
