@@ -214,3 +214,5 @@ TEMPLATES["requests-mock"] = BenchmarkTemplate(id="requests-mock", name="Request
 TEMPLATES["sklearn-pipeline"] = BenchmarkTemplate(id="sklearn-pipeline", name="Scikit-Learn Pipeline", category="Machine Learning", description="Tests estimator fit and predict.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Estimator passed\")'", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
 
 TEMPLATES["pytorch-tensor"] = BenchmarkTemplate(id="pytorch-tensor", name="PyTorch Tensor Verification", category="Machine Learning", description="Executes tensor math checks.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Tensor math OK\")'", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["numpy-linalg"] = BenchmarkTemplate(id="numpy-linalg", name="NumPy Matrix Operations", category="Math", description="Tests eigenvalue and matrix dot products.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"NumPy verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
