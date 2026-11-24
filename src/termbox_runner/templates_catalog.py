@@ -212,3 +212,5 @@ TEMPLATES["flask-route"] = BenchmarkTemplate(id="flask-route", name="Flask Route
 TEMPLATES["requests-mock"] = BenchmarkTemplate(id="requests-mock", name="Requests HTTP Mock", category="SWE-bench", description="Tests mock HTTP adapters.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Mock requests passed\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["sklearn-pipeline"] = BenchmarkTemplate(id="sklearn-pipeline", name="Scikit-Learn Pipeline", category="Machine Learning", description="Tests estimator fit and predict.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Estimator passed\")'", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["pytorch-tensor"] = BenchmarkTemplate(id="pytorch-tensor", name="PyTorch Tensor Verification", category="Machine Learning", description="Executes tensor math checks.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Tensor math OK\")'", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
