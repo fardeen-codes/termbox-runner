@@ -230,3 +230,10 @@ def generate_lcov_coverage(source_file: str = "main.py", hit_lines: list = None)
     lines.append(f"LF:{len(hits)}")
     lines.append("end_of_record")
     return "\n".join(lines)
+
+def format_run_csv_row(manifest: RunManifest) -> str:
+    """Format run manifest into CSV record line."""
+    mode = manifest.failure_mode.value if manifest.failure_mode else "PASSED"
+    exit_c = manifest.exit_code if manifest.exit_code is not None else ""
+    cmd_clean = manifest.task.main_cmd.replace('"', '""')
+    return f'"{manifest.run_id}","{manifest.status.value}","{mode}","{exit_c}","{manifest.duration_ms:.1f}","{cmd_clean}"'
