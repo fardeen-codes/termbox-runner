@@ -83,3 +83,10 @@ def calculate_percentile_buckets(durations: list[float]) -> dict[str, float]:
     n = len(s)
     def pct(p): return s[min(int(n * p), n - 1)]
     return {"p25": pct(0.25), "p50": pct(0.50), "p75": pct(0.75), "p90": pct(0.90), "p95": pct(0.95), "p99": pct(0.99)}
+
+def format_prometheus_histogram_buckets(metric_name: str, buckets: dict[float, int]) -> list[str]:
+    """Format histogram buckets into standard Prometheus exposition format."""
+    lines = []
+    for le, count in sorted(buckets.items()):
+        lines.append(f'{metric_name}_bucket{{le="{le}"}} {count}')
+    return lines
