@@ -208,3 +208,5 @@ def validate_template_limits(t: BenchmarkTemplate) -> bool:
 TEMPLATES["django-orm"] = BenchmarkTemplate(id="django-orm", name="Django ORM Test Suite", category="SWE-bench", description="Tests Django ORM model queries.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Django tests passed\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["flask-route"] = BenchmarkTemplate(id="flask-route", name="Flask Route Suite", category="SWE-bench", description="Tests Flask endpoints.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Flask routes verified\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["requests-mock"] = BenchmarkTemplate(id="requests-mock", name="Requests HTTP Mock", category="SWE-bench", description="Tests mock HTTP adapters.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Mock requests passed\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
