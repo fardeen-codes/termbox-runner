@@ -369,6 +369,11 @@ class TelemetrySpan(BaseModel):
     duration_ms: float
     attributes: dict = Field(default_factory=dict)
 
+class CpuUsageBreakdown(BaseModel):
+    user_cpu_us: int = 0
+    system_cpu_us: int = 0
+    total_cpu_us: int = 0
+
 class StepTimelineEntry(BaseModel):
     """Timeline slice representation for step Gantt execution."""
     step_name: str
