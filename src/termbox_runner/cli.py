@@ -318,3 +318,7 @@ def cmd_trace(server_url: str):
 def cmd_reindex(server_url: str):
     with httpx.Client(base_url=server_url, timeout=10.0) as client:
         print(client.post("/system/db/reindex").json())
+
+def cmd_config_dump(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/system/config").json() if hasattr(client, 'get') else {})
