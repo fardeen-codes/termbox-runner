@@ -874,3 +874,11 @@ async def export_github_summary(run_id: str, storage: RunStorage = Depends(get_s
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.export import generate_github_step_summary
     return PlainTextResponse(generate_github_step_summary(manifest))
+
+@app.get("/runs/{run_id}/export/gitlab", response_class=PlainTextResponse)
+async def export_gitlab_junit(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import generate_gitlab_junit_xml
+    return PlainTextResponse(generate_gitlab_junit_xml(manifest), media_type="application/xml")
