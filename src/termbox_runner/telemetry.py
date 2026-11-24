@@ -62,3 +62,7 @@ def parse_traceparent(header: str) -> dict:
 def inject_trace_context_env(traceparent: str) -> dict[str, str]:
     """Inject W3C traceparent into subprocess environment dictionary."""
     return {"TRACEPARENT": traceparent, "OTEL_TRACE_ID": traceparent.split("-")[1]}
+
+def record_rss_metric(run_id: str, rss_bytes: int) -> dict:
+    """Construct RSS memory telemetry datapoint."""
+    return {"metric": "container_memory_rss_bytes", "run_id": run_id, "value": rss_bytes, "unit": "bytes"}
