@@ -70,3 +70,7 @@ def record_rss_metric(run_id: str, rss_bytes: int) -> dict:
 def record_disk_io_metric(run_id: str, read_bytes: int, write_bytes: int) -> dict:
     """Construct disk I/O telemetry datapoint."""
     return {"metric": "container_disk_io_bytes", "run_id": run_id, "read_bytes": read_bytes, "write_bytes": write_bytes}
+
+def record_network_drop_metric(run_id: str, drops: int) -> dict:
+    """Construct dropped packets telemetry datapoint."""
+    return {"metric": "container_network_drops_total", "run_id": run_id, "drops": drops}
