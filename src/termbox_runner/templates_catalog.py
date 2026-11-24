@@ -236,3 +236,7 @@ TEMPLATES["network-tls"] = BenchmarkTemplate(id="network-tls", name="TLS Handsha
 TEMPLATES["concurrency-race"] = BenchmarkTemplate(id="concurrency-race", name="Race Condition Detector", category="Concurrency", description="Tests atomic counter under thread contention.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"No race conditions\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["io-throughput"] = BenchmarkTemplate(id="io-throughput", name="Disk I/O Stress Test", category="Storage", description="Measures sequential write and read throughput.", task=TaskSubmission(image="alpine:3.19", main_cmd="dd if=/dev/zero of=/tmp/test.bin bs=1M count=10", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+def filter_templates_by_timeout_range(min_timeout: float, max_timeout: float) -> list:
+    """Filter benchmark templates within timeout range."""
+    return [t for t in TEMPLATES.values() if min_timeout <= t.task.limits.timeout_seconds <= max_timeout]
