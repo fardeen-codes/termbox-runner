@@ -74,3 +74,12 @@ def record_disk_io_metric(run_id: str, read_bytes: int, write_bytes: int) -> dic
 def record_network_drop_metric(run_id: str, drops: int) -> dict:
     """Construct dropped packets telemetry datapoint."""
     return {"metric": "container_network_drops_total", "run_id": run_id, "drops": drops}
+
+def calculate_percentile_buckets(durations: list[float]) -> dict[str, float]:
+    """Compute p25, p50, p75, p90, p95, p99 percentile distribution."""
+    if not durations:
+        return {"p25": 0.0, "p50": 0.0, "p75": 0.0, "p90": 0.0, "p95": 0.0, "p99": 0.0}
+    s = sorted(durations)
+    n = len(s)
+    def pct(p): return s[min(int(n * p), n - 1)]
+    return {"p25": pct(0.25), "p50": pct(0.50), "p75": pct(0.75), "p90": pct(0.90), "p95": pct(0.95), "p99": pct(0.99)}
