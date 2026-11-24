@@ -98,6 +98,7 @@ class ResourceLimits(BaseModel):
     security: SecurityOptions = Field(default_factory=SecurityOptions, description="Security sandbox controls")
     ulimit_nofile: Optional[int] = Field(default=1024, description="Max open file descriptors")
     ulimit_nproc: Optional[int] = Field(default=512, description="Max child processes")
+    stop_signal: str = Field(default="SIGKILL", description="Signal to stop container")
 
     @field_validator("mem_limit")
     @classmethod
