@@ -334,3 +334,7 @@ def cmd_memory_filter(server_url: str, min_mb: int = 128):
 def terminal_green(text: str) -> str:
     """Format string with green ANSI color escape."""
     return f"\033[32m{text}\033[0m"
+
+def terminal_red(text: str) -> str:
+    """Format string with red ANSI color escape."""
+    return f"\033[31m{text}\033[0m"
