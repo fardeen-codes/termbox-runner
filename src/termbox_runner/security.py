@@ -23,3 +23,7 @@ def validate_read_only_rootfs(is_read_only: bool, tmpfs_configured: bool) -> boo
     if is_read_only and not tmpfs_configured:
         return False
     return True
+
+def get_masked_paths() -> list[str]:
+    """Return kernel and hardware info paths that must be masked from containers."""
+    return ["/proc/kcore", "/proc/sys", "/proc/sysrq-trigger", "/proc/irq", "/proc/bus"]
