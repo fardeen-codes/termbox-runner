@@ -226,3 +226,5 @@ TEMPLATES["security-redos"] = BenchmarkTemplate(id="security-redos", name="ReDoS
 TEMPLATES["security-secretleak"] = BenchmarkTemplate(id="security-secretleak", name="Secret Leakage Detector", category="Security", description="Scans git logs for API tokens.", task=TaskSubmission(image="alpine/git:latest", main_cmd="git --version", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
 
 TEMPLATES["network-ping"] = BenchmarkTemplate(id="network-ping", name="ICMP Ping Simulator", category="Networking", description="Tests network round-trip timing.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo 64 bytes from localhost", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
+
+TEMPLATES["network-proxy"] = BenchmarkTemplate(id="network-proxy", name="Reverse Proxy Test", category="Networking", description="Tests HTTP host header routing.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo HTTP 200 OK", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
