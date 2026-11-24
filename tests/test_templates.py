@@ -64,3 +64,12 @@ def test_templates_part3_additions():
 
     matches = search_templates_by_tag("Python")
     assert len(matches) >= 1
+
+def test_swebench_and_security_templates():
+    from termbox_runner.templates_catalog import TEMPLATES, filter_templates_by_timeout_range
+    assert "django-orm" in TEMPLATES
+    assert "sklearn-pipeline" in TEMPLATES
+    assert "security-sqli" in TEMPLATES
+    assert "network-ping" in TEMPLATES
+    filtered = filter_templates_by_timeout_range(10.0, 30.0)
+    assert len(filtered) > 5
