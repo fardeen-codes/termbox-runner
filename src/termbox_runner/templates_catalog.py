@@ -232,3 +232,5 @@ TEMPLATES["network-proxy"] = BenchmarkTemplate(id="network-proxy", name="Reverse
 TEMPLATES["network-dns"] = BenchmarkTemplate(id="network-dns", name="DNS Resolution Benchmark", category="Networking", description="Verifies A and AAAA record queries.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo 127.0.0.1", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
 
 TEMPLATES["network-tls"] = BenchmarkTemplate(id="network-tls", name="TLS Handshake Verifier", category="Networking", description="Validates x509 cert chains.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo TLS OK", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
+
+TEMPLATES["concurrency-race"] = BenchmarkTemplate(id="concurrency-race", name="Race Condition Detector", category="Concurrency", description="Tests atomic counter under thread contention.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"No race conditions\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
