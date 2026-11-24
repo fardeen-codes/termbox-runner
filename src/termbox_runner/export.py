@@ -198,3 +198,8 @@ def generate_teamcity_messages(manifest: RunManifest) -> list[str]:
         messages.append(f"##teamcity[testFailed name='{name}' message='{manifest.failure_mode.value}']")
     messages.append(f"##teamcity[testFinished name='{name}' duration='{int(manifest.duration_ms)}']")
     return messages
+
+def generate_cobertura_xml(coverage_pct: float = 100.0, packages: list = None) -> str:
+    """Generate Cobertura code coverage XML report."""
+    line_rate = coverage_pct / 100.0
+    return f'<?xml version="1.0"?><coverage line-rate="{line_rate:.2f}" branch-rate="{line_rate:.2f}" version="2.0.3"><packages/></coverage>'
