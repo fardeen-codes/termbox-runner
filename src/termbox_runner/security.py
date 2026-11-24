@@ -31,3 +31,13 @@ def get_masked_paths() -> list[str]:
 def get_readonly_paths() -> list[str]:
     """Return sensitive virtual filesystem paths that must be mounted read-only."""
     return ["/proc/asound", "/proc/bus", "/proc/fs", "/proc/sys", "/sys/fs/cgroup"]
+
+def emit_security_audit_event(event_type: str, details: dict) -> dict:
+    """Construct structured security audit log entry."""
+    from datetime import datetime, timezone
+    return {
+        "event_type": event_type,
+        "details": details,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "severity": "SECURITY_WARNING"
+    }
