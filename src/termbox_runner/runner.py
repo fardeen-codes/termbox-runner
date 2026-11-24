@@ -883,3 +883,8 @@ def parse_shm_size_bytes(shm_size: str) -> int:
     """Parse human-readable shm size like 64m or 1g into byte integer."""
     from termbox_runner.models import parse_memory_to_bytes
     return parse_memory_to_bytes(shm_size)
+
+def validate_cpuset_cpus(cpuset: str) -> bool:
+    """Validate cpuset format (e.g. '0', '0-3', '0,2,4')."""
+    import re
+    return bool(re.match(r'^[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*$', cpuset.strip()))
