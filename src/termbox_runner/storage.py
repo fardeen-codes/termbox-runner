@@ -810,3 +810,10 @@ async def search_runs_by_command_pattern(storage, pattern: str) -> list[str]:
         async with db.execute("SELECT run_id FROM runs WHERE main_cmd LIKE ?", (f"%{pattern}%",)) as cur:
             rows = await cur.fetchall()
             return [r[0] for r in rows]
+
+async def estimate_runs_table_bytes(storage) -> int:
+    """Estimate storage footprint in bytes of the runs table."""
+    async with storage._get_connection() as db:
+        async with db.execute("SELECT COUNT(*) FROM runs") as cur:
+            row = await cur.fetchone()
+            return (row[0] if row else 0) * 1024
