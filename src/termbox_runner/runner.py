@@ -874,3 +874,7 @@ def compute_cfs_quota(nano_cpus: Optional[int]) -> tuple[int, int]:
         return -1, cfs_period
     cfs_quota = int(nano_cpus / 1_000_000_000 * cfs_period)
     return max(1000, cfs_quota), cfs_period
+
+def clamp_swappiness(val: int) -> int:
+    """Clamp swappiness between 0 (disabled) and 100 (aggressive)."""
+    return max(0, min(100, val))
