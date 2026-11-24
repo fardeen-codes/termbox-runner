@@ -761,3 +761,13 @@ def get_storage(db_path: Optional[str] = None) -> RunStorage:
     if _default_storage is None:
         _default_storage = RunStorage()
     return _default_storage
+
+def get_optimized_sqlite_pragmas() -> list[str]:
+    """Return list of performance-oriented SQLite PRAGMAs."""
+    return [
+        "PRAGMA journal_mode=WAL",
+        "PRAGMA synchronous=NORMAL",
+        "PRAGMA cache_size=-64000",
+        "PRAGMA temp_store=MEMORY",
+        "PRAGMA mmap_size=268435456",
+    ]
