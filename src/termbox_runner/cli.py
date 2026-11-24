@@ -310,3 +310,7 @@ def cmd_export_sarif(server_url: str, run_id: str):
 def cmd_export_github(server_url: str, run_id: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get(f"/runs/{run_id}/export/github").text)
+
+def cmd_trace(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/telemetry/spans").json())
