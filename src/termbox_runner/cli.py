@@ -330,3 +330,7 @@ def cmd_migrations(server_url: str):
 def cmd_memory_filter(server_url: str, min_mb: int = 128):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get(f"/runs/filter/memory?min_bytes={min_mb * 1024 * 1024}").json())
+
+def terminal_green(text: str) -> str:
+    """Format string with green ANSI color escape."""
+    return f"\033[32m{text}\033[0m"
