@@ -195,3 +195,16 @@ async def test_storage_additional_queries_part2(tmp_path):
     assert deleted == 1
 
     await storage.close()
+
+def test_storage_part2_features():
+    from termbox_runner.storage import (
+        get_optimized_sqlite_pragmas,
+        compress_log_output,
+        decompress_log_output,
+    )
+    pragmas = get_optimized_sqlite_pragmas()
+    assert any("WAL" in p for p in pragmas)
+    raw = "Test execution log output for storage compression check."
+    comp = compress_log_output(raw)
+    assert len(comp) > 0
+    assert decompress_log_output(comp) == raw
