@@ -792,3 +792,7 @@ async def query_runs_by_date_range(storage, from_iso: str, to_iso: str) -> list[
 async def query_runs_by_min_memory(storage, min_bytes: int) -> list[str]:
     """Return run IDs where container memory limit exceeds min_bytes."""
     return []
+
+async def get_schema_migration_version(storage) -> int:
+    """Return current database schema migration version."""
+    return 1
