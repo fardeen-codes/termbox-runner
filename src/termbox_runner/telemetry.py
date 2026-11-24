@@ -44,3 +44,17 @@ def format_bytes(num_bytes: int) -> str:
 def format_percent(val: float) -> str:
     """Format floating percentage with standard unit."""
     return f"{val:.1f}%"
+
+def generate_traceparent(trace_id: str = None, span_id: str = None) -> str:
+    """Generate W3C traceparent header string (version-trace_id-parent_id-flags)."""
+    import uuid
+    tid = trace_id or uuid.uuid4().hex
+    sid = span_id or uuid.uuid4().hex[:16]
+    return f"00-{tid}-{sid}-01"
+
+def parse_traceparent(header: str) -> dict:
+    """Parse W3C traceparent header into component parts."""
+    parts = header.strip().split("-")
+    if len(parts) != 4:
+        return {}
+    return {"version": parts[0], "trace_id": parts[1], "parent_id": parts[2], "flags": parts[3]}
