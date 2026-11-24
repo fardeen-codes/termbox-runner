@@ -912,3 +912,8 @@ async def export_csv(run_id: str, storage: RunStorage = Depends(get_storage_depe
 async def export_cobertura(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.export import generate_cobertura_xml
     return PlainTextResponse(generate_cobertura_xml(), media_type="application/xml")
+
+@app.get("/runs/{run_id}/export/lcov", response_class=PlainTextResponse)
+async def export_lcov(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.export import generate_lcov_coverage
+    return PlainTextResponse(generate_lcov_coverage())
