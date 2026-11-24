@@ -234,3 +234,5 @@ TEMPLATES["network-dns"] = BenchmarkTemplate(id="network-dns", name="DNS Resolut
 TEMPLATES["network-tls"] = BenchmarkTemplate(id="network-tls", name="TLS Handshake Verifier", category="Networking", description="Validates x509 cert chains.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo TLS OK", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
 
 TEMPLATES["concurrency-race"] = BenchmarkTemplate(id="concurrency-race", name="Race Condition Detector", category="Concurrency", description="Tests atomic counter under thread contention.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"No race conditions\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["io-throughput"] = BenchmarkTemplate(id="io-throughput", name="Disk I/O Stress Test", category="Storage", description="Measures sequential write and read throughput.", task=TaskSubmission(image="alpine:3.19", main_cmd="dd if=/dev/zero of=/tmp/test.bin bs=1M count=10", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
