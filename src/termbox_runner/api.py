@@ -866,3 +866,11 @@ async def add_correlation_id_header(request, call_next):
     response = await call_next(request)
     response.headers["X-Correlation-ID"] = cid
     return response
+
+@app.get("/runs/{run_id}/export/github", response_class=PlainTextResponse)
+async def export_github_summary(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import generate_github_step_summary
+    return PlainTextResponse(generate_github_step_summary(manifest))
