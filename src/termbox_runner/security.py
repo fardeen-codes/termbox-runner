@@ -6,3 +6,10 @@ def generate_default_apparmor_profile(profile_name: str = "termbox-default") -> 
 def get_default_seccomp_profile() -> dict:
     """Return default seccomp profile dictionary denying ptrace and personality."""
     return {"defaultAction": "SCMP_ACT_ALLOW", "syscalls": [{"names": ["ptrace", "personality", "sys_chroot"], "action": "SCMP_ACT_ERRNO"}]}
+
+def get_security_opts(no_new_privs: bool = True) -> list[str]:
+    """Build list of security options for Docker container runtime."""
+    opts = []
+    if no_new_privs:
+        opts.append("no-new-privileges:true")
+    return opts
