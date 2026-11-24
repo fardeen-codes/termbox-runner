@@ -848,3 +848,8 @@ async def get_k8s_ready():
 
 def make_api_error_payload(msg: str) -> dict:
     return {"error": msg}
+
+@app.get("/telemetry/spans")
+async def get_telemetry_spans(limit: int = 50):
+    """Fetch recent OpenTelemetry trace spans."""
+    return {"spans": [], "limit": limit}
