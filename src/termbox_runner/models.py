@@ -96,6 +96,7 @@ class ResourceLimits(BaseModel):
     swappiness: Optional[int] = Field(default=0, ge=0, le=100, description='Memory swappiness')
     sysctls: Dict[str, str] = Field(default_factory=dict, description='Container sysctls')
     security: SecurityOptions = Field(default_factory=SecurityOptions, description="Security sandbox controls")
+    ulimit_nofile: Optional[int] = Field(default=1024, description="Max open file descriptors")
 
     @field_validator("mem_limit")
     @classmethod
