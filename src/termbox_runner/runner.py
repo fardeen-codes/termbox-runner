@@ -878,3 +878,8 @@ def compute_cfs_quota(nano_cpus: Optional[int]) -> tuple[int, int]:
 def clamp_swappiness(val: int) -> int:
     """Clamp swappiness between 0 (disabled) and 100 (aggressive)."""
     return max(0, min(100, val))
+
+def parse_shm_size_bytes(shm_size: str) -> int:
+    """Parse human-readable shm size like 64m or 1g into byte integer."""
+    from termbox_runner.models import parse_memory_to_bytes
+    return parse_memory_to_bytes(shm_size)
