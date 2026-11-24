@@ -228,3 +228,5 @@ TEMPLATES["security-secretleak"] = BenchmarkTemplate(id="security-secretleak", n
 TEMPLATES["network-ping"] = BenchmarkTemplate(id="network-ping", name="ICMP Ping Simulator", category="Networking", description="Tests network round-trip timing.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo 64 bytes from localhost", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
 
 TEMPLATES["network-proxy"] = BenchmarkTemplate(id="network-proxy", name="Reverse Proxy Test", category="Networking", description="Tests HTTP host header routing.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo HTTP 200 OK", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
+
+TEMPLATES["network-dns"] = BenchmarkTemplate(id="network-dns", name="DNS Resolution Benchmark", category="Networking", description="Verifies A and AAAA record queries.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo 127.0.0.1", limits=ResourceLimits(mem_limit="64m", timeout_seconds=10.0)))
