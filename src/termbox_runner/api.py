@@ -917,3 +917,7 @@ async def export_cobertura(run_id: str, storage: RunStorage = Depends(get_storag
 async def export_lcov(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.export import generate_lcov_coverage
     return PlainTextResponse(generate_lcov_coverage())
+
+@app.get("/system/db/migrations")
+async def get_db_migrations():
+    return {"current_version": 1, "applied_migrations": ["001_initial_schema"]}
