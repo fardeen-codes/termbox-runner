@@ -817,3 +817,10 @@ async def estimate_runs_table_bytes(storage) -> int:
         async with db.execute("SELECT COUNT(*) FROM runs") as cur:
             row = await cur.fetchone()
             return (row[0] if row else 0) * 1024
+
+async def batch_delete_runs_by_status(storage, status_str: str) -> int:
+    """Delete all historical runs matching a given status string."""
+    async with storage._get_connection() as db:
+        cur = await db.execute("DELETE FROM runs WHERE status = ?", (status_str,))
+        await db.commit()
+        return cur.rowcount
