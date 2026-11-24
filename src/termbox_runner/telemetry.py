@@ -102,3 +102,8 @@ def format_audit_log_entry(action: str, actor: str, target: str, status: str) ->
         "target": target,
         "status": status
     })
+
+def generate_correlation_id() -> str:
+    """Generate correlation ID for request tracing."""
+    import uuid
+    return f"corr_{uuid.uuid4().hex[:12]}"
