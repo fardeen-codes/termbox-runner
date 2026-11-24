@@ -933,3 +933,9 @@ async def filter_runs_by_memory(min_bytes: int = 1048576, storage: RunStorage = 
     from termbox_runner.storage import query_runs_by_min_memory
     ids = await query_runs_by_min_memory(storage, min_bytes)
     return {"run_ids": ids}
+
+@app.get("/runs/filter/date")
+async def filter_runs_by_date(from_date: str = "2020-01-01", to_date: str = "2030-01-01", storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import query_runs_by_date_range
+    ids = await query_runs_by_date_range(storage, from_date, to_date)
+    return {"run_ids": ids}
