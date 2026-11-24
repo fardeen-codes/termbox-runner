@@ -362,6 +362,13 @@ class RunAuditEntry(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
+class TelemetrySpan(BaseModel):
+    span_id: str
+    trace_id: str
+    name: str
+    duration_ms: float
+    attributes: dict = Field(default_factory=dict)
+
 class StepTimelineEntry(BaseModel):
     """Timeline slice representation for step Gantt execution."""
     step_name: str
