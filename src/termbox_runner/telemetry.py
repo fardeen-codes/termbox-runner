@@ -90,3 +90,15 @@ def format_prometheus_histogram_buckets(metric_name: str, buckets: dict[float, i
     for le, count in sorted(buckets.items()):
         lines.append(f'{metric_name}_bucket{{le="{le}"}} {count}')
     return lines
+
+def format_audit_log_entry(action: str, actor: str, target: str, status: str) -> str:
+    """Format audit event into single-line JSON log."""
+    import json
+    from datetime import datetime, timezone
+    return json.dumps({
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "action": action,
+        "actor": actor,
+        "target": target,
+        "status": status
+    })
