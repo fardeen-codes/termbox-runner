@@ -240,3 +240,5 @@ TEMPLATES["io-throughput"] = BenchmarkTemplate(id="io-throughput", name="Disk I/
 def filter_templates_by_timeout_range(min_timeout: float, max_timeout: float) -> list:
     """Filter benchmark templates within timeout range."""
     return [t for t in TEMPLATES.values() if min_timeout <= t.task.limits.timeout_seconds <= max_timeout]
+
+TEMPLATES["ruby-rspec"] = BenchmarkTemplate(id="ruby-rspec", name="Ruby RSpec Test Suite", category="Ruby", description="Executes bundle exec rspec.", task=TaskSubmission(image="ruby:3.3-slim", main_cmd="bundle exec rspec", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
