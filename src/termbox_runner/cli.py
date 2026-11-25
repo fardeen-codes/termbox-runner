@@ -342,3 +342,8 @@ def terminal_red(text: str) -> str:
 def terminal_cyan(text: str) -> str:
     """Format string with cyan ANSI color escape."""
     return f"\033[36m{text}\033[0m"
+
+def cmd_daily_stats(server_url: str):
+    """Query daily task counts."""
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/stats/daily").json())
