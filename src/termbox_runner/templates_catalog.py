@@ -242,3 +242,5 @@ def filter_templates_by_timeout_range(min_timeout: float, max_timeout: float) ->
     return [t for t in TEMPLATES.values() if min_timeout <= t.task.limits.timeout_seconds <= max_timeout]
 
 TEMPLATES["ruby-rspec"] = BenchmarkTemplate(id="ruby-rspec", name="Ruby RSpec Test Suite", category="Ruby", description="Executes bundle exec rspec.", task=TaskSubmission(image="ruby:3.3-slim", main_cmd="bundle exec rspec", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["go-cpu-profile"] = BenchmarkTemplate(id="go-cpu-profile", name="Go Benchmark & CPU Profiling", category="Go", description="Runs go test -bench=. -cpuprofile=cpu.pprof.", task=TaskSubmission(image="golang:1.22-alpine", main_cmd="go test -bench=.", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
