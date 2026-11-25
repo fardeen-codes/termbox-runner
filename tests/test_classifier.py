@@ -202,3 +202,27 @@ def test_classifier_jvm_and_fatal_signals():
     assert "SIGABRT" in format_fatal_signal_summary(134)
     assert format_fatal_signal_summary(0) is None
 
+
+def test_multilang_diagnostics_extended():
+    from termbox_runner.classifier import (
+        detect_ruby_exception,
+        detect_php_fatal_error,
+        extract_rust_panic_message,
+        detect_go_deadlock,
+    )
+    from termbox_runner.models import FailureMode
+
+    ruby_res = detect_ruby_exception("undefined method 'foo' for nil:NilClass (NoMethodError)")
+    assert ruby_res is not None
+    assert ruby_res[0] == FailureMode.RUNTIME_ERROR
+
+    php_res = detect_php_fatal_error("Fatal error: Uncaught Error: Call to undefined function")
+    assert php_res is not None
+
+    rust_msg = extract_rust_panic_message("thread 'main' panicked at src/main.rs:10:5:\nexplicit panic")
+    assert rust_msg is not None
+    assert "panicked at" in rust_msg
+
+    go_res = detect_go_deadlock("fatal error: all goroutines are asleep - deadlock!")
+    assert go_res is not None
+    assert "deadlock" in go_res[1]
