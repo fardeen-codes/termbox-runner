@@ -274,3 +274,14 @@ def format_fatal_signal_summary(exit_code: Optional[int]) -> Optional[str]:
         15: "Terminated (SIGTERM): Graceful termination request received.",
     }
     return descriptions.get(sig, f"Signal {sig} terminated process.")
+
+def detect_ruby_exception(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Ruby runtime exceptions such as NameError, NoMethodError, or LoadError."""
+    lowered = combined_output.lower()
+    if "nomethoderror: undefined method" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Ruby NoMethodError encountered."
+    if "nameerror: uninitialized constant" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Ruby NameError uninitialized constant."
+    if "loaderror: cannot load such file" in lowered:
+        return FailureMode.SETUP_ERROR, "Ruby LoadError missing gem or dependency."
+    return None
