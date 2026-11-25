@@ -247,3 +247,16 @@ def generate_bazel_test_xml(manifest: RunManifest) -> str:
     """Format task execution results in Bazel test.xml convention."""
     status = "failed" if manifest.failure_mode and manifest.failure_mode != FailureMode.PASSED else "passed"
     return f'<?xml version="1.0" encoding="UTF-8"?><testsuites><testsuite name="bazel.test" tests="1" errors="0" failures="{1 if status == "failed" else 0}"><testcase name="{manifest.run_id}" status="{status}" time="{manifest.duration_ms / 1000.0:.3f}"/></testsuite></testsuites>'
+
+def generate_ctrf_report(manifest: RunManifest) -> dict:
+    """Generate CTRF standard JSON report for modern CI/CD dashboards."""
+    passed = manifest.status == RunStatus.COMPLETED and (not manifest.failure_mode or manifest.failure_mode == FailureMode.PASSED)
+    return {
+        "reportFormat": "CTRF",
+        "specVersion": "0.0.1",
+        "results": {
+            "tool": {"name": "termbox-runner"},
+            "summary": {"tests": 1, "passed": 1 if passed else 0, "failed": 0 if passed else 1, "start": 0, "stop": int(manifest.duration_ms)},
+            "tests": [{"name": manifest.run_id, "status": "passed" if passed else "failed", "duration": int(manifest.duration_ms)}]
+        }
+    }
