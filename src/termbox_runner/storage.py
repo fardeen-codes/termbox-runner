@@ -824,3 +824,10 @@ async def batch_delete_runs_by_status(storage, status_str: str) -> int:
         cur = await db.execute("DELETE FROM runs WHERE status = ?", (status_str,))
         await db.commit()
         return cur.rowcount
+
+async def count_runs_grouped_by_day(storage) -> dict[str, int]:
+    """Return dictionary mapping YYYY-MM-DD to execution counts."""
+    async with storage._get_connection() as db:
+        async with db.execute("SELECT SUBSTR(created_at, 1, 10) as day, COUNT(*) FROM runs GROUP BY day ORDER BY day DESC LIMIT 30") as cur:
+            rows = await cur.fetchall()
+            return {r[0]: r[1] for r in rows if r[0]}
