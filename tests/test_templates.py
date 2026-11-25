@@ -73,3 +73,9 @@ def test_swebench_and_security_templates():
     assert "network-ping" in TEMPLATES
     filtered = filter_templates_by_timeout_range(10.0, 30.0)
     assert len(filtered) > 5
+
+def test_ruby_and_rust_templates():
+    from termbox_runner.templates_catalog import TEMPLATES
+    assert "ruby-rspec" in TEMPLATES
+    assert "go-cpu-profile" in TEMPLATES
+    assert "rust-clippy" in TEMPLATES
