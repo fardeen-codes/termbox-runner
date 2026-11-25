@@ -294,3 +294,10 @@ def detect_php_fatal_error(combined_output: str) -> Optional[Tuple[FailureMode, 
     if "parse error: syntax error" in lowered:
         return FailureMode.RUNTIME_ERROR, "PHP parse syntax error."
     return None
+
+def extract_rust_panic_message(stderr_text: str) -> Optional[str]:
+    """Extract panic location and message from Rust backtrace output."""
+    for line in stderr_text.splitlines():
+        if "panicked at " in line:
+            return line.strip()
+    return None
