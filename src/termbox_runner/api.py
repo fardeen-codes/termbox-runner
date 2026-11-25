@@ -947,3 +947,8 @@ async def export_ctrf(run_id: str, storage: RunStorage = Depends(get_storage_dep
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.export import generate_ctrf_report
     return generate_ctrf_report(manifest)
+
+@app.get("/stats/daily")
+async def get_daily_run_stats(storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import count_runs_grouped_by_day
+    return await count_runs_grouped_by_day(storage)
