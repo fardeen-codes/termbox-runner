@@ -110,3 +110,15 @@ def test_export_additional_ci_formats():
     assert "echo 1" in csv_row
     jsonl = serialize_jsonl_events([{"a": 1}, {"b": 2}])
     assert "\n" in jsonl
+
+def test_export_bazel_and_ctrf():
+    from termbox_runner.models import RunManifest, TaskSubmission, RunStatus, FailureMode
+    from termbox_runner.export import generate_bazel_test_xml, generate_ctrf_report
+
+    m = RunManifest(task=TaskSubmission(main_cmd="echo ok"), status=RunStatus.COMPLETED, failure_mode=FailureMode.PASSED, duration_ms=25.0)
+    bazel_xml = generate_bazel_test_xml(m)
+    assert "<testsuite name="bazel.test"" in bazel_xml
+
+    ctrf = generate_ctrf_report(m)
+    assert ctrf["reportFormat"] == "CTRF"
+    assert ctrf["results"]["summary"]["passed"] == 1
