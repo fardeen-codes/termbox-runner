@@ -285,3 +285,12 @@ def detect_ruby_exception(combined_output: str) -> Optional[Tuple[FailureMode, s
     if "loaderror: cannot load such file" in lowered:
         return FailureMode.SETUP_ERROR, "Ruby LoadError missing gem or dependency."
     return None
+
+def detect_php_fatal_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract PHP fatal runtime errors and parse errors."""
+    lowered = combined_output.lower()
+    if "fatal error: uncaught error:" in lowered or "fatal error: uncaught exception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "PHP uncaught fatal exception."
+    if "parse error: syntax error" in lowered:
+        return FailureMode.RUNTIME_ERROR, "PHP parse syntax error."
+    return None
