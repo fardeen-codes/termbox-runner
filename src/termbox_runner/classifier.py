@@ -301,3 +301,9 @@ def extract_rust_panic_message(stderr_text: str) -> Optional[str]:
         if "panicked at " in line:
             return line.strip()
     return None
+
+def detect_go_deadlock(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Detect Go fatal runtime deadlock where all goroutines are asleep."""
+    if "fatal error: all goroutines are asleep - deadlock!" in combined_output.lower():
+        return FailureMode.RUNTIME_ERROR, "Go concurrency deadlock (all goroutines asleep)."
+    return None
