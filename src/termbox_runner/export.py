@@ -242,3 +242,8 @@ def serialize_jsonl_events(events: list) -> str:
     """Serialize list of telemetry or execution events into JSONL string."""
     import json
     return "\n".join(json.dumps(ev) for ev in events)
+
+def generate_bazel_test_xml(manifest: RunManifest) -> str:
+    """Format task execution results in Bazel test.xml convention."""
+    status = "failed" if manifest.failure_mode and manifest.failure_mode != FailureMode.PASSED else "passed"
+    return f'<?xml version="1.0" encoding="UTF-8"?><testsuites><testsuite name="bazel.test" tests="1" errors="0" failures="{1 if status == "failed" else 0}"><testcase name="{manifest.run_id}" status="{status}" time="{manifest.duration_ms / 1000.0:.3f}"/></testsuite></testsuites>'
