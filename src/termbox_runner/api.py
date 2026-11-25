@@ -939,3 +939,11 @@ async def filter_runs_by_date(from_date: str = "2020-01-01", to_date: str = "203
     from termbox_runner.storage import query_runs_by_date_range
     ids = await query_runs_by_date_range(storage, from_date, to_date)
     return {"run_ids": ids}
+
+@app.get("/runs/{run_id}/export/ctrf")
+async def export_ctrf(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import generate_ctrf_report
+    return generate_ctrf_report(manifest)
