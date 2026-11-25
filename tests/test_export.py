@@ -117,7 +117,7 @@ def test_export_bazel_and_ctrf():
 
     m = RunManifest(task=TaskSubmission(main_cmd="echo ok"), status=RunStatus.COMPLETED, failure_mode=FailureMode.PASSED, duration_ms=25.0)
     bazel_xml = generate_bazel_test_xml(m)
-    assert "<testsuite name="bazel.test"" in bazel_xml
+    assert '<testsuite name="bazel.test"' in bazel_xml
 
     ctrf = generate_ctrf_report(m)
     assert ctrf["reportFormat"] == "CTRF"

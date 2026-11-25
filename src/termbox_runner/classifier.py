@@ -278,11 +278,11 @@ def format_fatal_signal_summary(exit_code: Optional[int]) -> Optional[str]:
 def detect_ruby_exception(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
     """Extract Ruby runtime exceptions such as NameError, NoMethodError, or LoadError."""
     lowered = combined_output.lower()
-    if "nomethoderror: undefined method" in lowered:
+    if "nomethoderror" in lowered:
         return FailureMode.RUNTIME_ERROR, "Ruby NoMethodError encountered."
-    if "nameerror: uninitialized constant" in lowered:
+    if "nameerror" in lowered:
         return FailureMode.RUNTIME_ERROR, "Ruby NameError uninitialized constant."
-    if "loaderror: cannot load such file" in lowered:
+    if "loaderror" in lowered:
         return FailureMode.SETUP_ERROR, "Ruby LoadError missing gem or dependency."
     return None
 

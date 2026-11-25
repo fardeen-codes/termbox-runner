@@ -784,10 +784,10 @@ def decompress_log_output(data: bytes) -> str:
 
 async def query_runs_by_date_range(storage, from_iso: str, to_iso: str) -> list[str]:
     """Return run IDs created between from_iso and to_iso dates."""
-    async with storage._get_connection() as db:
-        async with db.execute("SELECT run_id FROM runs WHERE created_at >= ? AND created_at <= ?", (from_iso, to_iso)) as cur:
-            rows = await cur.fetchall()
-            return [r[0] for r in rows]
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT run_id FROM runs WHERE created_at >= ? AND created_at <= ?", (from_iso, to_iso)) as cur:
+        rows = await cur.fetchall()
+        return [r[0] for r in rows]
 
 async def query_runs_by_min_memory(storage, min_bytes: int) -> list[str]:
     """Return run IDs where container memory limit exceeds min_bytes."""
@@ -799,35 +799,35 @@ async def get_schema_migration_version(storage) -> int:
 
 async def rebuild_database_indexes(storage) -> bool:
     """Execute REINDEX on SQLite database tables."""
-    async with storage._get_connection() as db:
-        await db.execute("REINDEX")
-        await db.commit()
+    conn = await storage.get_connection()
+    await conn.execute("REINDEX")
+    await conn.commit()
     return True
 
 async def search_runs_by_command_pattern(storage, pattern: str) -> list[str]:
     """Find run IDs where main_cmd matches SQL LIKE pattern."""
-    async with storage._get_connection() as db:
-        async with db.execute("SELECT run_id FROM runs WHERE main_cmd LIKE ?", (f"%{pattern}%",)) as cur:
-            rows = await cur.fetchall()
-            return [r[0] for r in rows]
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT run_id FROM runs WHERE main_cmd LIKE ?", (f"%{pattern}%",)) as cur:
+        rows = await cur.fetchall()
+        return [r[0] for r in rows]
 
 async def estimate_runs_table_bytes(storage) -> int:
     """Estimate storage footprint in bytes of the runs table."""
-    async with storage._get_connection() as db:
-        async with db.execute("SELECT COUNT(*) FROM runs") as cur:
-            row = await cur.fetchone()
-            return (row[0] if row else 0) * 1024
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT COUNT(*) FROM runs") as cur:
+        row = await cur.fetchone()
+        return (row[0] if row else 0) * 1024
 
 async def batch_delete_runs_by_status(storage, status_str: str) -> int:
     """Delete all historical runs matching a given status string."""
-    async with storage._get_connection() as db:
-        cur = await db.execute("DELETE FROM runs WHERE status = ?", (status_str,))
-        await db.commit()
-        return cur.rowcount
+    conn = await storage.get_connection()
+    cur = await conn.execute("DELETE FROM runs WHERE status = ?", (status_str,))
+    await conn.commit()
+    return cur.rowcount
 
 async def count_runs_grouped_by_day(storage) -> dict[str, int]:
     """Return dictionary mapping YYYY-MM-DD to execution counts."""
-    async with storage._get_connection() as db:
-        async with db.execute("SELECT SUBSTR(created_at, 1, 10) as day, COUNT(*) FROM runs GROUP BY day ORDER BY day DESC LIMIT 30") as cur:
-            rows = await cur.fetchall()
-            return {r[0]: r[1] for r in rows if r[0]}
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT SUBSTR(created_at, 1, 10) as day, COUNT(*) FROM runs GROUP BY day ORDER BY day DESC LIMIT 30") as cur:
+        rows = await cur.fetchall()
+        return {r[0]: r[1] for r in rows if r[0]}

@@ -38,3 +38,11 @@
 - OpenTelemetry span schemas and W3C traceparent context injection.
 - Multi-format CI test reporters: GitHub Step Summary, GitLab JUnit, SARIF v2.1.0, Cobertura, LCOV.
 - SQLite query optimization pragmas, log compression, and schema migrations.
+
+## [0.5.0] - 2026-11-25
+### Added
+- Extended runtime diagnostics for Ruby, PHP fatal errors, Rust panic backtraces, and Go deadlocks.
+- Benchmark templates for Ruby RSpec, Go CPU profiling, and Rust Cargo clippy.
+- Bazel test.xml and CTRF standard test report format exporters.
+- Daily run aggregation statistics and `/stats/daily` endpoint.
+- CI/CD agent evaluation harness integration guide.
