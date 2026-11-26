@@ -226,3 +226,24 @@ def test_multilang_diagnostics_extended():
     go_res = detect_go_deadlock("fatal error: all goroutines are asleep - deadlock!")
     assert go_res is not None
     assert "deadlock" in go_res[1]
+
+def test_classifier_functional_and_asan_diagnostics():
+    from termbox_runner.classifier import (
+        detect_haskell_error,
+        detect_ocaml_error,
+        detect_zig_error,
+        detect_asan_violation,
+    )
+    from termbox_runner.models import FailureMode
+
+    hask = detect_haskell_error("Couldn't match expected type 'Int' with actual type 'Bool'")
+    assert hask is not None and hask[0] == FailureMode.RUNTIME_ERROR
+
+    ocaml = detect_ocaml_error("Fatal error: exception Failure("empty list")")
+    assert ocaml is not None and ocaml[0] == FailureMode.RUNTIME_ERROR
+
+    zig = detect_zig_error("main.zig:12:5: error: expected type 'u32', found 'bool'")
+    assert zig is not None and zig[0] == FailureMode.RUNTIME_ERROR
+
+    asan = detect_asan_violation("==1234==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x00")
+    assert asan is not None and "heap-buffer-overflow" in asan[1]
