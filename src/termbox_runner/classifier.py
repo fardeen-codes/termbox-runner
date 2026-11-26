@@ -307,3 +307,12 @@ def detect_go_deadlock(combined_output: str) -> Optional[Tuple[FailureMode, str]
     if "fatal error: all goroutines are asleep - deadlock!" in combined_output.lower():
         return FailureMode.RUNTIME_ERROR, "Go concurrency deadlock (all goroutines asleep)."
     return None
+
+def detect_haskell_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Detect Haskell GHC type or syntax errors."""
+    lowered = combined_output.lower()
+    if "couldn't match expected type" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Haskell type mismatch error."
+    if "parse error on input" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Haskell syntax parse error."
+    return None
