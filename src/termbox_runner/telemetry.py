@@ -120,3 +120,12 @@ def mask_sensitive_env_vars(env: dict[str, str], secret_keys: list[str] = None) 
         else:
             masked[k] = v
     return masked
+
+def record_page_faults_metric(run_id: str, major_faults: int, minor_faults: int) -> dict:
+    """Construct memory page faults telemetry datapoint."""
+    return {
+        "metric": "container_page_faults_total",
+        "run_id": run_id,
+        "major_faults": major_faults,
+        "minor_faults": minor_faults
+    }
