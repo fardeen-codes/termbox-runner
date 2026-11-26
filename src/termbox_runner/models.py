@@ -99,6 +99,7 @@ class ResourceLimits(BaseModel):
     ulimit_nofile: Optional[int] = Field(default=1024, description="Max open file descriptors")
     ulimit_nproc: Optional[int] = Field(default=512, description="Max child processes")
     stop_signal: str = Field(default="SIGKILL", description="Signal to stop container")
+    pid_mode: Optional[str] = Field(default=None, description="PID namespace mode")
 
     @field_validator("mem_limit")
     @classmethod
