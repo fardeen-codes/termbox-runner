@@ -888,3 +888,7 @@ def validate_cpuset_cpus(cpuset: str) -> bool:
     """Validate cpuset format (e.g. '0', '0-3', '0,2,4')."""
     import re
     return bool(re.match(r'^[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*$', cpuset.strip()))
+
+def calculate_memory_reservation(mem_limit_bytes: int, ratio: float = 0.8) -> int:
+    """Compute container memory reservation (soft limit) from hard limit."""
+    return max(16 * 1024 * 1024, int(mem_limit_bytes * ratio))
