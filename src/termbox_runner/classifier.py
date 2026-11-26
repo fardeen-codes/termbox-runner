@@ -325,3 +325,12 @@ def detect_ocaml_error(combined_output: str) -> Optional[Tuple[FailureMode, str]
     if "syntax error" in lowered and "ocaml" in lowered:
         return FailureMode.RUNTIME_ERROR, "OCaml syntax error."
     return None
+
+def detect_zig_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Detect Zig panic or compiler error."""
+    lowered = combined_output.lower()
+    if "panic: reached unreachable code" in lowered or "thread panicked" in lowered and "zig" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Zig unreachable code reached panic."
+    if "error: expected type" in lowered and ".zig:" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Zig type mismatch compile error."
+    return None
