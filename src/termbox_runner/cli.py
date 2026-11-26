@@ -347,3 +347,7 @@ def cmd_daily_stats(server_url: str):
     """Query daily task counts."""
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/stats/daily").json())
+
+def cmd_export_allure(server_url: str, run_id: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/{run_id}/export/allure").json())
