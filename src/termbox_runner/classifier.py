@@ -316,3 +316,12 @@ def detect_haskell_error(combined_output: str) -> Optional[Tuple[FailureMode, st
     if "parse error on input" in lowered:
         return FailureMode.RUNTIME_ERROR, "Haskell syntax parse error."
     return None
+
+def detect_ocaml_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Detect OCaml fatal runtime exceptions."""
+    lowered = combined_output.lower()
+    if "fatal error: exception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "OCaml unhandled fatal exception."
+    if "syntax error" in lowered and "ocaml" in lowered:
+        return FailureMode.RUNTIME_ERROR, "OCaml syntax error."
+    return None
