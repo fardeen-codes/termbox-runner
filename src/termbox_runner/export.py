@@ -260,3 +260,17 @@ def generate_ctrf_report(manifest: RunManifest) -> dict:
             "tests": [{"name": manifest.run_id, "status": "passed" if passed else "failed", "duration": int(manifest.duration_ms)}]
         }
     }
+
+def generate_allure_result_json(manifest: RunManifest) -> dict:
+    """Generate standard Allure 2.x JSON test result structure."""
+    status = "passed" if not manifest.failure_mode or manifest.failure_mode == FailureMode.PASSED else "failed"
+    return {
+        "name": f"TaskExecution_{manifest.run_id}",
+        "status": status,
+        "statusDetails": {"message": manifest.failure_reason or "Completed clean"},
+        "stage": "finished",
+        "start": int(manifest.duration_ms),
+        "stop": int(manifest.duration_ms),
+        "parameters": [{"name": "command", "value": manifest.task.main_cmd}],
+        "labels": [{"name": "suite", "value": "termbox-runner"}, {"name": "framework", "value": "termbox"}]
+    }
