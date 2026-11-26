@@ -49,3 +49,13 @@ def test_security_profiles_and_helpers():
     assert "/proc/sys" in get_readonly_paths()
     audit = emit_security_audit_event("priv_esc_attempt", {"pid": 42})
     assert audit["event_type"] == "priv_esc_attempt"
+
+def test_security_part3_features():
+    from termbox_runner.security import get_strict_network_seccomp_profile, validate_dropped_capabilities
+    from termbox_runner.runner import calculate_memory_reservation
+    prof = get_strict_network_seccomp_profile()
+    assert "socket" in prof["syscalls"][0]["names"]
+    assert validate_dropped_capabilities(["ALL"]) is True
+    assert validate_dropped_capabilities(["CHOWN"]) is False
+    res = calculate_memory_reservation(100 * 1024 * 1024, 0.5)
+    assert res == 50 * 1024 * 1024
