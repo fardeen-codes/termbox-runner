@@ -334,3 +334,14 @@ def detect_zig_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
     if "error: expected type" in lowered and ".zig:" in lowered:
         return FailureMode.RUNTIME_ERROR, "Zig type mismatch compile error."
     return None
+
+def detect_asan_violation(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Detect LLVM AddressSanitizer (ASan) memory safety violations."""
+    lowered = combined_output.lower()
+    if "addresssanitizer: heap-buffer-overflow" in lowered:
+        return FailureMode.RUNTIME_ERROR, "AddressSanitizer: heap-buffer-overflow detected."
+    if "addresssanitizer: use-after-free" in lowered:
+        return FailureMode.RUNTIME_ERROR, "AddressSanitizer: use-after-free detected."
+    if "leakspan: detected memory leaks" in lowered or "detected memory leaks" in lowered:
+        return FailureMode.RUNTIME_ERROR, "AddressSanitizer: memory leak detected."
+    return None
