@@ -952,3 +952,11 @@ async def export_ctrf(run_id: str, storage: RunStorage = Depends(get_storage_dep
 async def get_daily_run_stats(storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.storage import count_runs_grouped_by_day
     return await count_runs_grouped_by_day(storage)
+
+@app.get("/runs/{run_id}/export/allure")
+async def export_allure(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import generate_allure_result_json
+    return generate_allure_result_json(manifest)
