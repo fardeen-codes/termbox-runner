@@ -41,3 +41,10 @@ def emit_security_audit_event(event_type: str, details: dict) -> dict:
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "severity": "SECURITY_WARNING"
     }
+
+def get_strict_network_seccomp_profile() -> dict:
+    """Return seccomp profile denying packet and raw socket creation."""
+    return {
+        "defaultAction": "SCMP_ACT_ALLOW",
+        "syscalls": [{"names": ["socket", "bind", "connect", "listen"], "action": "SCMP_ACT_ERRNO"}]
+    }
