@@ -239,7 +239,7 @@ def test_classifier_functional_and_asan_diagnostics():
     hask = detect_haskell_error("Couldn't match expected type 'Int' with actual type 'Bool'")
     assert hask is not None and hask[0] == FailureMode.RUNTIME_ERROR
 
-    ocaml = detect_ocaml_error("Fatal error: exception Failure("empty list")")
+    ocaml = detect_ocaml_error('Fatal error: exception Failure("empty list")')
     assert ocaml is not None and ocaml[0] == FailureMode.RUNTIME_ERROR
 
     zig = detect_zig_error("main.zig:12:5: error: expected type 'u32', found 'bool'")

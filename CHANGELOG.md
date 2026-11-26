@@ -46,3 +46,11 @@
 - Bazel test.xml and CTRF standard test report format exporters.
 - Daily run aggregation statistics and `/stats/daily` endpoint.
 - CI/CD agent evaluation harness integration guide.
+
+## [0.6.0] - 2026-11-26
+### Added
+- Strict network seccomp profiles and container PID/IPC namespace isolation flags.
+- Extended error diagnostics for Haskell, OCaml, Zig, and AddressSanitizer (ASan).
+- Functional & systems language benchmark templates (Haskell Cabal, OCaml Dune, Zig test).
+- Allure 2.x test report exporter and memory page faults telemetry metrics.
+- AddressSanitizer debugging guide in docs.
