@@ -48,3 +48,8 @@ def get_strict_network_seccomp_profile() -> dict:
         "defaultAction": "SCMP_ACT_ALLOW",
         "syscalls": [{"names": ["socket", "bind", "connect", "listen"], "action": "SCMP_ACT_ERRNO"}]
     }
+
+def validate_dropped_capabilities(drop_caps: list) -> bool:
+    """Verify that ALL or SYS_ADMIN is included in dropped capabilities."""
+    upper_caps = [c.upper() for c in drop_caps]
+    return "ALL" in upper_caps or "SYS_ADMIN" in upper_caps or "CAP_SYS_ADMIN" in upper_caps
