@@ -122,3 +122,16 @@ def test_export_bazel_and_ctrf():
     ctrf = generate_ctrf_report(m)
     assert ctrf["reportFormat"] == "CTRF"
     assert ctrf["results"]["summary"]["passed"] == 1
+
+def test_export_allure_and_page_faults():
+    from termbox_runner.models import RunManifest, TaskSubmission, RunStatus, FailureMode
+    from termbox_runner.export import generate_allure_result_json
+    from termbox_runner.telemetry import record_page_faults_metric
+
+    m = RunManifest(task=TaskSubmission(main_cmd="echo test"), status=RunStatus.COMPLETED, failure_mode=FailureMode.PASSED, duration_ms=10.0)
+    allure = generate_allure_result_json(m)
+    assert allure["status"] == "passed"
+    assert allure["labels"][0]["name"] == "suite"
+
+    pf = record_page_faults_metric("r1", 0, 150)
+    assert pf["minor_faults"] == 150
