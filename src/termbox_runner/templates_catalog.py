@@ -248,3 +248,5 @@ TEMPLATES["go-cpu-profile"] = BenchmarkTemplate(id="go-cpu-profile", name="Go Be
 TEMPLATES["rust-clippy"] = BenchmarkTemplate(id="rust-clippy", name="Rust Cargo Clippy Linter", category="Rust", description="Runs cargo clippy --all-targets -- -D warnings.", task=TaskSubmission(image="rust:1.77-slim", main_cmd="cargo clippy --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=20.0)))
 
 TEMPLATES["haskell-cabal"] = BenchmarkTemplate(id="haskell-cabal", name="Haskell Cabal Test Suite", category="Haskell", description="Executes cabal test in Haskell.", task=TaskSubmission(image="haskell:9.6-slim", main_cmd="cabal --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["ocaml-dune"] = BenchmarkTemplate(id="ocaml-dune", name="OCaml Dune Test Harness", category="OCaml", description="Executes dune runtest.", task=TaskSubmission(image="ocaml/opam:debian-12-ocaml-5.1", main_cmd="dune --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
