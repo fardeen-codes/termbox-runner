@@ -250,3 +250,5 @@ TEMPLATES["rust-clippy"] = BenchmarkTemplate(id="rust-clippy", name="Rust Cargo 
 TEMPLATES["haskell-cabal"] = BenchmarkTemplate(id="haskell-cabal", name="Haskell Cabal Test Suite", category="Haskell", description="Executes cabal test in Haskell.", task=TaskSubmission(image="haskell:9.6-slim", main_cmd="cabal --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
 
 TEMPLATES["ocaml-dune"] = BenchmarkTemplate(id="ocaml-dune", name="OCaml Dune Test Harness", category="OCaml", description="Executes dune runtest.", task=TaskSubmission(image="ocaml/opam:debian-12-ocaml-5.1", main_cmd="dune --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["zig-test"] = BenchmarkTemplate(id="zig-test", name="Zig Build Test Harness", category="Zig", description="Executes zig build test.", task=TaskSubmission(image="ziglang/zig:master-alpine", main_cmd="zig version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
