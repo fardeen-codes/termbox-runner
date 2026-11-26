@@ -79,3 +79,9 @@ def test_ruby_and_rust_templates():
     assert "ruby-rspec" in TEMPLATES
     assert "go-cpu-profile" in TEMPLATES
     assert "rust-clippy" in TEMPLATES
+
+def test_functional_and_systems_templates():
+    from termbox_runner.templates_catalog import TEMPLATES
+    assert "haskell-cabal" in TEMPLATES
+    assert "ocaml-dune" in TEMPLATES
+    assert "zig-test" in TEMPLATES
