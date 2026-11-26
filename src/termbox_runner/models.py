@@ -100,6 +100,7 @@ class ResourceLimits(BaseModel):
     ulimit_nproc: Optional[int] = Field(default=512, description="Max child processes")
     stop_signal: str = Field(default="SIGKILL", description="Signal to stop container")
     pid_mode: Optional[str] = Field(default=None, description="PID namespace mode")
+    ipc_mode: Optional[str] = Field(default=None, description="IPC namespace mode")
 
     @field_validator("mem_limit")
     @classmethod
