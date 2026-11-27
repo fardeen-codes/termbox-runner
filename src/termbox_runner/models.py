@@ -109,6 +109,7 @@ class ResourceLimits(BaseModel):
     extra_hosts: Dict[str, str] = Field(default_factory=dict, description="Additional /etc/hosts entries")
     healthcheck_interval_seconds: Optional[float] = Field(default=None, description="Healthcheck interval")
     oom_score_adj: Optional[int] = Field(default=None, ge=-1000, le=1000, description="OOM killer score adjustment")
+    oom_kill_disable: Optional[bool] = Field(default=False, description="Disable OOM killer for container")
 
     @field_validator("mem_limit")
     @classmethod
