@@ -236,3 +236,12 @@ def parse_w3c_tracestate(header: str) -> dict[str, str]:
             k, v = item.strip().split("=", 1)
             res[k] = v
     return res
+
+def calculate_duration_stddev(durations: list[float]) -> float:
+    """Calculate sample standard deviation of execution durations."""
+    if len(durations) < 2:
+        return 0.0
+    mean = sum(durations) / len(durations)
+    variance = sum((x - mean) ** 2 for x in durations) / (len(durations) - 1)
+    import math
+    return math.sqrt(variance)
