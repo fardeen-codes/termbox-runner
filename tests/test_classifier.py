@@ -277,3 +277,33 @@ def test_multilang_batch1_diagnostics():
     assert is_sigxcpu_signal(152) is True
     assert is_sigxfsz_signal(153) is True
     assert is_sigsys_signal(159) is True
+
+def test_multilang_batch2_diagnostics():
+    from termbox_runner.classifier import (
+        detect_erlang_error,
+        detect_lisp_error,
+        detect_fsharp_error,
+        detect_groovy_error,
+        detect_ada_error,
+        detect_d_error,
+        detect_nim_error,
+        detect_crystal_error,
+        detect_v_error,
+        detect_valgrind_violation,
+        detect_fortran_error,
+        is_sigtrap_signal,
+        is_sigabrt_signal,
+    )
+    assert detect_erlang_error("** Generic server foo terminating") is not None
+    assert detect_lisp_error("The variable x is unbound") is not None
+    assert detect_fsharp_error("MatchFailureException") is not None
+    assert detect_groovy_error("groovy.lang.MissingMethodException") is not None
+    assert detect_ada_error("raised CONSTRAINT_ERROR : index out of range") is not None
+    assert detect_d_error("core.exception.RangeError") is not None
+    assert detect_nim_error("IndexDefect: index out of bounds") is not None
+    assert detect_crystal_error("IndexOutOfBoundsError") is not None
+    assert detect_v_error("V panic: array index out of range") is not None
+    assert detect_valgrind_violation("Invalid read of size 4") is not None
+    assert detect_fortran_error("Fortran runtime error: End of file") is not None
+    assert is_sigtrap_signal(133) is True
+    assert is_sigabrt_signal(134) is True
