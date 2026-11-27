@@ -167,7 +167,7 @@ def test_export_batch3_ci_annotations():
         format_github_action_warning,
     )
     m = RunManifest(task=TaskSubmission(main_cmd="echo test"), status=RunStatus.COMPLETED, failure_mode=FailureMode.PASSED, duration_ms=20.0)
-    assert "<testsuite name="jenkins.runner"" in generate_jenkins_test_xml(m)
+    assert '<testsuite name="jenkins.runner"' in generate_jenkins_test_xml(m)
     assert "travis_fold:start:build" in format_travis_log_section("build", "Compiling...")
     assert "::error" in format_github_action_error("OOM", "Memory limit exceeded")
     assert "::warning" in format_github_action_warning("Slow", "Execution took > 10s")

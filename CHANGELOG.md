@@ -70,3 +70,11 @@
 - Evaluation benchmark presets for Common Lisp, Rebar3, Spock, GNAT, Dub, Nimble, OpenAPI, Terraform, and Ansible.
 - TAP 14 output generator and HMAC-SHA256 webhook signatures.
 - Memory page reclamation and network bandwidth telemetry metrics.
+
+## [0.9.0] - 2026-11-27
+### Added
+- Advanced OOM killer score adjustment (`oom_score_adj`) and CPU shares weighting.
+- Runtime diagnostics for Racket, Scheme, FreePascal, COBOL, GAS Assembler, LLVM crashes, and Strace errors.
+- Data science & OLAP benchmark templates: DuckDB, Polars, PyArrow, Fastparquet, Wasmtime.
+- Standard deviation and Median Absolute Deviation (MAD) duration analytics.
+- Jenkins JUnit and Travis CI folding log export integrations.
