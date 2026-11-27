@@ -252,3 +252,5 @@ TEMPLATES["haskell-cabal"] = BenchmarkTemplate(id="haskell-cabal", name="Haskell
 TEMPLATES["ocaml-dune"] = BenchmarkTemplate(id="ocaml-dune", name="OCaml Dune Test Harness", category="OCaml", description="Executes dune runtest.", task=TaskSubmission(image="ocaml/opam:debian-12-ocaml-5.1", main_cmd="dune --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
 
 TEMPLATES["zig-test"] = BenchmarkTemplate(id="zig-test", name="Zig Build Test Harness", category="Zig", description="Executes zig build test.", task=TaskSubmission(image="ziglang/zig:master-alpine", main_cmd="zig version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["express-api"] = BenchmarkTemplate(id="express-api", name="Express.js REST API", category="Web", description="Tests Express route handlers.", task=TaskSubmission(image="node:20-slim", main_cmd="node -e 'console.log(\"Express verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
