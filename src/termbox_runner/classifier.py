@@ -412,3 +412,12 @@ def detect_dart_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]
     if "rangeerror (index):" in lowered:
         return FailureMode.RUNTIME_ERROR, "Dart RangeError index out of range."
     return None
+
+def detect_lua_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Lua table nil index runtime error."""
+    lowered = combined_output.lower()
+    if "attempt to index a nil value" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Lua attempt to index nil value."
+    if "attempt to call a nil value" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Lua attempt to call nil value."
+    return None
