@@ -76,3 +76,7 @@ def has_dropped_all_capabilities(cap_drop: list[str]) -> bool:
 def validate_seccomp_action(action: str) -> bool:
     """Validate seccomp action string."""
     return action in ("SCMP_ACT_ALLOW", "SCMP_ACT_ERRNO", "SCMP_ACT_KILL", "SCMP_ACT_TRAP")
+
+def generate_complain_mode_apparmor_profile(name: str = "termbox-complain") -> str:
+    """Generate AppArmor profile in non-enforcing audit/complain mode."""
+    return f"profile {name} flags=(complain) {{\n  file,\n  network,\n}}"
