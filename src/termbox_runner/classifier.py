@@ -608,3 +608,7 @@ def has_gdb_stacktrace(combined_output: str) -> bool:
 def detect_strace_permission_denied(combined_output: str) -> bool:
     """Check if strace log recorded EPERM or EACCES error."""
     return "= -1 eperm" in combined_output.lower() or "= -1 eacces" in combined_output.lower()
+
+def has_jvm_thread_dump(combined_output: str) -> bool:
+    """Check if output contains JVM thread dump dump."""
+    return "prio=" in combined_output and "tid=" in combined_output and "nid=" in combined_output
