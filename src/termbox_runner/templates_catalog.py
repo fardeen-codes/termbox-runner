@@ -316,3 +316,5 @@ TEMPLATES["valgrind-memcheck"] = BenchmarkTemplate(id="valgrind-memcheck", name=
 TEMPLATES["openapi-validate"] = BenchmarkTemplate(id="openapi-validate", name="OpenAPI Spec Validator", category="Validation", description="Validates openapi.yaml specs.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"OpenAPI valid\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["proto-validate"] = BenchmarkTemplate(id="proto-validate", name="Protobuf Schema Compiler", category="Validation", description="Compiles .proto files.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Protoc OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["graphql-schema"] = BenchmarkTemplate(id="graphql-schema", name="GraphQL Schema Linter", category="Validation", description="Validates schema.graphql syntax.", task=TaskSubmission(image="node:20-slim", main_cmd="node -e 'console.log(\"GraphQL valid\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
