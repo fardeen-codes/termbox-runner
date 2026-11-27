@@ -120,3 +120,11 @@ def test_telemetry_batch3_math():
     vals = [10.0, 12.0, 11.0, 10.0, 12.0]
     assert calculate_duration_stddev(vals) > 0.0
     assert calculate_duration_mad(vals) >= 0.0
+
+def test_telemetry_part4_sla_and_p999():
+    from termbox_runner.telemetry import check_duration_sla, is_valid_otel_span_kind, calculate_p999
+    assert check_duration_sla(500.0, 1000.0) is True
+    assert check_duration_sla(1500.0, 1000.0) is False
+    assert is_valid_otel_span_kind("INTERNAL") is True
+    assert is_valid_otel_span_kind("INVALID") is False
+    assert calculate_p999([1.0, 2.0, 3.0]) == 3.0
