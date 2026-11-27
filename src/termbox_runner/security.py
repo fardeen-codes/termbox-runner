@@ -135,3 +135,7 @@ def export_seccomp_profile_json(profile: dict) -> str:
 def is_apparmor_enforced(profile_output: str) -> bool:
     """Check if AppArmor reports profile in enforce mode."""
     return "flags=(enforce)" in profile_output or "flags=(attach_disconnected)" in profile_output
+
+def generate_userns_remap_spec(host_uid: int, container_uid: int, count: int = 1) -> str:
+    """Construct uid_map specification for unprivileged container user."""
+    return f"{container_uid} {host_uid} {count}"
