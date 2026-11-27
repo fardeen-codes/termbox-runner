@@ -535,3 +535,12 @@ def detect_valgrind_violation(combined_output: str) -> Optional[Tuple[FailureMod
     if "definitely lost in loss record" in lowered:
         return FailureMode.RUNTIME_ERROR, "Valgrind definitely lost memory leak."
     return None
+
+def detect_fortran_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Fortran runtime IO and subscript errors."""
+    lowered = combined_output.lower()
+    if "fortran runtime error: end of file" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Fortran EOF runtime error."
+    if "fortran runtime error: index" in lowered and "out of bounds" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Fortran array index out of bounds."
+    return None
