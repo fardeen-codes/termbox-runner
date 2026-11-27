@@ -845,3 +845,12 @@ async def get_average_duration_by_image(storage) -> dict[str, float]:
     async with conn.execute("SELECT image, AVG(duration_ms) FROM runs WHERE duration_ms IS NOT NULL GROUP BY image") as cur:
         rows = await cur.fetchall()
         return {r[0]: float(r[1]) for r in rows if r[0]}
+
+async def update_run_annotation(storage, run_id: str, key: str, val: str) -> bool:
+    """Set metadata annotation key-value pair on run manifest."""
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        return False
+    manifest.annotations[key] = val
+    await storage.save_run(manifest)
+    return True
