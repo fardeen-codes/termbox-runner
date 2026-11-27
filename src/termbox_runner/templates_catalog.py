@@ -318,3 +318,5 @@ TEMPLATES["openapi-validate"] = BenchmarkTemplate(id="openapi-validate", name="O
 TEMPLATES["proto-validate"] = BenchmarkTemplate(id="proto-validate", name="Protobuf Schema Compiler", category="Validation", description="Compiles .proto files.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Protoc OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["graphql-schema"] = BenchmarkTemplate(id="graphql-schema", name="GraphQL Schema Linter", category="Validation", description="Validates schema.graphql syntax.", task=TaskSubmission(image="node:20-slim", main_cmd="node -e 'console.log(\"GraphQL valid\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["terraform-validate"] = BenchmarkTemplate(id="terraform-validate", name="Terraform HCL Validator", category="DevOps", description="Runs terraform fmt -check.", task=TaskSubmission(image="hashicorp/terraform:light", main_cmd="terraform --version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
