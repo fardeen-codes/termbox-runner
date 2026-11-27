@@ -348,3 +348,7 @@ def generate_tap14_report(manifest: RunManifest) -> str:
 def sanitize_cdata_text(text: str) -> str:
     """Escape CDATA termination sequence in XML output."""
     return text.replace("]]>", "]]]]><![CDATA[>")
+
+def format_teamcity_inspection(type_id: str, message: str, file_path: str = "main.py") -> str:
+    """Generate TeamCity inspection message."""
+    return f"##teamcity[inspectionType id='{type_id}' name='{type_id}' category='Security' description='Termbox finding']\n##teamcity[inspection typeId='{type_id}' message='{message}' file='{file_path}']"
