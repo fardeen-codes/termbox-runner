@@ -108,6 +108,7 @@ class ResourceLimits(BaseModel):
     dns_search: Optional[List[str]] = Field(default_factory=list, description="DNS search domains")
     extra_hosts: Dict[str, str] = Field(default_factory=dict, description="Additional /etc/hosts entries")
     healthcheck_interval_seconds: Optional[float] = Field(default=None, description="Healthcheck interval")
+    oom_score_adj: Optional[int] = Field(default=None, ge=-1000, le=1000, description="OOM killer score adjustment")
 
     @field_validator("mem_limit")
     @classmethod
