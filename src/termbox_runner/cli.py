@@ -414,3 +414,7 @@ def terminal_underline(text: str) -> str:
 def cmd_oom_runs(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/runs/filter/oom").json())
+
+def cmd_timeout_runs(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/runs/filter/timeouts").json())
