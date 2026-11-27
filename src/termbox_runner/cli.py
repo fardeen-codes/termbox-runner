@@ -378,3 +378,7 @@ def cmd_badge_url(server_url: str, run_id: str):
 def terminal_yellow(text: str) -> str:
     """Format string with yellow ANSI color escape."""
     return f"\033[33m{text}\033[0m"
+
+def terminal_magenta(text: str) -> str:
+    """Format string with magenta ANSI color escape."""
+    return f"\033[35m{text}\033[0m"
