@@ -74,3 +74,31 @@ def test_telemetry_part1_utilities():
     masked = mask_sensitive_env_vars({"API_KEY": "secret123", "PORT": "8000"})
     assert masked["API_KEY"] == "********"
     assert masked["PORT"] == "8000"
+
+def test_telemetry_batch1_helpers():
+    from termbox_runner.telemetry import (
+        format_prometheus_cpu_seconds,
+        format_prometheus_memory_bytes,
+        generate_w3c_baggage_header,
+        parse_w3c_baggage_header,
+        record_lifecycle_timing,
+        assign_latency_bucket,
+        build_run_audit_event,
+        record_memory_swap_metric,
+        record_process_count_metric,
+    )
+    cpu_lines = format_prometheus_cpu_seconds("r1", 0.12, 0.05)
+    assert len(cpu_lines) == 2
+    mem_line = format_prometheus_memory_bytes("r1", 1048576)
+    assert "1048576" in mem_line
+    baggage = generate_w3c_baggage_header({"user": "alice", "env": "prod"})
+    parsed = parse_w3c_baggage_header(baggage)
+    assert parsed["user"] == "alice"
+    assert parsed["env"] == "prod"
+    timing = record_lifecycle_timing("r1", 10.0, 50.0, 20.0)
+    assert timing["total_ms"] == 80.0
+    assert assign_latency_bucket(45.0) == 50.0
+    audit = build_run_audit_event("r1", "STARTED", {"image": "python"})
+    assert audit["run_id"] == "r1"
+    assert record_memory_swap_metric("r1", 0)["swap_bytes"] == 0
+    assert record_process_count_metric("r1", 4)["pids"] == 4
