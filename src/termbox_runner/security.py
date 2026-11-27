@@ -88,3 +88,8 @@ def override_seccomp_syscall_action(profile: dict, syscall_name: str, new_action
         if syscall_name in sc.get("names", []):
             sc["action"] = new_action
     return new_prof
+
+def is_safe_container_sysctl(key: str) -> bool:
+    """Verify that kernel sysctl is safe for container execution."""
+    unsafe_prefixes = ["kernel.", "fs.protected_", "vm.drop_caches"]
+    return not any(key.startswith(p) for p in unsafe_prefixes)
