@@ -136,3 +136,7 @@ def format_prometheus_cpu_seconds(run_id: str, user_sec: float, sys_sec: float) 
         f'termbox_container_cpu_user_seconds_total{{run_id="{run_id}"}} {user_sec:.4f}',
         f'termbox_container_cpu_system_seconds_total{{run_id="{run_id}"}} {sys_sec:.4f}'
     ]
+
+def format_prometheus_memory_bytes(run_id: str, peak_bytes: int) -> str:
+    """Format peak container memory usage in Prometheus gauge format."""
+    return f'termbox_container_memory_peak_bytes{{run_id="{run_id}"}} {peak_bytes}'
