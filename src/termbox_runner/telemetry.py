@@ -144,3 +144,12 @@ def format_prometheus_memory_bytes(run_id: str, peak_bytes: int) -> str:
 def generate_w3c_baggage_header(items: dict[str, str]) -> str:
     """Generate W3C baggage header from key-value pairs."""
     return ", ".join(f"{k}={v}" for k, v in sorted(items.items()))
+
+def parse_w3c_baggage_header(header: str) -> dict[str, str]:
+    """Parse W3C baggage header into key-value dictionary."""
+    res = {}
+    for part in header.split(","):
+        if "=" in part:
+            k, v = part.strip().split("=", 1)
+            res[k] = v
+    return res
