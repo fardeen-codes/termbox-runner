@@ -280,3 +280,5 @@ TEMPLATES["security-jwt"] = BenchmarkTemplate(id="security-jwt", name="JWT Signa
 TEMPLATES["security-deser"] = BenchmarkTemplate(id="security-deser", name="Insecure Deserialization Audit", category="Security", description="Tests safe object deserialization.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Deserialization safe\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["alembic-mig"] = BenchmarkTemplate(id="alembic-mig", name="Alembic Migration Suite", category="Database", description="Tests Python Alembic DDL migrations.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Alembic upgraded\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["prisma-validate"] = BenchmarkTemplate(id="prisma-validate", name="Prisma Schema Validator", category="Database", description="Validates prisma/schema.prisma definitions.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
