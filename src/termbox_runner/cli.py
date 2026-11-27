@@ -426,3 +426,7 @@ def cmd_stddev_stats(server_url: str):
 def cmd_export_jenkins(server_url: str, run_id: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get(f"/runs/{run_id}/export/jenkins").text)
+
+def terminal_bright_red(text: str) -> str:
+    """Format string with bright red ANSI escape."""
+    return f"\033[91m{text}\033[0m"
