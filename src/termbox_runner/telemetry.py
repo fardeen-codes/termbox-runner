@@ -140,3 +140,7 @@ def format_prometheus_cpu_seconds(run_id: str, user_sec: float, sys_sec: float) 
 def format_prometheus_memory_bytes(run_id: str, peak_bytes: int) -> str:
     """Format peak container memory usage in Prometheus gauge format."""
     return f'termbox_container_memory_peak_bytes{{run_id="{run_id}"}} {peak_bytes}'
+
+def generate_w3c_baggage_header(items: dict[str, str]) -> str:
+    """Generate W3C baggage header from key-value pairs."""
+    return ", ".join(f"{k}={v}" for k, v in sorted(items.items()))
