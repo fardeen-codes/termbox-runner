@@ -279,3 +279,14 @@ def generate_circleci_test_xml(manifest: RunManifest) -> str:
     """Format task execution results in CircleCI test results XML convention."""
     failures = 1 if manifest.failure_mode and manifest.failure_mode != FailureMode.PASSED else 0
     return f'<?xml version="1.0" encoding="UTF-8"?><testsuite name="circleci.task" tests="1" failures="{failures}" time="{manifest.duration_ms / 1000.0:.3f}"><testcase name="{manifest.run_id}" classname="termbox.runner"/></testsuite>'
+
+def generate_azure_devops_test_json(manifest: RunManifest) -> dict:
+    """Format task execution results in Azure DevOps Test Runs JSON schema."""
+    outcome = "Passed" if not manifest.failure_mode or manifest.failure_mode == FailureMode.PASSED else "Failed"
+    return {
+        "title": f"Termbox Task {manifest.run_id}",
+        "outcome": outcome,
+        "durationInMs": int(manifest.duration_ms),
+        "errorMessage": manifest.failure_reason if outcome == "Failed" else None,
+        "runId": manifest.run_id
+    }
