@@ -909,3 +909,7 @@ def calculate_cgroup_io_weight(priority: int) -> int:
 def get_low_tier_preset() -> dict:
     """Preset for lightweight microbenchmarks."""
     return {"mem_limit": "128m", "cpu_quota": 0.5, "timeout_seconds": 15.0, "pids_limit": 64}
+
+def get_standard_tier_preset() -> dict:
+    """Preset for standard evaluation benchmarks."""
+    return {"mem_limit": "512m", "cpu_quota": 1.0, "timeout_seconds": 30.0, "pids_limit": 128}
