@@ -186,3 +186,7 @@ def build_run_audit_event(run_id: str, action: str, details: dict) -> dict:
 def record_memory_swap_metric(run_id: str, swap_bytes: int) -> dict:
     """Construct container swap memory telemetry point."""
     return {"metric": "container_memory_swap_bytes", "run_id": run_id, "swap_bytes": swap_bytes}
+
+def record_process_count_metric(run_id: str, pids: int) -> dict:
+    """Construct active PID count telemetry point."""
+    return {"metric": "container_pids_active", "run_id": run_id, "pids": pids}
