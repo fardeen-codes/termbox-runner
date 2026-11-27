@@ -72,3 +72,7 @@ def is_secure_tmpfs_options(options: str) -> bool:
 def has_dropped_all_capabilities(cap_drop: list[str]) -> bool:
     """Check if container explicitly drops ALL capabilities."""
     return "ALL" in [c.upper() for c in cap_drop]
+
+def validate_seccomp_action(action: str) -> bool:
+    """Validate seccomp action string."""
+    return action in ("SCMP_ACT_ALLOW", "SCMP_ACT_ERRNO", "SCMP_ACT_KILL", "SCMP_ACT_TRAP")
