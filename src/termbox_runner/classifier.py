@@ -365,3 +365,14 @@ def detect_r_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
     if "error in " in lowered and "could not find function" in lowered:
         return FailureMode.RUNTIME_ERROR, "R undefined function error."
     return None
+
+def detect_julia_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Julia BoundsError, MethodError, or UndefVarError."""
+    lowered = combined_output.lower()
+    if "boundserror: attempt to access" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Julia BoundsError encountered."
+    if "methoderror: no method matching" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Julia MethodError encountered."
+    if "undefvarerror:" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Julia UndefVarError encountered."
+    return None
