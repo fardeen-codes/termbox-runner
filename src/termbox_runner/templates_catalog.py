@@ -264,3 +264,5 @@ TEMPLATES["actix-web"] = BenchmarkTemplate(id="actix-web", name="Actix Web Servi
 TEMPLATES["gin-router"] = BenchmarkTemplate(id="gin-router", name="Gin Router Evaluation", category="Go", description="Tests Gin HTTP request routing.", task=TaskSubmission(image="golang:1.22-alpine", main_cmd="go version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["echo-framework"] = BenchmarkTemplate(id="echo-framework", name="Echo Go Web Test", category="Go", description="Tests Echo middleware handlers.", task=TaskSubmission(image="golang:1.22-alpine", main_cmd="go version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["rails-controller"] = BenchmarkTemplate(id="rails-controller", name="Rails Controller Test", category="Ruby", description="Tests ActionController endpoints.", task=TaskSubmission(image="ruby:3.3-slim", main_cmd="ruby --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
