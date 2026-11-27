@@ -579,3 +579,10 @@ def detect_pascal_error(combined_output: str) -> Optional[Tuple[FailureMode, str
     if "runtime error 216 at" in lowered:
         return FailureMode.RUNTIME_ERROR, "FreePascal Access violation (Error 216)."
     return None
+
+def detect_cobol_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract GnuCOBOL runtime subscript errors."""
+    lowered = combined_output.lower()
+    if "subscript out of range" in lowered:
+        return FailureMode.RUNTIME_ERROR, "COBOL subscript out of range."
+    return None
