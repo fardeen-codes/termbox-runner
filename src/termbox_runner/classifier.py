@@ -494,3 +494,12 @@ def detect_ada_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
     if "raised program_error" in lowered:
         return FailureMode.RUNTIME_ERROR, "Ada PROGRAM_ERROR exception."
     return None
+
+def detect_d_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract D runtime exceptions."""
+    lowered = combined_output.lower()
+    if "core.exception.rangeerror" in lowered:
+        return FailureMode.RUNTIME_ERROR, "D core.exception.RangeError."
+    if "core.exception.asserterror" in lowered:
+        return FailureMode.ASSERTION_FAILED, "D core.exception.AssertError."
+    return None
