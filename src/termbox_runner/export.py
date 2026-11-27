@@ -301,3 +301,13 @@ def generate_sonarqube_generic_xml(manifest: RunManifest) -> str:
     passed = not manifest.failure_mode or manifest.failure_mode == FailureMode.PASSED
     inner = f'<testCase name="{manifest.run_id}" duration="{int(manifest.duration_ms)}"/>' if passed else f'<testCase name="{manifest.run_id}" duration="{int(manifest.duration_ms)}"><failure message="{manifest.failure_mode.value}"/></testCase>'
     return f'<testExecutions version="1"><file path="sandbox://task">{inner}</file></testExecutions>'
+
+def generate_testrail_result_json(manifest: RunManifest, test_id: int = 1) -> dict:
+    """Format task results for TestRail API add_result endpoint."""
+    status_id = 1 if not manifest.failure_mode or manifest.failure_mode == FailureMode.PASSED else 5
+    return {
+        "test_id": test_id,
+        "status_id": status_id,
+        "comment": manifest.failure_reason or "Execution clean",
+        "elapsed": f"{max(1, int(manifest.duration_ms / 1000))}s"
+    }
