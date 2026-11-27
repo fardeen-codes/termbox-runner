@@ -370,3 +370,5 @@ TEMPLATES["pytest-bench"] = BenchmarkTemplate(id="pytest-bench", name="Pytest Be
 TEMPLATES["criterion-rust"] = BenchmarkTemplate(id="criterion-rust", name="Criterion.rs Benchmarks", category="Performance", description="Executes cargo bench with Criterion.", task=TaskSubmission(image="rust:1.77-slim", main_cmd="cargo --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
 
 TEMPLATES["jmh-java"] = BenchmarkTemplate(id="jmh-java", name="JMH Java Microbenchmark", category="Performance", description="Runs JMH benchmark iterations.", task=TaskSubmission(image="gradle:jdk17", main_cmd="gradle --version", limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0)))
+
+TEMPLATES["go-benchmem"] = BenchmarkTemplate(id="go-benchmem", name="Go Benchmark MemAllocs", category="Performance", description="Runs go test -bench=. -benchmem.", task=TaskSubmission(image="golang:1.22-alpine", main_cmd="go version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
