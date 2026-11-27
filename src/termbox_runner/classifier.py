@@ -641,3 +641,7 @@ def detect_rust_use_of_moved_value(output: str) -> bool:
 def detect_rust_mutable_borrow_error(output: str) -> bool:
     """Check if rustc reported cannot borrow as mutable (E0502)."""
     return "error[e0502]: cannot borrow" in output.lower()
+
+def detect_go_type_mismatch(output: str) -> bool:
+    """Check if go build reported cannot use type error."""
+    return "cannot use " in output.lower() and " as type " in output.lower()
