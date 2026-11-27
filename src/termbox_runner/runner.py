@@ -892,3 +892,16 @@ def validate_cpuset_cpus(cpuset: str) -> bool:
 def calculate_memory_reservation(mem_limit_bytes: int, ratio: float = 0.8) -> int:
     """Compute container memory reservation (soft limit) from hard limit."""
     return max(16 * 1024 * 1024, int(mem_limit_bytes * ratio))
+
+def calculate_cgroup_memory_high(max_bytes: int, ratio: float = 0.85) -> int:
+    """Calculate cgroup v2 memory.high throttling threshold."""
+    return int(max_bytes * ratio)
+
+def calculate_cgroup_cpu_weight(quota: float) -> int:
+    """Convert CPU quota cores to cgroup v2 cpu.weight (1-10000)."""
+    return max(1, min(10000, int(quota * 100)))
+
+def calculate_cgroup_io_weight(priority: int) -> int:
+    """Convert task priority (-20 to 19) to cgroup v2 io.weight (1-10000)."""
+    normalized = 100 - (priority * 4)
+    return max(1, min(10000, normalized))
