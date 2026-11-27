@@ -135,3 +135,25 @@ def test_export_allure_and_page_faults():
 
     pf = record_page_faults_metric("r1", 0, 150)
     assert pf["minor_faults"] == 150
+
+def test_export_batch1_ci_formats():
+    from termbox_runner.models import RunManifest, TaskSubmission, RunStatus, FailureMode
+    from termbox_runner.export import (
+        generate_circleci_test_xml,
+        generate_azure_devops_test_json,
+        generate_bitbucket_report_xml,
+        generate_sonarqube_generic_xml,
+        generate_testrail_result_json,
+        generate_status_badge_svg,
+        format_multi_run_markdown_matrix,
+        encode_ndjson_event,
+    )
+    m = RunManifest(task=TaskSubmission(main_cmd="echo test"), status=RunStatus.COMPLETED, failure_mode=FailureMode.PASSED, duration_ms=15.0)
+    assert "<testsuite name="circleci.task"" in generate_circleci_test_xml(m)
+    assert generate_azure_devops_test_json(m)["outcome"] == "Passed"
+    assert "SUCCESS" in generate_bitbucket_report_xml(m)
+    assert "<testExecutions" in generate_sonarqube_generic_xml(m)
+    assert generate_testrail_result_json(m)["status_id"] == 1
+    assert "<svg" in generate_status_badge_svg("PASSED")
+    assert "echo test" in format_multi_run_markdown_matrix([m])
+    assert "data" in encode_ndjson_event("STARTED", {"id": 1})
