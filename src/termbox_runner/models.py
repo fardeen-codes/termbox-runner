@@ -106,6 +106,7 @@ class ResourceLimits(BaseModel):
     io_weight: Optional[int] = Field(default=100, ge=1, le=10000, description="Cgroups v2 io.weight")
     dns_servers: Optional[List[str]] = Field(default_factory=list, description="Custom DNS servers")
     dns_search: Optional[List[str]] = Field(default_factory=list, description="DNS search domains")
+    extra_hosts: Dict[str, str] = Field(default_factory=dict, description="Additional /etc/hosts entries")
 
     @field_validator("mem_limit")
     @classmethod
