@@ -1015,3 +1015,11 @@ async def trigger_wal_checkpoint_endpoint(storage: RunStorage = Depends(get_stor
     from termbox_runner.storage import trigger_wal_checkpoint
     await trigger_wal_checkpoint(storage)
     return {"checkpoint": "ok"}
+
+@app.get("/runs/{run_id}/export/tap14", response_class=PlainTextResponse)
+async def export_tap14(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import generate_tap14_report
+    return PlainTextResponse(generate_tap14_report(manifest))
