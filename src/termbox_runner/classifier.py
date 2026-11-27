@@ -394,3 +394,12 @@ def detect_kotlin_error(combined_output: str) -> Optional[Tuple[FailureMode, str
     if "uninitializedpropertyaccessexception" in lowered:
         return FailureMode.RUNTIME_ERROR, "Kotlin UninitializedPropertyAccessException."
     return None
+
+def detect_swift_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Swift runtime fatalErrors."""
+    lowered = combined_output.lower()
+    if "fatal error: index out of range" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Swift fatal error: index out of range."
+    if "fatal error: unexpectedly found nil" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Swift unwrapping optional nil value."
+    return None
