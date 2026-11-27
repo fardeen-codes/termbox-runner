@@ -449,3 +449,12 @@ def is_sigxfsz_signal(exit_code: Optional[int]) -> bool:
 def is_sigsys_signal(exit_code: Optional[int]) -> bool:
     """Check if exit code corresponds to SIGSYS (128 + 31 = 159)."""
     return exit_code in (159, 31)
+
+def detect_erlang_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Erlang crash reports and server terminations."""
+    lowered = combined_output.lower()
+    if "** generic server " in lowered and " terminating" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Erlang gen_server crash termination."
+    if "** reason for termination ==" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Erlang process crash termination."
+    return None
