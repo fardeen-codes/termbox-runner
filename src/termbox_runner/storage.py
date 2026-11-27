@@ -868,3 +868,13 @@ async def query_runs_by_annotation_key(storage, key: str) -> list[str]:
     """Find run IDs containing a specific metadata annotation key."""
     all_runs = await storage.list_runs(limit=100)
     return [r.run_id for r in all_runs if key in getattr(r, "annotations", {})]
+
+async def count_table_rows(storage, table_name: str = "runs") -> int:
+    """Count rows in a given database table safely."""
+    valid_tables = {"runs", "schema_migrations", "artifacts"}
+    if table_name not in valid_tables:
+        return 0
+    conn = await storage.get_connection()
+    async with conn.execute(f"SELECT COUNT(*) FROM {table_name}") as cur:
+        row = await cur.fetchone()
+        return row[0] if row else 0
