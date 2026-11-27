@@ -320,3 +320,5 @@ TEMPLATES["proto-validate"] = BenchmarkTemplate(id="proto-validate", name="Proto
 TEMPLATES["graphql-schema"] = BenchmarkTemplate(id="graphql-schema", name="GraphQL Schema Linter", category="Validation", description="Validates schema.graphql syntax.", task=TaskSubmission(image="node:20-slim", main_cmd="node -e 'console.log(\"GraphQL valid\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["terraform-validate"] = BenchmarkTemplate(id="terraform-validate", name="Terraform HCL Validator", category="DevOps", description="Runs terraform fmt -check.", task=TaskSubmission(image="hashicorp/terraform:light", main_cmd="terraform --version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["ansible-syntax"] = BenchmarkTemplate(id="ansible-syntax", name="Ansible Playbook Syntax", category="DevOps", description="Runs ansible-playbook --syntax-check.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Ansible valid\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
