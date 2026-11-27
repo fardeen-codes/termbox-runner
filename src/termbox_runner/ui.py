@@ -520,6 +520,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         <a id="btn-download-junit" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">JUnit XML</a>
         <a id="btn-download-sarif" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">🛡️ SARIF</a>
         <a id="btn-download-allure" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">📊 Allure</a>
+        <a id="btn-download-circleci" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">⭕ CircleCI</a>
         <a id="btn-download-github" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">🐙 GitHub Summary</a>
         <button class="btn" onclick="closeModal('run-detail-modal')">Close</button>
       </div>
