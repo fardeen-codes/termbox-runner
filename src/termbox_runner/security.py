@@ -93,3 +93,7 @@ def is_safe_container_sysctl(key: str) -> bool:
     """Verify that kernel sysctl is safe for container execution."""
     unsafe_prefixes = ["kernel.", "fs.protected_", "vm.drop_caches"]
     return not any(key.startswith(p) for p in unsafe_prefixes)
+
+def get_restricted_devices_list() -> list[str]:
+    """Return list of dangerous host device paths blocked by default."""
+    return ["/dev/kmem", "/dev/mem", "/dev/port", "/dev/nvme0", "/dev/sda"]
