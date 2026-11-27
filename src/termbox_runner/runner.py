@@ -957,3 +957,8 @@ def compute_oom_score_adj(priority: int) -> int:
 def clamp_cpu_shares(shares: int) -> int:
     """Clamp cpu_shares between 2 and 262144."""
     return max(2, min(262144, shares))
+
+def parse_rate_limit_bytes(rate_str: str) -> int:
+    """Convert rate limit like '10mb' or '1gb' to bytes per second."""
+    from termbox_runner.models import parse_memory_to_bytes
+    return parse_memory_to_bytes(rate_str)
