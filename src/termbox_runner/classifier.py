@@ -645,3 +645,7 @@ def detect_rust_mutable_borrow_error(output: str) -> bool:
 def detect_go_type_mismatch(output: str) -> bool:
     """Check if go build reported cannot use type error."""
     return "cannot use " in output.lower() and " as type " in output.lower()
+
+def detect_clang_header_not_found(output: str) -> bool:
+    """Check if clang reported missing include file."""
+    return "fatal error:" in output.lower() and "file not found" in output.lower()
