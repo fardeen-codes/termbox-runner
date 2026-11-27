@@ -91,3 +91,13 @@ def test_security_part4_network_and_sysctls():
     assert validate_volume_mount_mode("ro") is True
     assert is_safe_container_sysctl("net.ipv4.ip_forward") is True
     assert is_safe_container_sysctl("kernel.core_pattern") is False
+
+def test_security_part5_device_and_oom():
+    from termbox_runner.runner import compute_oom_score_adj, clamp_cpu_shares, parse_rate_limit_bytes
+    from termbox_runner.security import get_restricted_devices_list, is_safe_device_rule
+    assert compute_oom_score_adj(5) == 250
+    assert clamp_cpu_shares(1) == 2
+    assert parse_rate_limit_bytes("10m") == 10 * 1024 * 1024
+    assert "/dev/mem" in get_restricted_devices_list()
+    assert is_safe_device_rule("c 1:3 r") is True
+    assert is_safe_device_rule("b *:* rwm") is False
