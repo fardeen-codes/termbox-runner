@@ -113,3 +113,8 @@ def estimate_overlay2_diff_size(layer_bytes: list[int]) -> int:
 def normalize_capability_names(caps: list[str]) -> list[str]:
     """Ensure CAP_ prefix is consistently formatted."""
     return [c.upper() if c.upper().startswith("CAP_") else f"CAP_{c.upper()}" for c in caps]
+
+def parse_tmpfs_size_mb(size_str: str) -> int:
+    """Convert tmpfs size string like '128m' to MB integer."""
+    from termbox_runner.models import parse_memory_to_bytes
+    return int(parse_memory_to_bytes(size_str) / (1024 * 1024))
