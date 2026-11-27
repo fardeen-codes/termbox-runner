@@ -680,3 +680,7 @@ def detect_unbound_local_error(output: str) -> bool:
 def detect_attribute_error(output: str) -> bool:
     """Check if Python raised AttributeError."""
     return "attributeerror: " in output.lower() and "object has no attribute" in output.lower()
+
+def detect_stop_iteration_error(output: str) -> bool:
+    """Check if Python generator raised unhandled StopIteration."""
+    return "stopiteration" in output.lower()
