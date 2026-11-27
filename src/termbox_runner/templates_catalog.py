@@ -366,3 +366,5 @@ TEMPLATES["doctest-cpp"] = BenchmarkTemplate(id="doctest-cpp", name="Doctest C++
 TEMPLATES["boost-test"] = BenchmarkTemplate(id="boost-test", name="Boost.Test Execution", category="Cpp", description="Executes Boost.Test suite.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Boost OK", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
 
 TEMPLATES["pytest-bench"] = BenchmarkTemplate(id="pytest-bench", name="Pytest Benchmark Plugin", category="Performance", description="Runs pytest-benchmark timing evaluations.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Benchmarked OK\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["criterion-rust"] = BenchmarkTemplate(id="criterion-rust", name="Criterion.rs Benchmarks", category="Performance", description="Executes cargo bench with Criterion.", task=TaskSubmission(image="rust:1.77-slim", main_cmd="cargo --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
