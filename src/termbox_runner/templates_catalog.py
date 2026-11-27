@@ -342,3 +342,5 @@ TEMPLATES["pyarrow-table"] = BenchmarkTemplate(id="pyarrow-table", name="PyArrow
 TEMPLATES["fastparquet-io"] = BenchmarkTemplate(id="fastparquet-io", name="Parquet File Compression I/O", category="Data Science", description="Tests Snappy compressed Parquet IO.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Parquet verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["clickhouse-local"] = BenchmarkTemplate(id="clickhouse-local", name="ClickHouse Local Query", category="Database", description="Tests clickhouse-local standalone SQL queries.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo ClickHouse OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["pytest-param"] = BenchmarkTemplate(id="pytest-param", name="Pytest Parameterized Suite", category="Testing", description="Runs pytest with @pytest.mark.parametrize.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Parameterized OK\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
