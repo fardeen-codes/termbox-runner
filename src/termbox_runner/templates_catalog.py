@@ -364,3 +364,5 @@ TEMPLATES["catch2-cpp"] = BenchmarkTemplate(id="catch2-cpp", name="Catch2 C++ Fr
 TEMPLATES["doctest-cpp"] = BenchmarkTemplate(id="doctest-cpp", name="Doctest C++ Framework", category="Cpp", description="Runs fast Doctest assertions.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Doctest OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["boost-test"] = BenchmarkTemplate(id="boost-test", name="Boost.Test Execution", category="Cpp", description="Executes Boost.Test suite.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Boost OK", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["pytest-bench"] = BenchmarkTemplate(id="pytest-bench", name="Pytest Benchmark Plugin", category="Performance", description="Runs pytest-benchmark timing evaluations.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Benchmarked OK\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
