@@ -949,3 +949,7 @@ def parse_cpuset_to_list(cpuset_str: str) -> list[int]:
 def validate_volume_mount_mode(mode: str) -> bool:
     """Validate container volume mount flags (ro, rw, z, Z)."""
     return mode in ("ro", "rw", "z", "Z", "rprivate", "rshared")
+
+def compute_oom_score_adj(priority: int) -> int:
+    """Convert priority to oom_score_adj (-1000 to 1000)."""
+    return max(-1000, min(1000, priority * 50))
