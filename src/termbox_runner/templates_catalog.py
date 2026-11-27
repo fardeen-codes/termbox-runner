@@ -268,3 +268,5 @@ TEMPLATES["echo-framework"] = BenchmarkTemplate(id="echo-framework", name="Echo 
 TEMPLATES["rails-controller"] = BenchmarkTemplate(id="rails-controller", name="Rails Controller Test", category="Ruby", description="Tests ActionController endpoints.", task=TaskSubmission(image="ruby:3.3-slim", main_cmd="ruby --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["phoenix-channel"] = BenchmarkTemplate(id="phoenix-channel", name="Phoenix Channel Suite", category="Elixir", description="Tests Phoenix websocket channels.", task=TaskSubmission(image="elixir:1.16-slim", main_cmd="elixir --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["sveltekit-ssr"] = BenchmarkTemplate(id="sveltekit-ssr", name="SvelteKit SSR Harness", category="Web", description="Tests SvelteKit server-side rendering.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
