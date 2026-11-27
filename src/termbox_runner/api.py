@@ -1032,3 +1032,8 @@ async def get_run_signature(run_id: str, secret: str = "termbox_default", storag
     from termbox_runner.export import sign_webhook_payload
     sig = sign_webhook_payload(manifest.run_id.encode("utf-8"), secret)
     return {"run_id": run_id, "signature": sig}
+
+@app.get("/runs/top-memory-usage")
+async def get_top_memory_runs(limit: int = 5, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import query_top_memory_runs
+    return {"top_runs": await query_top_memory_runs(storage, limit)}
