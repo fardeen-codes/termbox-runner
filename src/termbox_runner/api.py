@@ -1055,3 +1055,11 @@ async def get_duration_standard_deviation(storage: RunStorage = Depends(get_stor
     durations = [r.duration_ms for r in runs if r.duration_ms is not None]
     from termbox_runner.telemetry import calculate_duration_stddev, calculate_duration_mad
     return {"stddev_ms": calculate_duration_stddev(durations), "mad_ms": calculate_duration_mad(durations), "sample_size": len(durations)}
+
+@app.get("/runs/{run_id}/export/jenkins", response_class=PlainTextResponse)
+async def export_jenkins_report(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import generate_jenkins_test_xml
+    return PlainTextResponse(generate_jenkins_test_xml(manifest), media_type="application/xml")
