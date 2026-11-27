@@ -352,3 +352,5 @@ TEMPLATES["hypothesis-fuzz"] = BenchmarkTemplate(id="hypothesis-fuzz", name="Hyp
 TEMPLATES["jest-mock"] = BenchmarkTemplate(id="jest-mock", name="Jest Mocking Test Suite", category="Testing", description="Tests jest.fn() and spyOn functions.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
 
 TEMPLATES["mocha-async"] = BenchmarkTemplate(id="mocha-async", name="Mocha Async Suite", category="Testing", description="Evaluates async/await Mocha test suite.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
+
+TEMPLATES["ava-concurrent"] = BenchmarkTemplate(id="ava-concurrent", name="Ava Concurrent Harness", category="Testing", description="Runs concurrent Ava test specifications.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
