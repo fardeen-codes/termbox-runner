@@ -105,3 +105,7 @@ def is_safe_device_rule(rule: str) -> bool:
 def detect_docker_storage_driver(info_driver: str = "overlay2") -> str:
     """Normalize and identify Docker container storage driver."""
     return info_driver.lower().strip()
+
+def estimate_overlay2_diff_size(layer_bytes: list[int]) -> int:
+    """Sum layer byte sizes for container filesystem diff."""
+    return sum(layer_bytes)
