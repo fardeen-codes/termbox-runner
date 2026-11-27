@@ -919,3 +919,8 @@ async def query_timeout_runs(storage, limit: int = 50) -> list[str]:
     async with conn.execute("SELECT run_id FROM runs WHERE failure_mode = 'TIMEOUT' OR exit_code = 124 ORDER BY created_at DESC LIMIT ?", (limit,)) as cur:
         rows = await cur.fetchall()
         return [r[0] for r in rows]
+
+async def query_runs_by_git_commit(storage, commit_hash: str) -> list[str]:
+    """Return run IDs matching a specific git commit SHA."""
+    all_runs = await storage.list_runs(limit=100)
+    return [r.run_id for r in all_runs if getattr(r.task, "git_commit", None) == commit_hash]
