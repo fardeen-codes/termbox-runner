@@ -367,3 +367,7 @@ def generate_jenkins_test_xml(manifest: RunManifest) -> str:
 def format_travis_log_section(section_name: str, content: str) -> str:
     """Format log with Travis CI fold markers (travis_fold:start/end)."""
     return f"travis_fold:start:{section_name}\ntravis_time:start:{section_name}\n{content}\ntravis_time:end:{section_name}\ntravis_fold:end:{section_name}"
+
+def format_github_action_error(title: str, message: str, file: str = "main.py", line: int = 1) -> str:
+    """Generate GitHub Actions workflow command error annotation string."""
+    return f"::error file={file},line={line},title={title}::{message}"
