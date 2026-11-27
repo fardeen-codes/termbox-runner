@@ -629,3 +629,7 @@ def extract_csharp_error_code(output: str) -> Optional[str]:
     import re
     match = re.search(r'error (CS[0-9]+):', output)
     return match.group(1) if match else None
+
+def detect_javac_cannot_find_symbol(output: str) -> bool:
+    """Check if javac reported cannot find symbol error."""
+    return "cannot find symbol" in output.lower() and "symbol:" in output.lower()
