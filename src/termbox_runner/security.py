@@ -144,3 +144,7 @@ def parse_device_numbers(device_str: str) -> tuple[int, int]:
     """Parse device major:minor string (e.g. '1:3')."""
     parts = device_str.split(":")
     return int(parts[0]), int(parts[1])
+
+def count_dropped_capabilities(cap_drop: list[str]) -> int:
+    """Return count of explicitly dropped capabilities."""
+    return len(cap_drop)
