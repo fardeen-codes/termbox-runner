@@ -921,3 +921,7 @@ def get_high_tier_preset() -> dict:
 def get_eval_tier_preset() -> dict:
     """Preset for long-running agent evaluation harnesses."""
     return {"mem_limit": "4g", "cpu_quota": 4.0, "timeout_seconds": 300.0, "pids_limit": 1024}
+
+def build_tmpfs_mount_spec(target: str = "/tmp", size_mb: int = 64) -> dict:
+    """Generate Docker tmpfs mount specification."""
+    return {target: f"rw,noexec,nosuid,size={size_mb}m"}
