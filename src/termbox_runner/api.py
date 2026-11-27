@@ -1078,3 +1078,8 @@ async def get_timeout_runs(limit: int = 50, storage: RunStorage = Depends(get_st
 async def get_runs_for_commit(commit_hash: str, storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.storage import query_runs_by_git_commit
     return {"run_ids": await query_runs_by_git_commit(storage, commit_hash)}
+
+@app.get("/runs/filter/git-branch/{branch_name}")
+async def get_runs_for_branch(branch_name: str, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import query_runs_by_git_branch
+    return {"run_ids": await query_runs_by_git_branch(storage, branch_name)}
