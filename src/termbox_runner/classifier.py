@@ -548,3 +548,7 @@ def detect_fortran_error(combined_output: str) -> Optional[Tuple[FailureMode, st
 def is_sigtrap_signal(exit_code: Optional[int]) -> bool:
     """Check if exit code corresponds to SIGTRAP (128 + 5 = 133)."""
     return exit_code in (133, 5)
+
+def is_sigabrt_signal(exit_code: Optional[int]) -> bool:
+    """Check if exit code corresponds to SIGABRT (128 + 6 = 134)."""
+    return exit_code in (134, 6)
