@@ -878,3 +878,10 @@ async def count_table_rows(storage, table_name: str = "runs") -> int:
     async with conn.execute(f"SELECT COUNT(*) FROM {table_name}") as cur:
         row = await cur.fetchone()
         return row[0] if row else 0
+
+async def run_sqlite_integrity_check(storage) -> str:
+    """Execute PRAGMA integrity_check on active SQLite database."""
+    conn = await storage.get_connection()
+    async with conn.execute("PRAGMA integrity_check") as cur:
+        row = await cur.fetchone()
+        return row[0] if row else "unknown"
