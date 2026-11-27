@@ -294,3 +294,5 @@ def list_template_categories() -> list[str]:
     return sorted(list(set(t.category for t in TEMPLATES.values())))
 
 TEMPLATES["lisp-sbcl"] = BenchmarkTemplate(id="lisp-sbcl", name="Common Lisp SBCL Test", category="Functional", description="Executes SBCL lisp script.", task=TaskSubmission(image="daewok/sbcl:latest", main_cmd="sbcl --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
+
+TEMPLATES["erlang-rebar3"] = BenchmarkTemplate(id="erlang-rebar3", name="Erlang Rebar3 Suite", category="Erlang", description="Runs rebar3 eunit.", task=TaskSubmission(image="erlang:26-alpine", main_cmd="rebar3 --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
