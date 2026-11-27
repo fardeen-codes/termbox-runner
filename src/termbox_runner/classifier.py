@@ -376,3 +376,12 @@ def detect_julia_error(combined_output: str) -> Optional[Tuple[FailureMode, str]
     if "undefvarerror:" in lowered:
         return FailureMode.RUNTIME_ERROR, "Julia UndefVarError encountered."
     return None
+
+def detect_scala_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Scala pattern matching errors."""
+    lowered = combined_output.lower()
+    if "scala.matcherror" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Scala MatchError pattern mismatch."
+    if "java.lang.classcastexception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Scala/JVM ClassCastException."
+    return None
