@@ -672,3 +672,7 @@ def extract_pytest_assertion_line(output: str) -> Optional[str]:
         if line.strip().startswith(">") and "assert " in line:
             return line.strip()
     return None
+
+def detect_unbound_local_error(output: str) -> bool:
+    """Check if Python raised UnboundLocalError."""
+    return "unboundlocalerror: local variable" in output.lower()
