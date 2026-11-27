@@ -372,3 +372,7 @@ TEMPLATES["criterion-rust"] = BenchmarkTemplate(id="criterion-rust", name="Crite
 TEMPLATES["jmh-java"] = BenchmarkTemplate(id="jmh-java", name="JMH Java Microbenchmark", category="Performance", description="Runs JMH benchmark iterations.", task=TaskSubmission(image="gradle:jdk17", main_cmd="gradle --version", limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0)))
 
 TEMPLATES["go-benchmem"] = BenchmarkTemplate(id="go-benchmem", name="Go Benchmark MemAllocs", category="Performance", description="Runs go test -bench=. -benchmem.", task=TaskSubmission(image="golang:1.22-alpine", main_cmd="go version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+def count_total_templates() -> int:
+    """Return total number of registered benchmark templates."""
+    return len(TEMPLATES)
