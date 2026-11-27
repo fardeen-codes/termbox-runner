@@ -93,3 +93,11 @@ def test_web_and_db_templates_batch1():
     assert "security-jwt" in TEMPLATES
     assert "alembic-mig" in TEMPLATES
     assert len(list_template_categories()) >= 6
+
+def test_systems_and_devops_templates_batch2():
+    from termbox_runner.templates_catalog import TEMPLATES
+    assert "lisp-sbcl" in TEMPLATES
+    assert "fsharp-test" in TEMPLATES
+    assert "nim-nimble" in TEMPLATES
+    assert "openapi-validate" in TEMPLATES
+    assert "terraform-validate" in TEMPLATES
