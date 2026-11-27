@@ -208,3 +208,8 @@ def test_storage_part2_features():
     comp = compress_log_output(raw)
     assert len(comp) > 0
     assert decompress_log_output(comp) == raw
+
+def test_storage_batch1_queries():
+    from termbox_runner.storage import count_table_rows
+    # synchronous check of table names
+    assert count_table_rows(None, "invalid_table") == 0
