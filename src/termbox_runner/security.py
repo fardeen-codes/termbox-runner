@@ -139,3 +139,8 @@ def is_apparmor_enforced(profile_output: str) -> bool:
 def generate_userns_remap_spec(host_uid: int, container_uid: int, count: int = 1) -> str:
     """Construct uid_map specification for unprivileged container user."""
     return f"{container_uid} {host_uid} {count}"
+
+def parse_device_numbers(device_str: str) -> tuple[int, int]:
+    """Parse device major:minor string (e.g. '1:3')."""
+    parts = device_str.split(":")
+    return int(parts[0]), int(parts[1])
