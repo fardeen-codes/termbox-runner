@@ -450,3 +450,7 @@ def cmd_branch_runs(server_url: str, branch_name: str):
 def cmd_failure_modes(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/stats/failure-modes").json())
+
+def cmd_p999_stats(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/stats/p999").json())
