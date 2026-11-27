@@ -623,3 +623,9 @@ def extract_typescript_error_code(output: str) -> Optional[str]:
     import re
     match = re.search(r'error (TS[0-9]+):', output)
     return match.group(1) if match else None
+
+def extract_csharp_error_code(output: str) -> Optional[str]:
+    """Extract C# Roslyn error codes (e.g. CS0103, CS0246)."""
+    import re
+    match = re.search(r'error (CS[0-9]+):', output)
+    return match.group(1) if match else None
