@@ -101,3 +101,20 @@ def test_security_part5_device_and_oom():
     assert "/dev/mem" in get_restricted_devices_list()
     assert is_safe_device_rule("c 1:3 r") is True
     assert is_safe_device_rule("b *:* rwm") is False
+
+def test_security_part6_utilities():
+    from termbox_runner.security import (
+        detect_docker_storage_driver,
+        estimate_overlay2_diff_size,
+        normalize_capability_names,
+        parse_tmpfs_size_mb,
+        is_valid_tmpfs_path,
+        parse_device_numbers,
+    )
+    assert detect_docker_storage_driver("OVERLAY2") == "overlay2"
+    assert estimate_overlay2_diff_size([100, 200]) == 300
+    assert normalize_capability_names(["chown"]) == ["CAP_CHOWN"]
+    assert parse_tmpfs_size_mb("64m") == 64
+    assert is_valid_tmpfs_path("/tmp") is True
+    assert is_valid_tmpfs_path("/etc") is False
+    assert parse_device_numbers("1:3") == (1, 3)
