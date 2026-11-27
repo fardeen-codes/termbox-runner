@@ -358,3 +358,8 @@ def sign_webhook_payload(payload_bytes: bytes, secret: str) -> str:
     import hmac
     import hashlib
     return hmac.new(secret.encode("utf-8"), payload_bytes, hashlib.sha256).hexdigest()
+
+def generate_jenkins_test_xml(manifest: RunManifest) -> str:
+    """Generate Jenkins JUnit plugin compliant XML report."""
+    failed = manifest.failure_mode and manifest.failure_mode != FailureMode.PASSED
+    return f'<?xml version="1.0" encoding="UTF-8"?><testsuite name="jenkins.runner" tests="1" failures="{1 if failed else 0}"><testcase classname="termbox.task" name="{manifest.run_id}" time="{manifest.duration_ms / 1000.0:.3f}"/></testsuite>'
