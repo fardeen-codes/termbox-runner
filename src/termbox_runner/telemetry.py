@@ -227,3 +227,12 @@ def format_prometheus_timeout_counter(total_timeouts: int) -> str:
 def generate_w3c_tracestate(vendor: str, state: str) -> str:
     """Generate W3C tracestate header string."""
     return f"{vendor}={state}"
+
+def parse_w3c_tracestate(header: str) -> dict[str, str]:
+    """Parse W3C tracestate header into vendor dictionary."""
+    res = {}
+    for item in header.split(","):
+        if "=" in item:
+            k, v = item.strip().split("=", 1)
+            res[k] = v
+    return res
