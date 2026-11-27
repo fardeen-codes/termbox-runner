@@ -352,3 +352,9 @@ def sanitize_cdata_text(text: str) -> str:
 def format_teamcity_inspection(type_id: str, message: str, file_path: str = "main.py") -> str:
     """Generate TeamCity inspection message."""
     return f"##teamcity[inspectionType id='{type_id}' name='{type_id}' category='Security' description='Termbox finding']\n##teamcity[inspection typeId='{type_id}' message='{message}' file='{file_path}']"
+
+def sign_webhook_payload(payload_bytes: bytes, secret: str) -> str:
+    """Generate HMAC-SHA256 signature string for webhook security."""
+    import hmac
+    import hashlib
+    return hmac.new(secret.encode("utf-8"), payload_bytes, hashlib.sha256).hexdigest()
