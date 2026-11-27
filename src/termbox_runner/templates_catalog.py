@@ -376,3 +376,7 @@ TEMPLATES["go-benchmem"] = BenchmarkTemplate(id="go-benchmem", name="Go Benchmar
 def count_total_templates() -> int:
     """Return total number of registered benchmark templates."""
     return len(TEMPLATES)
+
+def get_templates_by_category(category: str) -> list[BenchmarkTemplate]:
+    """Return benchmark templates in specified category."""
+    return [t for t in TEMPLATES.values() if t.category.lower() == category.lower()]
