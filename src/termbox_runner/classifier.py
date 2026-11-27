@@ -503,3 +503,12 @@ def detect_d_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
     if "core.exception.asserterror" in lowered:
         return FailureMode.ASSERTION_FAILED, "D core.exception.AssertError."
     return None
+
+def detect_nim_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Nim defects and runtime errors."""
+    lowered = combined_output.lower()
+    if "indexdefect: index out of bounds" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Nim IndexDefect out of bounds."
+    if "nilaccessdefect" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Nim NilAccessDefect."
+    return None
