@@ -356,3 +356,5 @@ TEMPLATES["mocha-async"] = BenchmarkTemplate(id="mocha-async", name="Mocha Async
 TEMPLATES["ava-concurrent"] = BenchmarkTemplate(id="ava-concurrent", name="Ava Concurrent Harness", category="Testing", description="Runs concurrent Ava test specifications.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
 
 TEMPLATES["criterion-c"] = BenchmarkTemplate(id="criterion-c", name="Criterion C Framework", category="C", description="Runs Criterion C unit assertions.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Criterion OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["googletest-cpp"] = BenchmarkTemplate(id="googletest-cpp", name="GoogleTest C++ Suite", category="Cpp", description="Executes GoogleTest test fixtures.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo GTest OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
