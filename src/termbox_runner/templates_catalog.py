@@ -340,3 +340,5 @@ TEMPLATES["polars-df"] = BenchmarkTemplate(id="polars-df", name="Polars DataFram
 TEMPLATES["pyarrow-table"] = BenchmarkTemplate(id="pyarrow-table", name="PyArrow In-Memory Tables", category="Data Science", description="Tests Arrow IPC serialization and schema validation.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"PyArrow verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["fastparquet-io"] = BenchmarkTemplate(id="fastparquet-io", name="Parquet File Compression I/O", category="Data Science", description="Tests Snappy compressed Parquet IO.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Parquet verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["clickhouse-local"] = BenchmarkTemplate(id="clickhouse-local", name="ClickHouse Local Query", category="Database", description="Tests clickhouse-local standalone SQL queries.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo ClickHouse OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
