@@ -993,3 +993,11 @@ async def get_exit_codes_distribution(storage: RunStorage = Depends(get_storage_
 async def get_image_durations(storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.storage import get_average_duration_by_image
     return await get_average_duration_by_image(storage)
+
+@app.post("/runs/{run_id}/annotations")
+async def add_run_annotation_endpoint(run_id: str, key: str, value: str, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import update_run_annotation
+    success = await update_run_annotation(storage, run_id, key, value)
+    if not success:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return {"run_id": run_id, "key": key, "value": value}
