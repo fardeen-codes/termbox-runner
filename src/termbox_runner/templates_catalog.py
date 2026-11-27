@@ -272,3 +272,5 @@ TEMPLATES["phoenix-channel"] = BenchmarkTemplate(id="phoenix-channel", name="Pho
 TEMPLATES["sveltekit-ssr"] = BenchmarkTemplate(id="sveltekit-ssr", name="SvelteKit SSR Harness", category="Web", description="Tests SvelteKit server-side rendering.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["nextjs-build"] = BenchmarkTemplate(id="nextjs-build", name="Next.js Build Test", category="Web", description="Tests Next.js static page generation.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["security-cors"] = BenchmarkTemplate(id="security-cors", name="CORS Configuration Audit", category="Security", description="Audits Access-Control-Allow-Origin headers.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"CORS valid\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
