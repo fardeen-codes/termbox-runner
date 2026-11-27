@@ -403,3 +403,12 @@ def detect_swift_error(combined_output: str) -> Optional[Tuple[FailureMode, str]
     if "fatal error: unexpectedly found nil" in lowered:
         return FailureMode.RUNTIME_ERROR, "Swift unwrapping optional nil value."
     return None
+
+def detect_dart_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Dart runtime exceptions."""
+    lowered = combined_output.lower()
+    if "nosuchmethoderror:" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Dart NoSuchMethodError."
+    if "rangeerror (index):" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Dart RangeError index out of range."
+    return None
