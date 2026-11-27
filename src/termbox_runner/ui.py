@@ -525,6 +525,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         <a id="btn-view-badge" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">🏷️ Badge</a>
         <a id="btn-download-tap14" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">📜 TAP 14</a>
         <a id="btn-view-signature" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">🔐 Signature</a>
+        <a id="btn-download-jenkins" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">☕ Jenkins</a>
         <a id="btn-download-github" class="btn btn-sm" target="_blank" style="text-decoration:none; margin-left:8px;">🐙 GitHub Summary</a>
         <button class="btn" onclick="closeModal('run-detail-modal')">Close</button>
       </div>
