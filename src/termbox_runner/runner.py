@@ -945,3 +945,7 @@ def parse_cpuset_to_list(cpuset_str: str) -> list[int]:
         elif part.strip():
             cores.add(int(part.strip()))
     return sorted(list(cores))
+
+def validate_volume_mount_mode(mode: str) -> bool:
+    """Validate container volume mount flags (ro, rw, z, Z)."""
+    return mode in ("ro", "rw", "z", "Z", "rprivate", "rshared")
