@@ -684,3 +684,7 @@ def detect_attribute_error(output: str) -> bool:
 def detect_stop_iteration_error(output: str) -> bool:
     """Check if Python generator raised unhandled StopIteration."""
     return "stopiteration" in output.lower()
+
+def detect_permission_error(output: str) -> bool:
+    """Check if Python raised PermissionError."""
+    return "permissionerror: [errno 13] permission denied" in output.lower()
