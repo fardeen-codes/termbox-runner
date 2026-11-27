@@ -586,3 +586,10 @@ def detect_cobol_error(combined_output: str) -> Optional[Tuple[FailureMode, str]
     if "subscript out of range" in lowered:
         return FailureMode.RUNTIME_ERROR, "COBOL subscript out of range."
     return None
+
+def detect_gas_assembler_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract GNU Assembler syntax and operand errors."""
+    lowered = combined_output.lower()
+    if "assembler messages:" in lowered and "error:" in lowered:
+        return FailureMode.RUNTIME_ERROR, "GNU Assembler compilation error."
+    return None
