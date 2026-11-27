@@ -118,3 +118,7 @@ def parse_tmpfs_size_mb(size_str: str) -> int:
     """Convert tmpfs size string like '128m' to MB integer."""
     from termbox_runner.models import parse_memory_to_bytes
     return int(parse_memory_to_bytes(size_str) / (1024 * 1024))
+
+def filter_allowed_sysctls(sysctls: dict[str, str]) -> dict[str, str]:
+    """Filter out any kernel sysctls that are dangerous."""
+    return {k: v for k, v in sysctls.items() if is_safe_container_sysctl(k)}
