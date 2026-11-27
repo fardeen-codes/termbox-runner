@@ -600,3 +600,7 @@ def detect_llvm_crash(combined_output: str) -> Optional[Tuple[FailureMode, str]]
     if "llvm error:" in lowered or "please submit a full bug report" in lowered:
         return FailureMode.RUNTIME_ERROR, "LLVM internal compiler fatal error."
     return None
+
+def has_gdb_stacktrace(combined_output: str) -> bool:
+    """Check if output contains GDB stacktrace frames (#0, #1)."""
+    return "#0 " in combined_output and ("in main" in combined_output or "0x" in combined_output)
