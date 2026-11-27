@@ -74,3 +74,9 @@ def test_cli_batch2_color_helpers():
     assert "\033[1;36m" in terminal_bold_cyan("HEADER")
     assert "\033[1;32m" in terminal_bold_green("PASS")
     assert "\033[4m" in terminal_underline("LINK")
+
+def test_cli_bright_colors():
+    from termbox_runner.cli import terminal_bright_red, terminal_bright_green, terminal_bright_blue
+    assert "\033[91m" in terminal_bright_red("ERR")
+    assert "\033[92m" in terminal_bright_green("OK")
+    assert "\033[94m" in terminal_bright_blue("INFO")
