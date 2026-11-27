@@ -148,3 +148,7 @@ def parse_device_numbers(device_str: str) -> tuple[int, int]:
 def count_dropped_capabilities(cap_drop: list[str]) -> int:
     """Return count of explicitly dropped capabilities."""
     return len(cap_drop)
+
+def format_security_summary(ro_rootfs: bool, no_new_privs: bool) -> str:
+    """Return concise security summary string."""
+    return f"ro_rootfs={ro_rootfs}, no_new_privs={no_new_privs}"
