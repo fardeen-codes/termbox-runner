@@ -260,3 +260,5 @@ TEMPLATES["nestjs-module"] = BenchmarkTemplate(id="nestjs-module", name="NestJS 
 TEMPLATES["spring-boot"] = BenchmarkTemplate(id="spring-boot", name="Spring Boot Test Harness", category="Java", description="Tests Spring MVC controller routes.", task=TaskSubmission(image="gradle:jdk17", main_cmd="gradle --version", limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0)))
 
 TEMPLATES["actix-web"] = BenchmarkTemplate(id="actix-web", name="Actix Web Service", category="Rust", description="Tests Actix Web asynchronous endpoints.", task=TaskSubmission(image="rust:1.77-slim", main_cmd="cargo --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["gin-router"] = BenchmarkTemplate(id="gin-router", name="Gin Router Evaluation", category="Go", description="Tests Gin HTTP request routing.", task=TaskSubmission(image="golang:1.22-alpine", main_cmd="go version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
