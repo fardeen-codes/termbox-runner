@@ -304,3 +304,5 @@ TEMPLATES["groovy-spock"] = BenchmarkTemplate(id="groovy-spock", name="Groovy Sp
 TEMPLATES["ada-gnat"] = BenchmarkTemplate(id="ada-gnat", name="Ada GNAT Harness", category="Ada", description="Compiles and tests Ada program.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo GNAT OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["d-dub"] = BenchmarkTemplate(id="d-dub", name="D Language Dub Test", category="D", description="Executes dub test in D.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo DUB OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["nim-nimble"] = BenchmarkTemplate(id="nim-nimble", name="Nim Nimble Harness", category="Nim", description="Executes nimble test.", task=TaskSubmission(image="nimlang/nim:latest-alpine", main_cmd="nim --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
