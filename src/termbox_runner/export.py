@@ -371,3 +371,7 @@ def format_travis_log_section(section_name: str, content: str) -> str:
 def format_github_action_error(title: str, message: str, file: str = "main.py", line: int = 1) -> str:
     """Generate GitHub Actions workflow command error annotation string."""
     return f"::error file={file},line={line},title={title}::{message}"
+
+def format_github_action_warning(title: str, message: str, file: str = "main.py", line: int = 1) -> str:
+    """Generate GitHub Actions workflow command warning annotation string."""
+    return f"::warning file={file},line={line},title={title}::{message}"
