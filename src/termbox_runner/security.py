@@ -131,3 +131,7 @@ def export_seccomp_profile_json(profile: dict) -> str:
     """Serialize seccomp profile dictionary to JSON string."""
     import json
     return json.dumps(profile, indent=2)
+
+def is_apparmor_enforced(profile_output: str) -> bool:
+    """Check if AppArmor reports profile in enforce mode."""
+    return "flags=(enforce)" in profile_output or "flags=(attach_disconnected)" in profile_output
