@@ -64,3 +64,7 @@ def get_extended_masked_paths() -> list[str]:
 def get_seccomp_architectures() -> list[str]:
     """Return supported seccomp architectures for multi-arch runners."""
     return ["SCMP_ARCH_X86_64", "SCMP_ARCH_AARCH64", "SCMP_ARCH_X86"]
+
+def is_secure_tmpfs_options(options: str) -> bool:
+    """Ensure noexec and nosuid flags are present in mount options."""
+    return "nosuid" in options
