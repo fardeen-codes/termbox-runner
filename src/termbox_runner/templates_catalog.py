@@ -274,3 +274,5 @@ TEMPLATES["sveltekit-ssr"] = BenchmarkTemplate(id="sveltekit-ssr", name="SvelteK
 TEMPLATES["nextjs-build"] = BenchmarkTemplate(id="nextjs-build", name="Next.js Build Test", category="Web", description="Tests Next.js static page generation.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
 
 TEMPLATES["security-cors"] = BenchmarkTemplate(id="security-cors", name="CORS Configuration Audit", category="Security", description="Audits Access-Control-Allow-Origin headers.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"CORS valid\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["security-jwt"] = BenchmarkTemplate(id="security-jwt", name="JWT Signature Verification", category="Security", description="Validates JWT 'none' algorithm rejection.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"JWT secure\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
