@@ -485,3 +485,12 @@ def detect_groovy_error(combined_output: str) -> Optional[Tuple[FailureMode, str
     if "groovy.lang.missingpropertyexception" in lowered:
         return FailureMode.RUNTIME_ERROR, "Groovy MissingPropertyException."
     return None
+
+def detect_ada_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Ada GNAT runtime exceptions."""
+    lowered = combined_output.lower()
+    if "raised constraint_error" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Ada CONSTRAINT_ERROR out of range."
+    if "raised program_error" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Ada PROGRAM_ERROR exception."
+    return None
