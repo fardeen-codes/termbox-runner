@@ -552,3 +552,12 @@ def is_sigtrap_signal(exit_code: Optional[int]) -> bool:
 def is_sigabrt_signal(exit_code: Optional[int]) -> bool:
     """Check if exit code corresponds to SIGABRT (128 + 6 = 134)."""
     return exit_code in (134, 6)
+
+def detect_racket_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Racket contract and type violations."""
+    lowered = combined_output.lower()
+    if "contract violation" in lowered and "expected:" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Racket contract violation."
+    if "hash-ref: no value found for key" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Racket hash-ref key not found."
+    return None
