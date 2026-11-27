@@ -355,3 +355,7 @@ def cmd_export_allure(server_url: str, run_id: str):
 def cmd_export_circleci(server_url: str, run_id: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get(f"/runs/{run_id}/export/circleci").text)
+
+def cmd_export_azure(server_url: str, run_id: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/{run_id}/export/azure").json())
