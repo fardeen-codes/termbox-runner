@@ -254,3 +254,7 @@ def calculate_duration_mad(durations: list[float]) -> float:
     median = s[len(s) // 2]
     deviations = sorted([abs(x - median) for x in durations])
     return deviations[len(deviations) // 2]
+
+def check_duration_sla(duration_ms: float, sla_ms: float = 1000.0) -> bool:
+    """Check if task execution duration satisfied SLA latency threshold."""
+    return duration_ms <= sla_ms
