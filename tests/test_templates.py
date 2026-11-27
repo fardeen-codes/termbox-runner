@@ -101,3 +101,11 @@ def test_systems_and_devops_templates_batch2():
     assert "nim-nimble" in TEMPLATES
     assert "openapi-validate" in TEMPLATES
     assert "terraform-validate" in TEMPLATES
+
+def test_data_science_and_wasm_templates_batch3():
+    from termbox_runner.templates_catalog import TEMPLATES
+    assert "racket-test" in TEMPLATES
+    assert "wasm-wasmtime" in TEMPLATES
+    assert "duckdb-sql" in TEMPLATES
+    assert "polars-df" in TEMPLATES
+    assert "clickhouse-local" in TEMPLATES
