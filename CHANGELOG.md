@@ -62,3 +62,11 @@
 - Web framework & security benchmark presets (Express, NestJS, Actix-web, CORS, JWT, Alembic, Prisma).
 - Enterprise CI/CD exporters for CircleCI, Azure DevOps, Bitbucket Pipelines, and SVG Status Badges.
 - SQLite exit codes distribution, average duration analytics, and WAL checkpoint endpoints.
+
+## [0.8.0] - 2026-11-27
+### Added
+- Extended container configuration: custom DNS servers, DNS search domains, extra /etc/hosts entries.
+- Runtime classifiers for Erlang, Common Lisp, F#, Groovy, Ada, D, Nim, Crystal, V, Valgrind, and Fortran.
+- Evaluation benchmark presets for Common Lisp, Rebar3, Spock, GNAT, Dub, Nimble, OpenAPI, Terraform, and Ansible.
+- TAP 14 output generator and HMAC-SHA256 webhook signatures.
+- Memory page reclamation and network bandwidth telemetry metrics.
