@@ -924,3 +924,8 @@ async def query_runs_by_git_commit(storage, commit_hash: str) -> list[str]:
     """Return run IDs matching a specific git commit SHA."""
     all_runs = await storage.list_runs(limit=100)
     return [r.run_id for r in all_runs if getattr(r.task, "git_commit", None) == commit_hash]
+
+async def query_runs_by_git_branch(storage, branch_name: str) -> list[str]:
+    """Return run IDs matching a specific git branch."""
+    all_runs = await storage.list_runs(limit=100)
+    return [r.run_id for r in all_runs if getattr(r.task, "git_branch", None) == branch_name]
