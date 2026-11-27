@@ -445,3 +445,7 @@ def is_sigxcpu_signal(exit_code: Optional[int]) -> bool:
 def is_sigxfsz_signal(exit_code: Optional[int]) -> bool:
     """Check if exit code corresponds to SIGXFSZ (128 + 25 = 153)."""
     return exit_code in (153, 25)
+
+def is_sigsys_signal(exit_code: Optional[int]) -> bool:
+    """Check if exit code corresponds to SIGSYS (128 + 31 = 159)."""
+    return exit_code in (159, 31)
