@@ -497,6 +497,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
           </div>
         </div>
       </div>
+      <!-- Extended inspection actions -->
       <div class="modal-footer">
         <button class="btn" onclick="closeModal('new-run-modal')">Cancel</button>
         <button class="btn btn-primary" onclick="submitCustomRun()">🚀 Execute Sandbox Task</button>
