@@ -561,3 +561,12 @@ def detect_racket_error(combined_output: str) -> Optional[Tuple[FailureMode, str
     if "hash-ref: no value found for key" in lowered:
         return FailureMode.RUNTIME_ERROR, "Racket hash-ref key not found."
     return None
+
+def detect_guile_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Guile Scheme runtime argument errors."""
+    lowered = combined_output.lower()
+    if "wrong type argument in position" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Guile Scheme wrong type argument."
+    if "unbound variable:" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Guile Scheme unbound variable."
+    return None
