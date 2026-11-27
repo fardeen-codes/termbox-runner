@@ -348,3 +348,5 @@ TEMPLATES["pytest-param"] = BenchmarkTemplate(id="pytest-param", name="Pytest Pa
 TEMPLATES["unittest-mock"] = BenchmarkTemplate(id="unittest-mock", name="Unittest Mock Evaluation", category="Testing", description="Tests unittest.mock patch and MagicMock.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Mocking verified\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["hypothesis-fuzz"] = BenchmarkTemplate(id="hypothesis-fuzz", name="Hypothesis Property Testing", category="Testing", description="Fuzzes algorithmic invariants using Hypothesis.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Hypothesis OK\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["jest-mock"] = BenchmarkTemplate(id="jest-mock", name="Jest Mocking Test Suite", category="Testing", description="Tests jest.fn() and spyOn functions.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
