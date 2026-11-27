@@ -345,3 +345,14 @@ def detect_asan_violation(combined_output: str) -> Optional[Tuple[FailureMode, s
     if "leakspan: detected memory leaks" in lowered or "detected memory leaks" in lowered:
         return FailureMode.RUNTIME_ERROR, "AddressSanitizer: memory leak detected."
     return None
+
+def detect_perl_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Perl runtime die or compilation errors."""
+    lowered = combined_output.lower()
+    if "syntax error at " in lowered and ".pl line" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Perl syntax error encountered."
+    if "can't locate " in lowered and ".pm in @inc" in lowered:
+        return FailureMode.SETUP_ERROR, "Perl missing module dependency."
+    if "died at " in lowered:
+        return FailureMode.RUNTIME_ERROR, "Perl fatal die exception."
+    return None
