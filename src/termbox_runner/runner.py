@@ -925,3 +925,8 @@ def get_eval_tier_preset() -> dict:
 def build_tmpfs_mount_spec(target: str = "/tmp", size_mb: int = 64) -> dict:
     """Generate Docker tmpfs mount specification."""
     return {target: f"rw,noexec,nosuid,size={size_mb}m"}
+
+def validate_shm_size_string(shm_str: str) -> bool:
+    """Validate format of shm size string (e.g. 64m, 1g)."""
+    import re
+    return bool(re.match(r'^[0-9]+[kmgKMG]?$', shm_str.strip()))
