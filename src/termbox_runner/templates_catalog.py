@@ -334,3 +334,5 @@ TEMPLATES["wasm-node"] = BenchmarkTemplate(id="wasm-node", name="Node.js Wasm Ru
 TEMPLATES["sqlite-fts5"] = BenchmarkTemplate(id="sqlite-fts5", name="SQLite FTS5 Full Text Search", category="Database", description="Tests SQLite FTS5 query matching and ranking.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"FTS5 verified\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["duckdb-sql"] = BenchmarkTemplate(id="duckdb-sql", name="DuckDB OLAP Analytics", category="Database", description="Tests analytical SQL aggregations in DuckDB.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"DuckDB verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["polars-df"] = BenchmarkTemplate(id="polars-df", name="Polars DataFrame Benchmark", category="Data Science", description="Tests lazy Polars query evaluation.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Polars verified\")'", limits=ResourceLimits(mem_limit="512m", timeout_seconds=25.0)))
