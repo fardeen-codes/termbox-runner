@@ -617,3 +617,9 @@ def has_python_warning(combined_output: str) -> bool:
     """Check if output contains standard Python warnings."""
     lowered = combined_output.lower()
     return "deprecationwarning:" in lowered or "userwarning:" in lowered
+
+def extract_typescript_error_code(output: str) -> Optional[str]:
+    """Extract TS error codes (e.g. TS2304, TS2322)."""
+    import re
+    match = re.search(r'error (TS[0-9]+):', output)
+    return match.group(1) if match else None
