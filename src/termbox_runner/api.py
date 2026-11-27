@@ -1068,3 +1068,8 @@ async def export_jenkins_report(run_id: str, storage: RunStorage = Depends(get_s
 async def get_oom_runs(limit: int = 50, storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.storage import query_oom_killed_runs
     return {"oom_run_ids": await query_oom_killed_runs(storage, limit)}
+
+@app.get("/runs/filter/timeouts")
+async def get_timeout_runs(limit: int = 50, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import query_timeout_runs
+    return {"timeout_run_ids": await query_timeout_runs(storage, limit)}
