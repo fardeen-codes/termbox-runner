@@ -122,3 +122,7 @@ def parse_tmpfs_size_mb(size_str: str) -> int:
 def filter_allowed_sysctls(sysctls: dict[str, str]) -> dict[str, str]:
     """Filter out any kernel sysctls that are dangerous."""
     return {k: v for k, v in sysctls.items() if is_safe_container_sysctl(k)}
+
+def create_ro_bind_mount(host_path: str, container_path: str) -> dict:
+    """Construct read-only volume mount dictionary."""
+    return {host_path: {"bind": container_path, "mode": "ro"}}
