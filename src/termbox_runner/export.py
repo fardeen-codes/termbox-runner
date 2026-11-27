@@ -344,3 +344,7 @@ def generate_tap14_report(manifest: RunManifest) -> str:
         f"  ..."
     ]
     return "\n".join(lines)
+
+def sanitize_cdata_text(text: str) -> str:
+    """Escape CDATA termination sequence in XML output."""
+    return text.replace("]]>", "]]]]><![CDATA[>")
