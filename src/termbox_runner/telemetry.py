@@ -245,3 +245,12 @@ def calculate_duration_stddev(durations: list[float]) -> float:
     variance = sum((x - mean) ** 2 for x in durations) / (len(durations) - 1)
     import math
     return math.sqrt(variance)
+
+def calculate_duration_mad(durations: list[float]) -> float:
+    """Calculate median absolute deviation (MAD) for robust outlier detection."""
+    if not durations:
+        return 0.0
+    s = sorted(durations)
+    median = s[len(s) // 2]
+    deviations = sorted([abs(x - median) for x in durations])
+    return deviations[len(deviations) // 2]
