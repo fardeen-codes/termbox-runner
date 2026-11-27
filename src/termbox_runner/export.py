@@ -290,3 +290,8 @@ def generate_azure_devops_test_json(manifest: RunManifest) -> dict:
         "errorMessage": manifest.failure_reason if outcome == "Failed" else None,
         "runId": manifest.run_id
     }
+
+def generate_bitbucket_report_xml(manifest: RunManifest) -> str:
+    """Format results for Bitbucket Pipelines Test Reports."""
+    passed = not manifest.failure_mode or manifest.failure_mode == FailureMode.PASSED
+    return f'<?xml version="1.0" encoding="UTF-8"?><testcase name="{manifest.run_id}" status="{"SUCCESS" if passed else "FAILED"}" duration="{int(manifest.duration_ms)}"/>'
