@@ -434,3 +434,7 @@ def terminal_bright_red(text: str) -> str:
 def terminal_bright_green(text: str) -> str:
     """Format string with bright green ANSI escape."""
     return f"\033[92m{text}\033[0m"
+
+def terminal_bright_blue(text: str) -> str:
+    """Format string with bright blue ANSI escape."""
+    return f"\033[94m{text}\033[0m"
