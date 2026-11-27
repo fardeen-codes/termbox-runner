@@ -519,3 +519,10 @@ def detect_crystal_error(combined_output: str) -> Optional[Tuple[FailureMode, st
     if "indexoutofboundserror" in lowered:
         return FailureMode.RUNTIME_ERROR, "Crystal IndexOutOfBoundsError."
     return None
+
+def detect_v_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract V language panic output."""
+    lowered = combined_output.lower()
+    if "v panic:" in lowered:
+        return FailureMode.RUNTIME_ERROR, "V language runtime panic."
+    return None
