@@ -386,3 +386,7 @@ def terminal_magenta(text: str) -> str:
 def terminal_clear_screen() -> str:
     """Return ANSI escape code to clear terminal screen."""
     return "\033[2J\033[H"
+
+def cmd_export_tap14(server_url: str, run_id: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/{run_id}/export/tap14").text)
