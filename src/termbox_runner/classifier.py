@@ -570,3 +570,12 @@ def detect_guile_error(combined_output: str) -> Optional[Tuple[FailureMode, str]
     if "unbound variable:" in lowered:
         return FailureMode.RUNTIME_ERROR, "Guile Scheme unbound variable."
     return None
+
+def detect_pascal_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract FreePascal runtime errors (201 range check, 216 general protection)."""
+    lowered = combined_output.lower()
+    if "runtime error 201 at" in lowered or "range check error" in lowered:
+        return FailureMode.RUNTIME_ERROR, "FreePascal Range check error (Error 201)."
+    if "runtime error 216 at" in lowered:
+        return FailureMode.RUNTIME_ERROR, "FreePascal Access violation (Error 216)."
+    return None
