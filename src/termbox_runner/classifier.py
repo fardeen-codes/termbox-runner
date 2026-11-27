@@ -653,3 +653,7 @@ def detect_clang_header_not_found(output: str) -> bool:
 def detect_gcc_undefined_reference(output: str) -> bool:
     """Check if GNU ld reported undefined reference."""
     return "undefined reference to `" in output.lower() or "undefined reference to '" in output.lower()
+
+def detect_docker_build_failure(output: str) -> bool:
+    """Check if docker build returned a non-zero code."""
+    return "returned a non-zero code:" in output.lower()
