@@ -254,3 +254,5 @@ TEMPLATES["ocaml-dune"] = BenchmarkTemplate(id="ocaml-dune", name="OCaml Dune Te
 TEMPLATES["zig-test"] = BenchmarkTemplate(id="zig-test", name="Zig Build Test Harness", category="Zig", description="Executes zig build test.", task=TaskSubmission(image="ziglang/zig:master-alpine", main_cmd="zig version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["express-api"] = BenchmarkTemplate(id="express-api", name="Express.js REST API", category="Web", description="Tests Express route handlers.", task=TaskSubmission(image="node:20-slim", main_cmd="node -e 'console.log(\"Express verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
+
+TEMPLATES["nestjs-module"] = BenchmarkTemplate(id="nestjs-module", name="NestJS Service Harness", category="Web", description="Verifies NestJS dependency injection.", task=TaskSubmission(image="node:20-slim", main_cmd="node -e 'console.log(\"NestJS verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
