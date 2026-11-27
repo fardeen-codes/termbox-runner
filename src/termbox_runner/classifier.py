@@ -512,3 +512,10 @@ def detect_nim_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
     if "nilaccessdefect" in lowered:
         return FailureMode.RUNTIME_ERROR, "Nim NilAccessDefect."
     return None
+
+def detect_crystal_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Crystal runtime exceptions."""
+    lowered = combined_output.lower()
+    if "indexoutofboundserror" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Crystal IndexOutOfBoundsError."
+    return None
