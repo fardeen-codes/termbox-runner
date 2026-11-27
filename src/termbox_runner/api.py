@@ -1048,3 +1048,10 @@ async def prune_runs_before_endpoint(cutoff: str = "2020-01-01T00:00:00Z", stora
 async def get_tracestate_header(vendor: str = "termbox", state: str = "active"):
     from termbox_runner.telemetry import generate_w3c_tracestate
     return {"tracestate": generate_w3c_tracestate(vendor, state)}
+
+@app.get("/stats/duration-stddev")
+async def get_duration_standard_deviation(storage: RunStorage = Depends(get_storage_dependency)):
+    runs = await storage.list_runs(limit=100)
+    durations = [r.duration_ms for r in runs if r.duration_ms is not None]
+    from termbox_runner.telemetry import calculate_duration_stddev, calculate_duration_mad
+    return {"stddev_ms": calculate_duration_stddev(durations), "mad_ms": calculate_duration_mad(durations), "sample_size": len(durations)}
