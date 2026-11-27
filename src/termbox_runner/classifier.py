@@ -476,3 +476,12 @@ def detect_fsharp_error(combined_output: str) -> Optional[Tuple[FailureMode, str
     if "system.invalidoperationexception" in lowered:
         return FailureMode.RUNTIME_ERROR, "F# System.InvalidOperationException."
     return None
+
+def detect_groovy_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Groovy missing method runtime errors."""
+    lowered = combined_output.lower()
+    if "groovy.lang.missingmethodexception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Groovy MissingMethodException."
+    if "groovy.lang.missingpropertyexception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Groovy MissingPropertyException."
+    return None
