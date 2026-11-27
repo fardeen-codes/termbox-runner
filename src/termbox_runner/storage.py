@@ -854,3 +854,12 @@ async def update_run_annotation(storage, run_id: str, key: str, val: str) -> boo
     manifest.annotations[key] = val
     await storage.save_run(manifest)
     return True
+
+async def delete_run_annotation(storage, run_id: str, key: str) -> bool:
+    """Remove metadata annotation key from run manifest."""
+    manifest = await storage.get_run(run_id)
+    if not manifest or key not in manifest.annotations:
+        return False
+    del manifest.annotations[key]
+    await storage.save_run(manifest)
+    return True
