@@ -612,3 +612,8 @@ def detect_strace_permission_denied(combined_output: str) -> bool:
 def has_jvm_thread_dump(combined_output: str) -> bool:
     """Check if output contains JVM thread dump dump."""
     return "prio=" in combined_output and "tid=" in combined_output and "nid=" in combined_output
+
+def has_python_warning(combined_output: str) -> bool:
+    """Check if output contains standard Python warnings."""
+    lowered = combined_output.lower()
+    return "deprecationwarning:" in lowered or "userwarning:" in lowered
