@@ -390,3 +390,7 @@ def terminal_clear_screen() -> str:
 def cmd_export_tap14(server_url: str, run_id: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get(f"/runs/{run_id}/export/tap14").text)
+
+def cmd_run_signature(server_url: str, run_id: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/{run_id}/signature").json())
