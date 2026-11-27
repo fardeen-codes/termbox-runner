@@ -54,3 +54,11 @@
 - Functional & systems language benchmark templates (Haskell Cabal, OCaml Dune, Zig test).
 - Allure 2.x test report exporter and memory page faults telemetry metrics.
 - AddressSanitizer debugging guide in docs.
+
+## [0.7.0] - 2026-11-27
+### Added
+- Cgroups v2 controllers (memory.high, cpu.weight, io.weight) and tier presets (LOW, STANDARD, HIGH, EVAL).
+- Multi-language error classification for Perl, R, Julia, Scala, Kotlin, Swift, Dart, Lua, Elixir, and Clojure.
+- Web framework & security benchmark presets (Express, NestJS, Actix-web, CORS, JWT, Alembic, Prisma).
+- Enterprise CI/CD exporters for CircleCI, Azure DevOps, Bitbucket Pipelines, and SVG Status Badges.
+- SQLite exit codes distribution, average duration analytics, and WAL checkpoint endpoints.

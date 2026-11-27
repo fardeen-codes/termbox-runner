@@ -149,7 +149,7 @@ def test_export_batch1_ci_formats():
         encode_ndjson_event,
     )
     m = RunManifest(task=TaskSubmission(main_cmd="echo test"), status=RunStatus.COMPLETED, failure_mode=FailureMode.PASSED, duration_ms=15.0)
-    assert "<testsuite name="circleci.task"" in generate_circleci_test_xml(m)
+    assert '<testsuite name="circleci.task"' in generate_circleci_test_xml(m)
     assert generate_azure_devops_test_json(m)["outcome"] == "Passed"
     assert "SUCCESS" in generate_bitbucket_report_xml(m)
     assert "<testExecutions" in generate_sonarqube_generic_xml(m)
