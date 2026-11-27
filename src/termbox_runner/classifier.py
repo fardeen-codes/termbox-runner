@@ -430,3 +430,10 @@ def detect_elixir_error(combined_output: str) -> Optional[Tuple[FailureMode, str
     if "matcherror" in lowered and "no match of right hand side" in lowered:
         return FailureMode.RUNTIME_ERROR, "Elixir MatchError pattern mismatch."
     return None
+
+def detect_clojure_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Clojure argument count mismatch error."""
+    lowered = combined_output.lower()
+    if "clojure.lang.arityexception: wrong number of args" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Clojure ArityException wrong number of arguments."
+    return None
