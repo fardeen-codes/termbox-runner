@@ -295,3 +295,9 @@ def generate_bitbucket_report_xml(manifest: RunManifest) -> str:
     """Format results for Bitbucket Pipelines Test Reports."""
     passed = not manifest.failure_mode or manifest.failure_mode == FailureMode.PASSED
     return f'<?xml version="1.0" encoding="UTF-8"?><testcase name="{manifest.run_id}" status="{"SUCCESS" if passed else "FAILED"}" duration="{int(manifest.duration_ms)}"/>'
+
+def generate_sonarqube_generic_xml(manifest: RunManifest) -> str:
+    """Format results in SonarQube generic test execution XML schema."""
+    passed = not manifest.failure_mode or manifest.failure_mode == FailureMode.PASSED
+    inner = f'<testCase name="{manifest.run_id}" duration="{int(manifest.duration_ms)}"/>' if passed else f'<testCase name="{manifest.run_id}" duration="{int(manifest.duration_ms)}"><failure message="{manifest.failure_mode.value}"/></testCase>'
+    return f'<testExecutions version="1"><file path="sandbox://task">{inner}</file></testExecutions>'
