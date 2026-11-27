@@ -203,3 +203,15 @@ def calculate_network_throughput(rx_bytes: int, tx_bytes: int, duration_sec: flo
 def record_fork_count_metric(run_id: str, total_forks: int) -> dict:
     """Construct process fork count telemetry point."""
     return {"metric": "container_forks_total", "run_id": run_id, "forks": total_forks}
+
+def build_webhook_delivery_event(run_id: str, url: str, status_code: int, attempt: int) -> dict:
+    """Construct audit event for webhook notification attempt."""
+    from datetime import datetime, timezone
+    return {
+        "event": "webhook_delivery",
+        "run_id": run_id,
+        "url": url,
+        "status_code": status_code,
+        "attempt": attempt,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
