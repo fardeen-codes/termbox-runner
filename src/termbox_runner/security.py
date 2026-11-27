@@ -126,3 +126,8 @@ def filter_allowed_sysctls(sysctls: dict[str, str]) -> dict[str, str]:
 def create_ro_bind_mount(host_path: str, container_path: str) -> dict:
     """Construct read-only volume mount dictionary."""
     return {host_path: {"bind": container_path, "mode": "ro"}}
+
+def export_seccomp_profile_json(profile: dict) -> str:
+    """Serialize seccomp profile dictionary to JSON string."""
+    import json
+    return json.dumps(profile, indent=2)
