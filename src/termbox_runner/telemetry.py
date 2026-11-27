@@ -223,3 +223,7 @@ def format_prometheus_oom_counter(total_ooms: int) -> str:
 def format_prometheus_timeout_counter(total_timeouts: int) -> str:
     """Format total timeout count for Prometheus metrics."""
     return f"termbox_container_timeouts_total {total_timeouts}"
+
+def generate_w3c_tracestate(vendor: str, state: str) -> str:
+    """Generate W3C tracestate header string."""
+    return f"{vendor}={state}"
