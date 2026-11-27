@@ -831,3 +831,10 @@ async def count_runs_grouped_by_day(storage) -> dict[str, int]:
     async with conn.execute("SELECT SUBSTR(created_at, 1, 10) as day, COUNT(*) FROM runs GROUP BY day ORDER BY day DESC LIMIT 30") as cur:
         rows = await cur.fetchall()
         return {r[0]: r[1] for r in rows if r[0]}
+
+async def get_runs_count_by_exit_code(storage) -> dict[int, int]:
+    """Return distribution of exit codes across historical executions."""
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT exit_code, COUNT(*) FROM runs WHERE exit_code IS NOT NULL GROUP BY exit_code") as cur:
+        rows = await cur.fetchall()
+        return {r[0]: r[1] for r in rows}
