@@ -59,3 +59,25 @@ def test_security_part3_features():
     assert validate_dropped_capabilities(["CHOWN"]) is False
     res = calculate_memory_reservation(100 * 1024 * 1024, 0.5)
     assert res == 50 * 1024 * 1024
+
+def test_cgroups_and_security_extensions():
+    from termbox_runner.runner import (
+        calculate_cgroup_memory_high,
+        calculate_cgroup_cpu_weight,
+        calculate_cgroup_io_weight,
+        get_low_tier_preset,
+        build_tmpfs_mount_spec,
+    )
+    from termbox_runner.security import (
+        get_extended_masked_paths,
+        get_seccomp_architectures,
+        has_dropped_all_capabilities,
+    )
+    assert calculate_cgroup_memory_high(1000) == 850
+    assert calculate_cgroup_cpu_weight(1.0) == 100
+    assert calculate_cgroup_io_weight(0) == 100
+    assert get_low_tier_preset()["mem_limit"] == "128m"
+    assert "nosuid" in build_tmpfs_mount_spec()["/tmp"]
+    assert "/proc/acpi" in get_extended_masked_paths()
+    assert "SCMP_ARCH_X86_64" in get_seccomp_architectures()
+    assert has_dropped_all_capabilities(["ALL"]) is True
