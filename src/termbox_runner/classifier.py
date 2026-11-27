@@ -467,3 +467,12 @@ def detect_lisp_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]
     if "undefined-function" in lowered:
         return FailureMode.RUNTIME_ERROR, "Common Lisp UNDEFINED-FUNCTION condition."
     return None
+
+def detect_fsharp_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract F# match failure exceptions."""
+    lowered = combined_output.lower()
+    if "matchfailureexception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "F# MatchFailureException."
+    if "system.invalidoperationexception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "F# System.InvalidOperationException."
+    return None
