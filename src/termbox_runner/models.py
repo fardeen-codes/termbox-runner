@@ -101,6 +101,7 @@ class ResourceLimits(BaseModel):
     stop_signal: str = Field(default="SIGKILL", description="Signal to stop container")
     pid_mode: Optional[str] = Field(default=None, description="PID namespace mode")
     ipc_mode: Optional[str] = Field(default=None, description="IPC namespace mode")
+    memory_high: Optional[str] = Field(default=None, description="Cgroups v2 memory.high throttle threshold")
 
     @field_validator("mem_limit")
     @classmethod
