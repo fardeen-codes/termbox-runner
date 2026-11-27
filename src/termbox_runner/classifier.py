@@ -665,3 +665,10 @@ def detect_k8s_oom_killed(output: str) -> bool:
 def detect_k8s_crash_loop(output: str) -> bool:
     """Check if pod entered CrashLoopBackOff status."""
     return "crashloopbackoff" in output.lower()
+
+def extract_pytest_assertion_line(output: str) -> Optional[str]:
+    """Extract failed assert line from pytest trace."""
+    for line in output.splitlines():
+        if line.strip().startswith(">") and "assert " in line:
+            return line.strip()
+    return None
