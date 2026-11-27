@@ -1083,3 +1083,8 @@ async def get_runs_for_commit(commit_hash: str, storage: RunStorage = Depends(ge
 async def get_runs_for_branch(branch_name: str, storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.storage import query_runs_by_git_branch
     return {"run_ids": await query_runs_by_git_branch(storage, branch_name)}
+
+@app.get("/stats/failure-modes")
+async def get_failure_modes_distribution(storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import get_failure_mode_counts
+    return await get_failure_mode_counts(storage)
