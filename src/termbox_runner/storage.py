@@ -912,3 +912,10 @@ async def query_oom_killed_runs(storage, limit: int = 50) -> list[str]:
     async with conn.execute("SELECT run_id FROM runs WHERE failure_mode = 'OOM_KILLED' OR exit_code = 137 ORDER BY created_at DESC LIMIT ?", (limit,)) as cur:
         rows = await cur.fetchall()
         return [r[0] for r in rows]
+
+async def query_timeout_runs(storage, limit: int = 50) -> list[str]:
+    """Return list of run IDs that timed out."""
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT run_id FROM runs WHERE failure_mode = 'TIMEOUT' OR exit_code = 124 ORDER BY created_at DESC LIMIT ?", (limit,)) as cur:
+        rows = await cur.fetchall()
+        return [r[0] for r in rows]
