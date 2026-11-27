@@ -913,3 +913,7 @@ def get_low_tier_preset() -> dict:
 def get_standard_tier_preset() -> dict:
     """Preset for standard evaluation benchmarks."""
     return {"mem_limit": "512m", "cpu_quota": 1.0, "timeout_seconds": 30.0, "pids_limit": 128}
+
+def get_high_tier_preset() -> dict:
+    """Preset for compilation and heavier benchmarks."""
+    return {"mem_limit": "2g", "cpu_quota": 4.0, "timeout_seconds": 120.0, "pids_limit": 512}
