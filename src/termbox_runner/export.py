@@ -316,3 +316,11 @@ def generate_status_badge_svg(status: str, label: str = "termbox") -> str:
     """Generate SVG status badge for GitHub READMEs or PR comments."""
     color = "#22c55e" if status.upper() in ("PASSED", "COMPLETED") else "#ef4444"
     return f'<svg xmlns="http://www.w3.org/2000/svg" width="100" height="20"><rect width="50" height="20" fill="#1e293b"/><rect x="50" width="50" height="20" fill="{color}"/><text x="25" y="14" fill="#fff" font-size="11" text-anchor="middle">{label}</text><text x="75" y="14" fill="#fff" font-size="11" text-anchor="middle">{status}</text></svg>'
+
+def format_multi_run_markdown_matrix(manifests: list[RunManifest]) -> str:
+    """Generate Markdown evaluation summary comparison table."""
+    lines = ["| Run ID | Status | Mode | Duration | Command |", "| :--- | :--- | :--- | :--- | :--- |"]
+    for m in manifests:
+        mode = m.failure_mode.value if m.failure_mode else "PASSED"
+        lines.append(f"| `{m.run_id}` | `{m.status.value}` | `{mode}` | {m.duration_ms:.1f}ms | `{m.task.main_cmd[:25]}` |")
+    return "\n".join(lines)
