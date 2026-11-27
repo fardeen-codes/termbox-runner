@@ -156,3 +156,7 @@ def format_security_summary(ro_rootfs: bool, no_new_privs: bool) -> str:
 def count_seccomp_filtered_syscalls(profile: dict) -> int:
     """Count total number of filtered syscalls across rules."""
     return sum(len(sc.get("names", [])) for sc in profile.get("syscalls", []))
+
+def is_valid_tmpfs_path(path: str) -> bool:
+    """Ensure tmpfs mount path is standard temporary directory."""
+    return path in ("/tmp", "/var/tmp", "/dev/shm", "/run")
