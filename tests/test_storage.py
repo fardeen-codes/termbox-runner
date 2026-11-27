@@ -213,3 +213,9 @@ def test_storage_batch1_queries():
     from termbox_runner.storage import count_table_rows
     # synchronous check of table names
     assert count_table_rows(None, "invalid_table") == 0
+
+def test_storage_batch2_helpers():
+    from termbox_runner.export import sign_webhook_payload, sanitize_cdata_text
+    sig = sign_webhook_payload(b"hello", "secret")
+    assert len(sig) == 64
+    assert "]]]]><![CDATA[>" in sanitize_cdata_text("test]]>text")
