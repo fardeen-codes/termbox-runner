@@ -1043,3 +1043,8 @@ async def prune_runs_before_endpoint(cutoff: str = "2020-01-01T00:00:00Z", stora
     from termbox_runner.storage import prune_runs_before_timestamp
     count = await prune_runs_before_timestamp(storage, cutoff)
     return {"pruned_count": count}
+
+@app.get("/telemetry/tracestate")
+async def get_tracestate_header(vendor: str = "termbox", state: str = "active"):
+    from termbox_runner.telemetry import generate_w3c_tracestate
+    return {"tracestate": generate_w3c_tracestate(vendor, state)}
