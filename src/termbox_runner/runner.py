@@ -934,3 +934,14 @@ def validate_shm_size_string(shm_str: str) -> bool:
 def is_valid_network_mode(mode: str) -> bool:
     """Validate supported Docker network mode strings."""
     return mode in ("none", "bridge", "host") or mode.startswith("container:")
+
+def parse_cpuset_to_list(cpuset_str: str) -> list[int]:
+    """Parse cpuset expression like '0,2-4' into list of core IDs."""
+    cores = set()
+    for part in cpuset_str.split(","):
+        if "-" in part:
+            s, e = part.split("-")
+            cores.update(range(int(s), int(e) + 1))
+        elif part.strip():
+            cores.add(int(part.strip()))
+    return sorted(list(cores))
