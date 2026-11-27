@@ -171,3 +171,14 @@ def assign_latency_bucket(duration_ms: float, buckets: list[float] = None) -> fl
         if duration_ms <= limit:
             return limit
     return float("inf")
+
+def build_run_audit_event(run_id: str, action: str, details: dict) -> dict:
+    """Build structured JSON audit log for run lifecycle transition."""
+    from datetime import datetime, timezone
+    return {
+        "event_id": f"audit_{run_id}_{action}",
+        "run_id": run_id,
+        "action": action,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "details": details
+    }
