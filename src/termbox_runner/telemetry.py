@@ -190,3 +190,7 @@ def record_memory_swap_metric(run_id: str, swap_bytes: int) -> dict:
 def record_process_count_metric(run_id: str, pids: int) -> dict:
     """Construct active PID count telemetry point."""
     return {"metric": "container_pids_active", "run_id": run_id, "pids": pids}
+
+def record_page_reclaim_metric(run_id: str, pgscan: int, pgsteal: int) -> dict:
+    """Construct memory page reclamation pressure telemetry point."""
+    return {"metric": "container_memory_reclaim_total", "run_id": run_id, "pgscan": pgscan, "pgsteal": pgsteal}
