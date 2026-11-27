@@ -276,3 +276,5 @@ TEMPLATES["nextjs-build"] = BenchmarkTemplate(id="nextjs-build", name="Next.js B
 TEMPLATES["security-cors"] = BenchmarkTemplate(id="security-cors", name="CORS Configuration Audit", category="Security", description="Audits Access-Control-Allow-Origin headers.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"CORS valid\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["security-jwt"] = BenchmarkTemplate(id="security-jwt", name="JWT Signature Verification", category="Security", description="Validates JWT 'none' algorithm rejection.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"JWT secure\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["security-deser"] = BenchmarkTemplate(id="security-deser", name="Insecure Deserialization Audit", category="Security", description="Tests safe object deserialization.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Deserialization safe\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
