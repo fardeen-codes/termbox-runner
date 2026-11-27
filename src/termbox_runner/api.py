@@ -1023,3 +1023,12 @@ async def export_tap14(run_id: str, storage: RunStorage = Depends(get_storage_de
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.export import generate_tap14_report
     return PlainTextResponse(generate_tap14_report(manifest))
+
+@app.get("/runs/{run_id}/signature")
+async def get_run_signature(run_id: str, secret: str = "termbox_default", storage: RunStorage = Depends(get_storage_dependency)):
+    manifest = await storage.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail="Run not found")
+    from termbox_runner.export import sign_webhook_payload
+    sig = sign_webhook_payload(manifest.run_id.encode("utf-8"), secret)
+    return {"run_id": run_id, "signature": sig}
