@@ -308,3 +308,5 @@ TEMPLATES["d-dub"] = BenchmarkTemplate(id="d-dub", name="D Language Dub Test", c
 TEMPLATES["nim-nimble"] = BenchmarkTemplate(id="nim-nimble", name="Nim Nimble Harness", category="Nim", description="Executes nimble test.", task=TaskSubmission(image="nimlang/nim:latest-alpine", main_cmd="nim --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["crystal-spec"] = BenchmarkTemplate(id="crystal-spec", name="Crystal Spec Suite", category="Crystal", description="Executes crystal spec.", task=TaskSubmission(image="crystallang/crystal:latest-alpine", main_cmd="crystal --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["v-test"] = BenchmarkTemplate(id="v-test", name="V Language Test Runner", category="V", description="Executes v test .", task=TaskSubmission(image="alpine:3.19", main_cmd="echo V OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
