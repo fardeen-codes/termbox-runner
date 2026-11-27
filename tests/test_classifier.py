@@ -307,3 +307,27 @@ def test_multilang_batch2_diagnostics():
     assert detect_fortran_error("Fortran runtime error: End of file") is not None
     assert is_sigtrap_signal(133) is True
     assert is_sigabrt_signal(134) is True
+
+def test_multilang_batch3_diagnostics():
+    from termbox_runner.classifier import (
+        detect_racket_error,
+        detect_guile_error,
+        detect_pascal_error,
+        detect_cobol_error,
+        detect_gas_assembler_error,
+        detect_llvm_crash,
+        has_gdb_stacktrace,
+        detect_strace_permission_denied,
+        has_jvm_thread_dump,
+        has_python_warning,
+    )
+    assert detect_racket_error("contract violation expected: number?") is not None
+    assert detect_guile_error("Wrong type argument in position 1") is not None
+    assert detect_pascal_error("Runtime error 201 at $00000000") is not None
+    assert detect_cobol_error("Subscript out of range") is not None
+    assert detect_gas_assembler_error("Assembler messages: Error: junk at end of line") is not None
+    assert detect_llvm_crash("LLVM ERROR: out of memory") is not None
+    assert has_gdb_stacktrace("#0 0x00000001 in main ()") is True
+    assert detect_strace_permission_denied("openat(AT_FDCWD, \"/root\", O_RDONLY) = -1 EPERM (Operation not permitted)") is True
+    assert has_jvm_thread_dump('"main" prio=5 tid=0x01 nid=0x02') is True
+    assert has_python_warning("UserWarning: experimental feature") is True
