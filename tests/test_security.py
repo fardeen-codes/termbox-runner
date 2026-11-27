@@ -81,3 +81,13 @@ def test_cgroups_and_security_extensions():
     assert "/proc/acpi" in get_extended_masked_paths()
     assert "SCMP_ARCH_X86_64" in get_seccomp_architectures()
     assert has_dropped_all_capabilities(["ALL"]) is True
+
+def test_security_part4_network_and_sysctls():
+    from termbox_runner.runner import is_valid_network_mode, parse_cpuset_to_list, validate_volume_mount_mode
+    from termbox_runner.security import is_safe_container_sysctl, override_seccomp_syscall_action
+    assert is_valid_network_mode("none") is True
+    assert is_valid_network_mode("bridge") is True
+    assert parse_cpuset_to_list("0,2-4") == [0, 2, 3, 4]
+    assert validate_volume_mount_mode("ro") is True
+    assert is_safe_container_sysctl("net.ipv4.ip_forward") is True
+    assert is_safe_container_sysctl("kernel.core_pattern") is False
