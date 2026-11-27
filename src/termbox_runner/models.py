@@ -104,6 +104,7 @@ class ResourceLimits(BaseModel):
     memory_high: Optional[str] = Field(default=None, description="Cgroups v2 memory.high throttle threshold")
     cpu_weight: Optional[int] = Field(default=100, ge=1, le=10000, description="Cgroups v2 cpu.weight")
     io_weight: Optional[int] = Field(default=100, ge=1, le=10000, description="Cgroups v2 io.weight")
+    dns_servers: Optional[List[str]] = Field(default_factory=list, description="Custom DNS servers")
 
     @field_validator("mem_limit")
     @classmethod
