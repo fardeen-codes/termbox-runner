@@ -526,3 +526,12 @@ def detect_v_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
     if "v panic:" in lowered:
         return FailureMode.RUNTIME_ERROR, "V language runtime panic."
     return None
+
+def detect_valgrind_violation(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Valgrind Memcheck memory access violations."""
+    lowered = combined_output.lower()
+    if "invalid read of size" in lowered or "invalid write of size" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Valgrind Memcheck invalid memory read/write."
+    if "definitely lost in loss record" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Valgrind definitely lost memory leak."
+    return None
