@@ -53,3 +53,10 @@ def validate_dropped_capabilities(drop_caps: list) -> bool:
     """Verify that ALL or SYS_ADMIN is included in dropped capabilities."""
     upper_caps = [c.upper() for c in drop_caps]
     return "ALL" in upper_caps or "SYS_ADMIN" in upper_caps or "CAP_SYS_ADMIN" in upper_caps
+
+def get_extended_masked_paths() -> list[str]:
+    """Return comprehensive list of proc and sys paths to mask in container sandbox."""
+    return [
+        "/proc/kcore", "/proc/sys", "/proc/sysrq-trigger", "/proc/irq", "/proc/bus",
+        "/proc/acpi", "/proc/keys", "/proc/latency_stats", "/proc/timer_list", "/proc/sched_debug"
+    ]
