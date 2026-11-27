@@ -367,3 +367,7 @@ def cmd_annotate_run(server_url: str, run_id: str, key: str, value: str):
 def cmd_wal_checkpoint(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.post("/system/db/wal-checkpoint").json())
+
+def cmd_image_durations(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/stats/image-durations").json())
