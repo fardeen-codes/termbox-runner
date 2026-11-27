@@ -988,3 +988,8 @@ async def get_run_badge(run_id: str, storage: RunStorage = Depends(get_storage_d
 async def get_exit_codes_distribution(storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.storage import get_runs_count_by_exit_code
     return await get_runs_count_by_exit_code(storage)
+
+@app.get("/stats/image-durations")
+async def get_image_durations(storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import get_average_duration_by_image
+    return await get_average_duration_by_image(storage)
