@@ -891,3 +891,10 @@ async def trigger_wal_checkpoint(storage) -> bool:
     conn = await storage.get_connection()
     await conn.execute("PRAGMA wal_checkpoint(PASSIVE)")
     return True
+
+async def query_top_memory_runs(storage, limit: int = 5) -> list[str]:
+    """Fetch run IDs with highest peak memory usage."""
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT run_id FROM runs ORDER BY peak_memory_bytes DESC LIMIT ?", (limit,)) as cur:
+        rows = await cur.fetchall()
+        return [r[0] for r in rows]
