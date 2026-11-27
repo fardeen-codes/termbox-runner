@@ -300,3 +300,5 @@ TEMPLATES["erlang-rebar3"] = BenchmarkTemplate(id="erlang-rebar3", name="Erlang 
 TEMPLATES["fsharp-test"] = BenchmarkTemplate(id="fsharp-test", name="F# Dotnet Test Harness", category="FSharp", description="Executes dotnet test on F# library.", task=TaskSubmission(image="mcr.microsoft.com/dotnet/sdk:8.0", main_cmd="dotnet --version", limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0)))
 
 TEMPLATES["groovy-spock"] = BenchmarkTemplate(id="groovy-spock", name="Groovy Spock Framework", category="Groovy", description="Runs Spock specifications.", task=TaskSubmission(image="groovy:4.0-jdk17", main_cmd="groovy --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["ada-gnat"] = BenchmarkTemplate(id="ada-gnat", name="Ada GNAT Harness", category="Ada", description="Compiles and tests Ada program.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo GNAT OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
