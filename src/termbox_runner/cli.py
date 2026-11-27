@@ -398,3 +398,7 @@ def cmd_run_signature(server_url: str, run_id: str):
 def cmd_top_memory_runs(server_url: str, limit: int = 5):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get(f"/runs/top-memory-usage?limit={limit}").json())
+
+def terminal_bold_cyan(text: str) -> str:
+    """Format string with bold cyan ANSI color escape."""
+    return f"\033[1;36m{text}\033[0m"
