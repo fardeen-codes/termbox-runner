@@ -463,3 +463,8 @@ class TaskFingerprint(BaseModel):
     hash_value: str
     image: str
     command: str
+
+def sanitize_tag_string(tag: str) -> str:
+    """Sanitize tag name to alphanumeric with dashes."""
+    import re
+    return re.sub(r'[^a-zA-Z0-9_-]', '', tag.strip().lower())
