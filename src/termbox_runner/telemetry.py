@@ -199,3 +199,7 @@ def calculate_network_throughput(rx_bytes: int, tx_bytes: int, duration_sec: flo
     """Compute RX/TX throughput in KB/s."""
     dur = max(0.001, duration_sec)
     return {"rx_kbps": (rx_bytes / 1024.0) / dur, "tx_kbps": (tx_bytes / 1024.0) / dur}
+
+def record_fork_count_metric(run_id: str, total_forks: int) -> dict:
+    """Construct process fork count telemetry point."""
+    return {"metric": "container_forks_total", "run_id": run_id, "forks": total_forks}
