@@ -328,3 +328,5 @@ TEMPLATES["racket-test"] = BenchmarkTemplate(id="racket-test", name="Racket Test
 TEMPLATES["pascal-fpc"] = BenchmarkTemplate(id="pascal-fpc", name="FreePascal Test Harness", category="Pascal", description="Compiles and tests FreePascal unit.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo FPC OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["wasm-wasmtime"] = BenchmarkTemplate(id="wasm-wasmtime", name="Wasmtime Wasm Execution", category="WebAssembly", description="Runs wasm module in wasmtime runtime.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Wasmtime OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["wasm-node"] = BenchmarkTemplate(id="wasm-node", name="Node.js Wasm Runner", category="WebAssembly", description="Instantiates and evaluates WebAssembly module in Node.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
