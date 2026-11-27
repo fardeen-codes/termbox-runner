@@ -78,3 +78,11 @@
 - Data science & OLAP benchmark templates: DuckDB, Polars, PyArrow, Fastparquet, Wasmtime.
 - Standard deviation and Median Absolute Deviation (MAD) duration analytics.
 - Jenkins JUnit and Travis CI folding log export integrations.
+
+## [1.0.0] - 2026-11-27
+### Added
+- Production-grade multi-tenant container isolation and cgroups v2 resource quotas.
+- Extensive language diagnostics covering 20+ programming languages and fatal signals.
+- 50+ benchmark templates for web, systems, database, AI/ML, and security evaluation.
+- Enterprise CI/CD reporting formats (GitHub Summary, GitLab, CircleCI, Azure DevOps, Allure, TAP 14, Jenkins).
+- Distributed telemetry, SLA latency percentiles, and SQLite high-performance WAL optimizations.
