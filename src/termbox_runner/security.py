@@ -80,3 +80,11 @@ def validate_seccomp_action(action: str) -> bool:
 def generate_complain_mode_apparmor_profile(name: str = "termbox-complain") -> str:
     """Generate AppArmor profile in non-enforcing audit/complain mode."""
     return f"profile {name} flags=(complain) {{\n  file,\n  network,\n}}"
+
+def override_seccomp_syscall_action(profile: dict, syscall_name: str, new_action: str) -> dict:
+    """Modify action for a specific syscall inside seccomp profile dict."""
+    new_prof = dict(profile)
+    for sc in new_prof.get("syscalls", []):
+        if syscall_name in sc.get("names", []):
+            sc["action"] = new_action
+    return new_prof
