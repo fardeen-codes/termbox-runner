@@ -102,3 +102,21 @@ def test_telemetry_batch1_helpers():
     assert audit["run_id"] == "r1"
     assert record_memory_swap_metric("r1", 0)["swap_bytes"] == 0
     assert record_process_count_metric("r1", 4)["pids"] == 4
+
+def test_telemetry_batch3_math():
+    from termbox_runner.telemetry import (
+        format_prometheus_oom_counter,
+        format_prometheus_timeout_counter,
+        generate_w3c_tracestate,
+        parse_w3c_tracestate,
+        calculate_duration_stddev,
+        calculate_duration_mad,
+    )
+    assert "termbox_container_oom_events_total" in format_prometheus_oom_counter(5)
+    assert "termbox_container_timeouts_total" in format_prometheus_timeout_counter(2)
+    ts = generate_w3c_tracestate("congo", "t61rcWkgMzE")
+    parsed = parse_w3c_tracestate(ts)
+    assert parsed["congo"] == "t61rcWkgMzE"
+    vals = [10.0, 12.0, 11.0, 10.0, 12.0]
+    assert calculate_duration_stddev(vals) > 0.0
+    assert calculate_duration_mad(vals) >= 0.0
