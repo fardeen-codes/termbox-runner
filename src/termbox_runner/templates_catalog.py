@@ -266,3 +266,5 @@ TEMPLATES["gin-router"] = BenchmarkTemplate(id="gin-router", name="Gin Router Ev
 TEMPLATES["echo-framework"] = BenchmarkTemplate(id="echo-framework", name="Echo Go Web Test", category="Go", description="Tests Echo middleware handlers.", task=TaskSubmission(image="golang:1.22-alpine", main_cmd="go version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["rails-controller"] = BenchmarkTemplate(id="rails-controller", name="Rails Controller Test", category="Ruby", description="Tests ActionController endpoints.", task=TaskSubmission(image="ruby:3.3-slim", main_cmd="ruby --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["phoenix-channel"] = BenchmarkTemplate(id="phoenix-channel", name="Phoenix Channel Suite", category="Elixir", description="Tests Phoenix websocket channels.", task=TaskSubmission(image="elixir:1.16-slim", main_cmd="elixir --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
