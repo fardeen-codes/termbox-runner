@@ -953,3 +953,7 @@ def validate_volume_mount_mode(mode: str) -> bool:
 def compute_oom_score_adj(priority: int) -> int:
     """Convert priority to oom_score_adj (-1000 to 1000)."""
     return max(-1000, min(1000, priority * 50))
+
+def clamp_cpu_shares(shares: int) -> int:
+    """Clamp cpu_shares between 2 and 262144."""
+    return max(2, min(262144, shares))
