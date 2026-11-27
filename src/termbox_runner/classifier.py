@@ -421,3 +421,12 @@ def detect_lua_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
     if "attempt to call a nil value" in lowered:
         return FailureMode.RUNTIME_ERROR, "Lua attempt to call nil value."
     return None
+
+def detect_elixir_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Elixir function clause and match errors."""
+    lowered = combined_output.lower()
+    if "functionclauseerror" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Elixir FunctionClauseError no matching clause."
+    if "matcherror" in lowered and "no match of right hand side" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Elixir MatchError pattern mismatch."
+    return None
