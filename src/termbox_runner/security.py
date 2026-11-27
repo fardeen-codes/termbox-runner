@@ -97,3 +97,7 @@ def is_safe_container_sysctl(key: str) -> bool:
 def get_restricted_devices_list() -> list[str]:
     """Return list of dangerous host device paths blocked by default."""
     return ["/dev/kmem", "/dev/mem", "/dev/port", "/dev/nvme0", "/dev/sda"]
+
+def is_safe_device_rule(rule: str) -> bool:
+    """Verify device cgroup rule does not grant raw disk write."""
+    return not ("b *:* rwm" in rule or "c 1:1 rwm" in rule)
