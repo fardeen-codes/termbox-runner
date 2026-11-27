@@ -219,3 +219,7 @@ def build_webhook_delivery_event(run_id: str, url: str, status_code: int, attemp
 def format_prometheus_oom_counter(total_ooms: int) -> str:
     """Format total OOM kills count for Prometheus metrics."""
     return f"termbox_container_oom_events_total {total_ooms}"
+
+def format_prometheus_timeout_counter(total_timeouts: int) -> str:
+    """Format total timeout count for Prometheus metrics."""
+    return f"termbox_container_timeouts_total {total_timeouts}"
