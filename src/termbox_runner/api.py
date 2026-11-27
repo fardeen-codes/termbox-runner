@@ -1088,3 +1088,10 @@ async def get_runs_for_branch(branch_name: str, storage: RunStorage = Depends(ge
 async def get_failure_modes_distribution(storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.storage import get_failure_mode_counts
     return await get_failure_mode_counts(storage)
+
+@app.get("/stats/p999")
+async def get_p999_latency(storage: RunStorage = Depends(get_storage_dependency)):
+    runs = await storage.list_runs(limit=100)
+    durations = [r.duration_ms for r in runs if r.duration_ms is not None]
+    from termbox_runner.telemetry import calculate_p999
+    return {"p999_ms": calculate_p999(durations), "count": len(durations)}
