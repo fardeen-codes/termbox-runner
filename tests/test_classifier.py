@@ -331,3 +331,29 @@ def test_multilang_batch3_diagnostics():
     assert detect_strace_permission_denied("openat(AT_FDCWD, \"/root\", O_RDONLY) = -1 EPERM (Operation not permitted)") is True
     assert has_jvm_thread_dump('"main" prio=5 tid=0x01 nid=0x02') is True
     assert has_python_warning("UserWarning: experimental feature") is True
+
+def test_classifier_part4_diagnostics():
+    from termbox_runner.classifier import (
+        extract_typescript_error_code,
+        extract_csharp_error_code,
+        detect_javac_cannot_find_symbol,
+        detect_rust_use_of_moved_value,
+        detect_clang_header_not_found,
+        detect_gcc_undefined_reference,
+        detect_docker_build_failure,
+        detect_k8s_oom_killed,
+        extract_pytest_assertion_line,
+        detect_unbound_local_error,
+        detect_attribute_error,
+    )
+    assert extract_typescript_error_code("app.ts(1,2): error TS2304: Cannot find name 'x'.") == "TS2304"
+    assert extract_csharp_error_code("Program.cs(5,10): error CS0103: The name 'foo' does not exist") == "CS0103"
+    assert detect_javac_cannot_find_symbol("error: cannot find symbol\n  symbol:   variable x") is True
+    assert detect_rust_use_of_moved_value("error[E0382]: use of moved value: `v`") is True
+    assert detect_clang_header_not_found("fatal error: 'stdio.h' file not found") is True
+    assert detect_gcc_undefined_reference("undefined reference to `main'") is True
+    assert detect_docker_build_failure("returned a non-zero code: 1") is True
+    assert detect_k8s_oom_killed("Reason: OOMKilled") is True
+    assert extract_pytest_assertion_line("  >       assert 1 == 2") == ">       assert 1 == 2"
+    assert detect_unbound_local_error("UnboundLocalError: local variable 'x' referenced before assignment") is True
+    assert detect_attribute_error("AttributeError: 'NoneType' object has no attribute 'val'") is True
