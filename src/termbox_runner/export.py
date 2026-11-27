@@ -363,3 +363,7 @@ def generate_jenkins_test_xml(manifest: RunManifest) -> str:
     """Generate Jenkins JUnit plugin compliant XML report."""
     failed = manifest.failure_mode and manifest.failure_mode != FailureMode.PASSED
     return f'<?xml version="1.0" encoding="UTF-8"?><testsuite name="jenkins.runner" tests="1" failures="{1 if failed else 0}"><testcase classname="termbox.task" name="{manifest.run_id}" time="{manifest.duration_ms / 1000.0:.3f}"/></testsuite>'
+
+def format_travis_log_section(section_name: str, content: str) -> str:
+    """Format log with Travis CI fold markers (travis_fold:start/end)."""
+    return f"travis_fold:start:{section_name}\ntravis_time:start:{section_name}\n{content}\ntravis_time:end:{section_name}\ntravis_fold:end:{section_name}"
