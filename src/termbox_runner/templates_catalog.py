@@ -288,3 +288,7 @@ TEMPLATES["drizzle-orm"] = BenchmarkTemplate(id="drizzle-orm", name="Drizzle ORM
 TEMPLATES["flyway-mig"] = BenchmarkTemplate(id="flyway-mig", name="Flyway DB Migrations", category="Database", description="Tests Flyway SQL versioned migrations.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Flyway OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["liquibase-mig"] = BenchmarkTemplate(id="liquibase-mig", name="Liquibase ChangeSet Test", category="Database", description="Tests Liquibase database changesets.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Liquibase OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+def list_template_categories() -> list[str]:
+    """Return sorted list of distinct template categories."""
+    return sorted(list(set(t.category for t in TEMPLATES.values())))
