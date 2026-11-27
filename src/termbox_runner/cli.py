@@ -371,3 +371,6 @@ def cmd_wal_checkpoint(server_url: str):
 def cmd_image_durations(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/stats/image-durations").json())
+
+def cmd_badge_url(server_url: str, run_id: str):
+    print(f"{server_url}/runs/{run_id}/badge")
