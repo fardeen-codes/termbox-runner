@@ -284,3 +284,5 @@ TEMPLATES["alembic-mig"] = BenchmarkTemplate(id="alembic-mig", name="Alembic Mig
 TEMPLATES["prisma-validate"] = BenchmarkTemplate(id="prisma-validate", name="Prisma Schema Validator", category="Database", description="Validates prisma/schema.prisma definitions.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["drizzle-orm"] = BenchmarkTemplate(id="drizzle-orm", name="Drizzle ORM DDL Test", category="Database", description="Validates Drizzle TypeScript schema queries.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["flyway-mig"] = BenchmarkTemplate(id="flyway-mig", name="Flyway DB Migrations", category="Database", description="Tests Flyway SQL versioned migrations.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Flyway OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
