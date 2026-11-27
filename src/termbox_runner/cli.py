@@ -402,3 +402,7 @@ def cmd_top_memory_runs(server_url: str, limit: int = 5):
 def terminal_bold_cyan(text: str) -> str:
     """Format string with bold cyan ANSI color escape."""
     return f"\033[1;36m{text}\033[0m"
+
+def terminal_bold_green(text: str) -> str:
+    """Format string with bold green ANSI color escape."""
+    return f"\033[1;32m{text}\033[0m"
