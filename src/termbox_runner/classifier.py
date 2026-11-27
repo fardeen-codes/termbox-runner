@@ -544,3 +544,7 @@ def detect_fortran_error(combined_output: str) -> Optional[Tuple[FailureMode, st
     if "fortran runtime error: index" in lowered and "out of bounds" in lowered:
         return FailureMode.RUNTIME_ERROR, "Fortran array index out of bounds."
     return None
+
+def is_sigtrap_signal(exit_code: Optional[int]) -> bool:
+    """Check if exit code corresponds to SIGTRAP (128 + 5 = 133)."""
+    return exit_code in (133, 5)
