@@ -182,3 +182,7 @@ def build_run_audit_event(run_id: str, action: str, details: dict) -> dict:
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "details": details
     }
+
+def record_memory_swap_metric(run_id: str, swap_bytes: int) -> dict:
+    """Construct container swap memory telemetry point."""
+    return {"metric": "container_memory_swap_bytes", "run_id": run_id, "swap_bytes": swap_bytes}
