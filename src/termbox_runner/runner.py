@@ -905,3 +905,7 @@ def calculate_cgroup_io_weight(priority: int) -> int:
     """Convert task priority (-20 to 19) to cgroup v2 io.weight (1-10000)."""
     normalized = 100 - (priority * 4)
     return max(1, min(10000, normalized))
+
+def get_low_tier_preset() -> dict:
+    """Preset for lightweight microbenchmarks."""
+    return {"mem_limit": "128m", "cpu_quota": 0.5, "timeout_seconds": 15.0, "pids_limit": 64}
