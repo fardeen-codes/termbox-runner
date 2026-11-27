@@ -661,3 +661,7 @@ def detect_docker_build_failure(output: str) -> bool:
 def detect_k8s_oom_killed(output: str) -> bool:
     """Check if container termination was marked OOMKilled."""
     return "oomkilled" in output.lower() or "reason: oomkilled" in output.lower()
+
+def detect_k8s_crash_loop(output: str) -> bool:
+    """Check if pod entered CrashLoopBackOff status."""
+    return "crashloopbackoff" in output.lower()
