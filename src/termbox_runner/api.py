@@ -976,3 +976,10 @@ async def export_azure_devops(run_id: str, storage: RunStorage = Depends(get_sto
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.export import generate_azure_devops_test_json
     return generate_azure_devops_test_json(manifest)
+
+@app.get("/runs/{run_id}/badge", response_class=Response)
+async def get_run_badge(run_id: str, storage: RunStorage = Depends(get_storage_dependency)):
+    manifest = await storage.get_run(run_id)
+    status_str = "NOT_FOUND" if not manifest else (manifest.failure_mode.value if manifest.failure_mode else "PASSED")
+    from termbox_runner.export import generate_status_badge_svg
+    return Response(content=generate_status_badge_svg(status_str), media_type="image/svg+xml")
