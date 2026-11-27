@@ -898,3 +898,10 @@ async def query_top_memory_runs(storage, limit: int = 5) -> list[str]:
     async with conn.execute("SELECT run_id FROM runs ORDER BY peak_memory_bytes DESC LIMIT ?", (limit,)) as cur:
         rows = await cur.fetchall()
         return [r[0] for r in rows]
+
+async def prune_runs_before_timestamp(storage, iso_cutoff: str) -> int:
+    """Prune historical runs created before iso_cutoff."""
+    conn = await storage.get_connection()
+    cur = await conn.execute("DELETE FROM runs WHERE created_at < ?", (iso_cutoff,))
+    await conn.commit()
+    return cur.rowcount
