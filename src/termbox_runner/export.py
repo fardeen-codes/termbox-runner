@@ -329,3 +329,18 @@ def encode_ndjson_event(event_type: str, payload: dict) -> str:
     """Encode single NDJSON event line."""
     import json
     return json.dumps({"event": event_type, "data": payload}) + "\n"
+
+def generate_tap14_report(manifest: RunManifest) -> str:
+    """Generate Test Anything Protocol (TAP) version 14 string."""
+    passed = not manifest.failure_mode or manifest.failure_mode == FailureMode.PASSED
+    ok_str = "ok" if passed else "not ok"
+    lines = [
+        "TAP version 14",
+        "1..1",
+        f"{ok_str} 1 - {manifest.run_id}",
+        f"  ---",
+        f"  duration_ms: {manifest.duration_ms:.1f}",
+        f"  mode: {manifest.failure_mode.value if manifest.failure_mode else 'PASSED'}",
+        f"  ..."
+    ]
+    return "\n".join(lines)
