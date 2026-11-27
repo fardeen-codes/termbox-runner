@@ -258,3 +258,7 @@ def calculate_duration_mad(durations: list[float]) -> float:
 def check_duration_sla(duration_ms: float, sla_ms: float = 1000.0) -> bool:
     """Check if task execution duration satisfied SLA latency threshold."""
     return duration_ms <= sla_ms
+
+def is_valid_otel_span_kind(kind: str) -> bool:
+    """Check if span kind matches standard OTEL enum."""
+    return kind.upper() in ("INTERNAL", "SERVER", "CLIENT", "PRODUCER", "CONSUMER")
