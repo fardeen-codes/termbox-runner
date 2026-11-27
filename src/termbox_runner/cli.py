@@ -438,3 +438,7 @@ def terminal_bright_green(text: str) -> str:
 def terminal_bright_blue(text: str) -> str:
     """Format string with bright blue ANSI escape."""
     return f"\033[94m{text}\033[0m"
+
+def cmd_commit_runs(server_url: str, commit_hash: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/filter/git-commit/{commit_hash}").json())
