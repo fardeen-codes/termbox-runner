@@ -394,3 +394,7 @@ def cmd_export_tap14(server_url: str, run_id: str):
 def cmd_run_signature(server_url: str, run_id: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get(f"/runs/{run_id}/signature").json())
+
+def cmd_top_memory_runs(server_url: str, limit: int = 5):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/top-memory-usage?limit={limit}").json())
