@@ -358,3 +358,5 @@ TEMPLATES["ava-concurrent"] = BenchmarkTemplate(id="ava-concurrent", name="Ava C
 TEMPLATES["criterion-c"] = BenchmarkTemplate(id="criterion-c", name="Criterion C Framework", category="C", description="Runs Criterion C unit assertions.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Criterion OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["googletest-cpp"] = BenchmarkTemplate(id="googletest-cpp", name="GoogleTest C++ Suite", category="Cpp", description="Executes GoogleTest test fixtures.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo GTest OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["catch2-cpp"] = BenchmarkTemplate(id="catch2-cpp", name="Catch2 C++ Framework", category="Cpp", description="Runs Catch2 BDD test scenarios.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Catch2 OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
