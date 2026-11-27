@@ -109,3 +109,12 @@ def test_data_science_and_wasm_templates_batch3():
     assert "duckdb-sql" in TEMPLATES
     assert "polars-df" in TEMPLATES
     assert "clickhouse-local" in TEMPLATES
+
+def test_testing_and_performance_templates_batch4():
+    from termbox_runner.templates_catalog import TEMPLATES, count_total_templates, get_templates_by_category
+    assert "pytest-param" in TEMPLATES
+    assert "hypothesis-fuzz" in TEMPLATES
+    assert "googletest-cpp" in TEMPLATES
+    assert "criterion-rust" in TEMPLATES
+    assert count_total_templates() >= 50
+    assert len(get_templates_by_category("Performance")) >= 3
