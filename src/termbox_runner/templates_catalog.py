@@ -336,3 +336,5 @@ TEMPLATES["sqlite-fts5"] = BenchmarkTemplate(id="sqlite-fts5", name="SQLite FTS5
 TEMPLATES["duckdb-sql"] = BenchmarkTemplate(id="duckdb-sql", name="DuckDB OLAP Analytics", category="Database", description="Tests analytical SQL aggregations in DuckDB.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"DuckDB verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["polars-df"] = BenchmarkTemplate(id="polars-df", name="Polars DataFrame Benchmark", category="Data Science", description="Tests lazy Polars query evaluation.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Polars verified\")'", limits=ResourceLimits(mem_limit="512m", timeout_seconds=25.0)))
+
+TEMPLATES["pyarrow-table"] = BenchmarkTemplate(id="pyarrow-table", name="PyArrow In-Memory Tables", category="Data Science", description="Tests Arrow IPC serialization and schema validation.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"PyArrow verified\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
