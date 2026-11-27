@@ -310,3 +310,5 @@ TEMPLATES["nim-nimble"] = BenchmarkTemplate(id="nim-nimble", name="Nim Nimble Ha
 TEMPLATES["crystal-spec"] = BenchmarkTemplate(id="crystal-spec", name="Crystal Spec Suite", category="Crystal", description="Executes crystal spec.", task=TaskSubmission(image="crystallang/crystal:latest-alpine", main_cmd="crystal --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["v-test"] = BenchmarkTemplate(id="v-test", name="V Language Test Runner", category="V", description="Executes v test .", task=TaskSubmission(image="alpine:3.19", main_cmd="echo V OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["valgrind-memcheck"] = BenchmarkTemplate(id="valgrind-memcheck", name="Valgrind Memcheck Audit", category="Memory", description="Runs valgrind --leak-check=full.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Valgrind OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=30.0)))
