@@ -1063,3 +1063,8 @@ async def export_jenkins_report(run_id: str, storage: RunStorage = Depends(get_s
         raise HTTPException(status_code=404, detail="Run not found")
     from termbox_runner.export import generate_jenkins_test_xml
     return PlainTextResponse(generate_jenkins_test_xml(manifest), media_type="application/xml")
+
+@app.get("/runs/filter/oom")
+async def get_oom_runs(limit: int = 50, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import query_oom_killed_runs
+    return {"oom_run_ids": await query_oom_killed_runs(storage, limit)}
