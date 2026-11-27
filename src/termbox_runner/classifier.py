@@ -637,3 +637,7 @@ def detect_javac_cannot_find_symbol(output: str) -> bool:
 def detect_rust_use_of_moved_value(output: str) -> bool:
     """Check if rustc reported borrow of moved value (E0382)."""
     return "error[e0382]: use of moved value" in output.lower()
+
+def detect_rust_mutable_borrow_error(output: str) -> bool:
+    """Check if rustc reported cannot borrow as mutable (E0502)."""
+    return "error[e0502]: cannot borrow" in output.lower()
