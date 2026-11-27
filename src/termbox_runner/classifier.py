@@ -593,3 +593,10 @@ def detect_gas_assembler_error(combined_output: str) -> Optional[Tuple[FailureMo
     if "assembler messages:" in lowered and "error:" in lowered:
         return FailureMode.RUNTIME_ERROR, "GNU Assembler compilation error."
     return None
+
+def detect_llvm_crash(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract LLVM internal fatal compiler errors."""
+    lowered = combined_output.lower()
+    if "llvm error:" in lowered or "please submit a full bug report" in lowered:
+        return FailureMode.RUNTIME_ERROR, "LLVM internal compiler fatal error."
+    return None
