@@ -385,3 +385,12 @@ def detect_scala_error(combined_output: str) -> Optional[Tuple[FailureMode, str]
     if "java.lang.classcastexception" in lowered:
         return FailureMode.RUNTIME_ERROR, "Scala/JVM ClassCastException."
     return None
+
+def detect_kotlin_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Kotlin specific runtime exceptions."""
+    lowered = combined_output.lower()
+    if "kotlinnullpointerexception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "KotlinNullPointerException encountered."
+    if "uninitializedpropertyaccessexception" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Kotlin UninitializedPropertyAccessException."
+    return None
