@@ -441,3 +441,7 @@ def detect_clojure_error(combined_output: str) -> Optional[Tuple[FailureMode, st
 def is_sigxcpu_signal(exit_code: Optional[int]) -> bool:
     """Check if exit code corresponds to SIGXCPU (128 + 24 = 152)."""
     return exit_code in (152, 24)
+
+def is_sigxfsz_signal(exit_code: Optional[int]) -> bool:
+    """Check if exit code corresponds to SIGXFSZ (128 + 25 = 153)."""
+    return exit_code in (153, 25)
