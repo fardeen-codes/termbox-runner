@@ -437,3 +437,7 @@ def detect_clojure_error(combined_output: str) -> Optional[Tuple[FailureMode, st
     if "clojure.lang.arityexception: wrong number of args" in lowered:
         return FailureMode.RUNTIME_ERROR, "Clojure ArityException wrong number of arguments."
     return None
+
+def is_sigxcpu_signal(exit_code: Optional[int]) -> bool:
+    """Check if exit code corresponds to SIGXCPU (128 + 24 = 152)."""
+    return exit_code in (152, 24)
