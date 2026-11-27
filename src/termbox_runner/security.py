@@ -101,3 +101,7 @@ def get_restricted_devices_list() -> list[str]:
 def is_safe_device_rule(rule: str) -> bool:
     """Verify device cgroup rule does not grant raw disk write."""
     return not ("b *:* rwm" in rule or "c 1:1 rwm" in rule)
+
+def detect_docker_storage_driver(info_driver: str = "overlay2") -> str:
+    """Normalize and identify Docker container storage driver."""
+    return info_driver.lower().strip()
