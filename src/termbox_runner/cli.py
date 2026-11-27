@@ -430,3 +430,7 @@ def cmd_export_jenkins(server_url: str, run_id: str):
 def terminal_bright_red(text: str) -> str:
     """Format string with bright red ANSI escape."""
     return f"\033[91m{text}\033[0m"
+
+def terminal_bright_green(text: str) -> str:
+    """Format string with bright green ANSI escape."""
+    return f"\033[92m{text}\033[0m"
