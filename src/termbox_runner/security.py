@@ -68,3 +68,7 @@ def get_seccomp_architectures() -> list[str]:
 def is_secure_tmpfs_options(options: str) -> bool:
     """Ensure noexec and nosuid flags are present in mount options."""
     return "nosuid" in options
+
+def has_dropped_all_capabilities(cap_drop: list[str]) -> bool:
+    """Check if container explicitly drops ALL capabilities."""
+    return "ALL" in [c.upper() for c in cap_drop]
