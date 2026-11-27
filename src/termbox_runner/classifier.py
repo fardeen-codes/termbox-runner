@@ -657,3 +657,7 @@ def detect_gcc_undefined_reference(output: str) -> bool:
 def detect_docker_build_failure(output: str) -> bool:
     """Check if docker build returned a non-zero code."""
     return "returned a non-zero code:" in output.lower()
+
+def detect_k8s_oom_killed(output: str) -> bool:
+    """Check if container termination was marked OOMKilled."""
+    return "oomkilled" in output.lower() or "reason: oomkilled" in output.lower()
