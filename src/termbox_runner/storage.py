@@ -885,3 +885,9 @@ async def run_sqlite_integrity_check(storage) -> str:
     async with conn.execute("PRAGMA integrity_check") as cur:
         row = await cur.fetchone()
         return row[0] if row else "unknown"
+
+async def trigger_wal_checkpoint(storage) -> bool:
+    """Execute PRAGMA wal_checkpoint(PASSIVE)."""
+    conn = await storage.get_connection()
+    await conn.execute("PRAGMA wal_checkpoint(PASSIVE)")
+    return True
