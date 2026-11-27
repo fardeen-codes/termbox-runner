@@ -296,3 +296,5 @@ def list_template_categories() -> list[str]:
 TEMPLATES["lisp-sbcl"] = BenchmarkTemplate(id="lisp-sbcl", name="Common Lisp SBCL Test", category="Functional", description="Executes SBCL lisp script.", task=TaskSubmission(image="daewok/sbcl:latest", main_cmd="sbcl --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
 
 TEMPLATES["erlang-rebar3"] = BenchmarkTemplate(id="erlang-rebar3", name="Erlang Rebar3 Suite", category="Erlang", description="Runs rebar3 eunit.", task=TaskSubmission(image="erlang:26-alpine", main_cmd="rebar3 --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["fsharp-test"] = BenchmarkTemplate(id="fsharp-test", name="F# Dotnet Test Harness", category="FSharp", description="Executes dotnet test on F# library.", task=TaskSubmission(image="mcr.microsoft.com/dotnet/sdk:8.0", main_cmd="dotnet --version", limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0)))
