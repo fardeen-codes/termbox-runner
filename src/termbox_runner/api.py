@@ -1009,3 +1009,9 @@ async def delete_run_annotation_endpoint(run_id: str, key: str, storage: RunStor
     if not success:
         raise HTTPException(status_code=404, detail="Annotation not found")
     return {"deleted": True, "key": key}
+
+@app.post("/system/db/wal-checkpoint")
+async def trigger_wal_checkpoint_endpoint(storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import trigger_wal_checkpoint
+    await trigger_wal_checkpoint(storage)
+    return {"checkpoint": "ok"}
