@@ -356,3 +356,12 @@ def detect_perl_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]
     if "died at " in lowered:
         return FailureMode.RUNTIME_ERROR, "Perl fatal die exception."
     return None
+
+def detect_r_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract R runtime errors such as subscript out of bounds or stop()."""
+    lowered = combined_output.lower()
+    if "error: subscript out of bounds" in lowered:
+        return FailureMode.RUNTIME_ERROR, "R subscript out of bounds error."
+    if "error in " in lowered and "could not find function" in lowered:
+        return FailureMode.RUNTIME_ERROR, "R undefined function error."
+    return None
