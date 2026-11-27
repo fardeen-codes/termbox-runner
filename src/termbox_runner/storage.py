@@ -838,3 +838,10 @@ async def get_runs_count_by_exit_code(storage) -> dict[int, int]:
     async with conn.execute("SELECT exit_code, COUNT(*) FROM runs WHERE exit_code IS NOT NULL GROUP BY exit_code") as cur:
         rows = await cur.fetchall()
         return {r[0]: r[1] for r in rows}
+
+async def get_average_duration_by_image(storage) -> dict[str, float]:
+    """Return average task duration grouped by Docker base image."""
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT image, AVG(duration_ms) FROM runs WHERE duration_ms IS NOT NULL GROUP BY image") as cur:
+        rows = await cur.fetchall()
+        return {r[0]: float(r[1]) for r in rows if r[0]}
