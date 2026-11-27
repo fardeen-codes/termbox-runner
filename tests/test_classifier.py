@@ -247,3 +247,33 @@ def test_classifier_functional_and_asan_diagnostics():
 
     asan = detect_asan_violation("==1234==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x00")
     assert asan is not None and "heap-buffer-overflow" in asan[1]
+
+def test_multilang_batch1_diagnostics():
+    from termbox_runner.classifier import (
+        detect_perl_error,
+        detect_r_error,
+        detect_julia_error,
+        detect_scala_error,
+        detect_kotlin_error,
+        detect_swift_error,
+        detect_dart_error,
+        detect_lua_error,
+        detect_elixir_error,
+        detect_clojure_error,
+        is_sigxcpu_signal,
+        is_sigxfsz_signal,
+        is_sigsys_signal,
+    )
+    assert detect_perl_error("syntax error at test.pl line 5") is not None
+    assert detect_r_error("Error: subscript out of bounds") is not None
+    assert detect_julia_error("BoundsError: attempt to access 3-element") is not None
+    assert detect_scala_error("scala.MatchError: 42") is not None
+    assert detect_kotlin_error("KotlinNullPointerException") is not None
+    assert detect_swift_error("Fatal error: Index out of range") is not None
+    assert detect_dart_error("NoSuchMethodError: method not found") is not None
+    assert detect_lua_error("attempt to index a nil value") is not None
+    assert detect_elixir_error("FunctionClauseError") is not None
+    assert detect_clojure_error("clojure.lang.ArityException: Wrong number of args") is not None
+    assert is_sigxcpu_signal(152) is True
+    assert is_sigxfsz_signal(153) is True
+    assert is_sigsys_signal(159) is True
