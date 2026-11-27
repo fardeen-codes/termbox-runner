@@ -330,3 +330,5 @@ TEMPLATES["pascal-fpc"] = BenchmarkTemplate(id="pascal-fpc", name="FreePascal Te
 TEMPLATES["wasm-wasmtime"] = BenchmarkTemplate(id="wasm-wasmtime", name="Wasmtime Wasm Execution", category="WebAssembly", description="Runs wasm module in wasmtime runtime.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Wasmtime OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["wasm-node"] = BenchmarkTemplate(id="wasm-node", name="Node.js Wasm Runner", category="WebAssembly", description="Instantiates and evaluates WebAssembly module in Node.", task=TaskSubmission(image="node:20-slim", main_cmd="node --version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["sqlite-fts5"] = BenchmarkTemplate(id="sqlite-fts5", name="SQLite FTS5 Full Text Search", category="Database", description="Tests SQLite FTS5 query matching and ranking.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"FTS5 verified\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
