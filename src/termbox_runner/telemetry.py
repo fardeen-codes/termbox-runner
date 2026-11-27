@@ -215,3 +215,7 @@ def build_webhook_delivery_event(run_id: str, url: str, status_code: int, attemp
         "attempt": attempt,
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
+
+def format_prometheus_oom_counter(total_ooms: int) -> str:
+    """Format total OOM kills count for Prometheus metrics."""
+    return f"termbox_container_oom_events_total {total_ooms}"
