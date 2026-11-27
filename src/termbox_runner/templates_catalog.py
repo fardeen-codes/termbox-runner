@@ -368,3 +368,5 @@ TEMPLATES["boost-test"] = BenchmarkTemplate(id="boost-test", name="Boost.Test Ex
 TEMPLATES["pytest-bench"] = BenchmarkTemplate(id="pytest-bench", name="Pytest Benchmark Plugin", category="Performance", description="Runs pytest-benchmark timing evaluations.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Benchmarked OK\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["criterion-rust"] = BenchmarkTemplate(id="criterion-rust", name="Criterion.rs Benchmarks", category="Performance", description="Executes cargo bench with Criterion.", task=TaskSubmission(image="rust:1.77-slim", main_cmd="cargo --version", limits=ResourceLimits(mem_limit="512m", timeout_seconds=30.0)))
+
+TEMPLATES["jmh-java"] = BenchmarkTemplate(id="jmh-java", name="JMH Java Microbenchmark", category="Performance", description="Runs JMH benchmark iterations.", task=TaskSubmission(image="gradle:jdk17", main_cmd="gradle --version", limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0)))
