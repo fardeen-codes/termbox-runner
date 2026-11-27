@@ -60,3 +60,7 @@ def get_extended_masked_paths() -> list[str]:
         "/proc/kcore", "/proc/sys", "/proc/sysrq-trigger", "/proc/irq", "/proc/bus",
         "/proc/acpi", "/proc/keys", "/proc/latency_stats", "/proc/timer_list", "/proc/sched_debug"
     ]
+
+def get_seccomp_architectures() -> list[str]:
+    """Return supported seccomp architectures for multi-arch runners."""
+    return ["SCMP_ARCH_X86_64", "SCMP_ARCH_AARCH64", "SCMP_ARCH_X86"]
