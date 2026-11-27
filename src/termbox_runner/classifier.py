@@ -604,3 +604,7 @@ def detect_llvm_crash(combined_output: str) -> Optional[Tuple[FailureMode, str]]
 def has_gdb_stacktrace(combined_output: str) -> bool:
     """Check if output contains GDB stacktrace frames (#0, #1)."""
     return "#0 " in combined_output and ("in main" in combined_output or "0x" in combined_output)
+
+def detect_strace_permission_denied(combined_output: str) -> bool:
+    """Check if strace log recorded EPERM or EACCES error."""
+    return "= -1 eperm" in combined_output.lower() or "= -1 eacces" in combined_output.lower()
