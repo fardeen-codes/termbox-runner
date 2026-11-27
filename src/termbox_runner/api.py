@@ -983,3 +983,8 @@ async def get_run_badge(run_id: str, storage: RunStorage = Depends(get_storage_d
     status_str = "NOT_FOUND" if not manifest else (manifest.failure_mode.value if manifest.failure_mode else "PASSED")
     from termbox_runner.export import generate_status_badge_svg
     return Response(content=generate_status_badge_svg(status_str), media_type="image/svg+xml")
+
+@app.get("/stats/exit-codes-distribution")
+async def get_exit_codes_distribution(storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import get_runs_count_by_exit_code
+    return await get_runs_count_by_exit_code(storage)
