@@ -930,3 +930,7 @@ def validate_shm_size_string(shm_str: str) -> bool:
     """Validate format of shm size string (e.g. 64m, 1g)."""
     import re
     return bool(re.match(r'^[0-9]+[kmgKMG]?$', shm_str.strip()))
+
+def is_valid_network_mode(mode: str) -> bool:
+    """Validate supported Docker network mode strings."""
+    return mode in ("none", "bridge", "host") or mode.startswith("container:")
