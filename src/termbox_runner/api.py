@@ -1001,3 +1001,11 @@ async def add_run_annotation_endpoint(run_id: str, key: str, value: str, storage
     if not success:
         raise HTTPException(status_code=404, detail="Run not found")
     return {"run_id": run_id, "key": key, "value": value}
+
+@app.delete("/runs/{run_id}/annotations/{key}")
+async def delete_run_annotation_endpoint(run_id: str, key: str, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import delete_run_annotation
+    success = await delete_run_annotation(storage, run_id, key)
+    if not success:
+        raise HTTPException(status_code=404, detail="Annotation not found")
+    return {"deleted": True, "key": key}
