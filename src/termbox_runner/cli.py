@@ -418,3 +418,7 @@ def cmd_oom_runs(server_url: str):
 def cmd_timeout_runs(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/runs/filter/timeouts").json())
+
+def cmd_stddev_stats(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/stats/duration-stddev").json())
