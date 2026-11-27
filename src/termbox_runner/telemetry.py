@@ -153,3 +153,13 @@ def parse_w3c_baggage_header(header: str) -> dict[str, str]:
             k, v = part.strip().split("=", 1)
             res[k] = v
     return res
+
+def record_lifecycle_timing(run_id: str, setup_ms: float, main_ms: float, verify_ms: float) -> dict:
+    """Record granular command phase timings."""
+    return {
+        "run_id": run_id,
+        "setup_ms": setup_ms,
+        "main_ms": main_ms,
+        "verify_ms": verify_ms,
+        "total_ms": setup_ms + main_ms + verify_ms
+    }
