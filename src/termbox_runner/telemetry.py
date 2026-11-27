@@ -194,3 +194,8 @@ def record_process_count_metric(run_id: str, pids: int) -> dict:
 def record_page_reclaim_metric(run_id: str, pgscan: int, pgsteal: int) -> dict:
     """Construct memory page reclamation pressure telemetry point."""
     return {"metric": "container_memory_reclaim_total", "run_id": run_id, "pgscan": pgscan, "pgsteal": pgsteal}
+
+def calculate_network_throughput(rx_bytes: int, tx_bytes: int, duration_sec: float) -> dict[str, float]:
+    """Compute RX/TX throughput in KB/s."""
+    dur = max(0.001, duration_sec)
+    return {"rx_kbps": (rx_bytes / 1024.0) / dur, "tx_kbps": (tx_bytes / 1024.0) / dur}
