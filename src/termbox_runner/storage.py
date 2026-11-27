@@ -929,3 +929,10 @@ async def query_runs_by_git_branch(storage, branch_name: str) -> list[str]:
     """Return run IDs matching a specific git branch."""
     all_runs = await storage.list_runs(limit=100)
     return [r.run_id for r in all_runs if getattr(r.task, "git_branch", None) == branch_name]
+
+async def get_failure_mode_counts(storage) -> dict[str, int]:
+    """Return distribution of runs by failure mode."""
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT failure_mode, COUNT(*) FROM runs WHERE failure_mode IS NOT NULL GROUP BY failure_mode") as cur:
+        rows = await cur.fetchall()
+        return {r[0]: r[1] for r in rows}
