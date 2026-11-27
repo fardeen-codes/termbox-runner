@@ -442,3 +442,7 @@ def terminal_bright_blue(text: str) -> str:
 def cmd_commit_runs(server_url: str, commit_hash: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get(f"/runs/filter/git-commit/{commit_hash}").json())
+
+def cmd_branch_runs(server_url: str, branch_name: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get(f"/runs/filter/git-branch/{branch_name}").json())
