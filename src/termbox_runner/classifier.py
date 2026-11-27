@@ -458,3 +458,12 @@ def detect_erlang_error(combined_output: str) -> Optional[Tuple[FailureMode, str
     if "** reason for termination ==" in lowered:
         return FailureMode.RUNTIME_ERROR, "Erlang process crash termination."
     return None
+
+def detect_lisp_error(combined_output: str) -> Optional[Tuple[FailureMode, str]]:
+    """Extract Common Lisp runtime conditions."""
+    lowered = combined_output.lower()
+    if "the variable " in lowered and " is unbound" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Common Lisp UNBOUND-VARIABLE condition."
+    if "undefined-function" in lowered:
+        return FailureMode.RUNTIME_ERROR, "Common Lisp UNDEFINED-FUNCTION condition."
+    return None
