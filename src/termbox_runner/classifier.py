@@ -633,3 +633,7 @@ def extract_csharp_error_code(output: str) -> Optional[str]:
 def detect_javac_cannot_find_symbol(output: str) -> bool:
     """Check if javac reported cannot find symbol error."""
     return "cannot find symbol" in output.lower() and "symbol:" in output.lower()
+
+def detect_rust_use_of_moved_value(output: str) -> bool:
+    """Check if rustc reported borrow of moved value (E0382)."""
+    return "error[e0382]: use of moved value" in output.lower()
