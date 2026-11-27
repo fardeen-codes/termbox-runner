@@ -129,3 +129,10 @@ def record_page_faults_metric(run_id: str, major_faults: int, minor_faults: int)
         "major_faults": major_faults,
         "minor_faults": minor_faults
     }
+
+def format_prometheus_cpu_seconds(run_id: str, user_sec: float, sys_sec: float) -> list[str]:
+    """Format user and system CPU seconds in Prometheus gauge format."""
+    return [
+        f'termbox_container_cpu_user_seconds_total{{run_id="{run_id}"}} {user_sec:.4f}',
+        f'termbox_container_cpu_system_seconds_total{{run_id="{run_id}"}} {sys_sec:.4f}'
+    ]
