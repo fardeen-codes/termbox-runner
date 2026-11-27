@@ -322,3 +322,5 @@ TEMPLATES["graphql-schema"] = BenchmarkTemplate(id="graphql-schema", name="Graph
 TEMPLATES["terraform-validate"] = BenchmarkTemplate(id="terraform-validate", name="Terraform HCL Validator", category="DevOps", description="Runs terraform fmt -check.", task=TaskSubmission(image="hashicorp/terraform:light", main_cmd="terraform --version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["ansible-syntax"] = BenchmarkTemplate(id="ansible-syntax", name="Ansible Playbook Syntax", category="DevOps", description="Runs ansible-playbook --syntax-check.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Ansible valid\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["racket-test"] = BenchmarkTemplate(id="racket-test", name="Racket Test Suite", category="Functional", description="Runs raco test on Racket source.", task=TaskSubmission(image="racket/racket:8.12", main_cmd="racket --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
