@@ -917,3 +917,7 @@ def get_standard_tier_preset() -> dict:
 def get_high_tier_preset() -> dict:
     """Preset for compilation and heavier benchmarks."""
     return {"mem_limit": "2g", "cpu_quota": 4.0, "timeout_seconds": 120.0, "pids_limit": 512}
+
+def get_eval_tier_preset() -> dict:
+    """Preset for long-running agent evaluation harnesses."""
+    return {"mem_limit": "4g", "cpu_quota": 4.0, "timeout_seconds": 300.0, "pids_limit": 1024}
