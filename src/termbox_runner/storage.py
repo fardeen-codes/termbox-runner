@@ -863,3 +863,8 @@ async def delete_run_annotation(storage, run_id: str, key: str) -> bool:
     del manifest.annotations[key]
     await storage.save_run(manifest)
     return True
+
+async def query_runs_by_annotation_key(storage, key: str) -> list[str]:
+    """Find run IDs containing a specific metadata annotation key."""
+    all_runs = await storage.list_runs(limit=100)
+    return [r.run_id for r in all_runs if key in getattr(r, "annotations", {})]
