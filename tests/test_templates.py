@@ -85,3 +85,11 @@ def test_functional_and_systems_templates():
     assert "haskell-cabal" in TEMPLATES
     assert "ocaml-dune" in TEMPLATES
     assert "zig-test" in TEMPLATES
+
+def test_web_and_db_templates_batch1():
+    from termbox_runner.templates_catalog import TEMPLATES, list_template_categories
+    assert "express-api" in TEMPLATES
+    assert "spring-boot" in TEMPLATES
+    assert "security-jwt" in TEMPLATES
+    assert "alembic-mig" in TEMPLATES
+    assert len(list_template_categories()) >= 6
