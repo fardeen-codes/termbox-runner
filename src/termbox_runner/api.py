@@ -1037,3 +1037,9 @@ async def get_run_signature(run_id: str, secret: str = "termbox_default", storag
 async def get_top_memory_runs(limit: int = 5, storage: RunStorage = Depends(get_storage_dependency)):
     from termbox_runner.storage import query_top_memory_runs
     return {"top_runs": await query_top_memory_runs(storage, limit)}
+
+@app.post("/maintenance/prune-before")
+async def prune_runs_before_endpoint(cutoff: str = "2020-01-01T00:00:00Z", storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import prune_runs_before_timestamp
+    count = await prune_runs_before_timestamp(storage, cutoff)
+    return {"pruned_count": count}
