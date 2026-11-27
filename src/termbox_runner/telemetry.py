@@ -163,3 +163,11 @@ def record_lifecycle_timing(run_id: str, setup_ms: float, main_ms: float, verify
         "verify_ms": verify_ms,
         "total_ms": setup_ms + main_ms + verify_ms
     }
+
+def assign_latency_bucket(duration_ms: float, buckets: list[float] = None) -> float:
+    """Assign duration to appropriate histogram threshold bucket."""
+    b = buckets or [10.0, 50.0, 100.0, 250.0, 500.0, 1000.0, 5000.0]
+    for limit in sorted(b):
+        if duration_ms <= limit:
+            return limit
+    return float("inf")
