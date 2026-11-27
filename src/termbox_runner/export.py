@@ -324,3 +324,8 @@ def format_multi_run_markdown_matrix(manifests: list[RunManifest]) -> str:
         mode = m.failure_mode.value if m.failure_mode else "PASSED"
         lines.append(f"| `{m.run_id}` | `{m.status.value}` | `{mode}` | {m.duration_ms:.1f}ms | `{m.task.main_cmd[:25]}` |")
     return "\n".join(lines)
+
+def encode_ndjson_event(event_type: str, payload: dict) -> str:
+    """Encode single NDJSON event line."""
+    import json
+    return json.dumps({"event": event_type, "data": payload}) + "\n"
