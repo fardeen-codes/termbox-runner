@@ -109,3 +109,7 @@ def detect_docker_storage_driver(info_driver: str = "overlay2") -> str:
 def estimate_overlay2_diff_size(layer_bytes: list[int]) -> int:
     """Sum layer byte sizes for container filesystem diff."""
     return sum(layer_bytes)
+
+def normalize_capability_names(caps: list[str]) -> list[str]:
+    """Ensure CAP_ prefix is consistently formatted."""
+    return [c.upper() if c.upper().startswith("CAP_") else f"CAP_{c.upper()}" for c in caps]
