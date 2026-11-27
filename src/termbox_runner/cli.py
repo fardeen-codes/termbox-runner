@@ -382,3 +382,7 @@ def terminal_yellow(text: str) -> str:
 def terminal_magenta(text: str) -> str:
     """Format string with magenta ANSI color escape."""
     return f"\033[35m{text}\033[0m"
+
+def terminal_clear_screen() -> str:
+    """Return ANSI escape code to clear terminal screen."""
+    return "\033[2J\033[H"
