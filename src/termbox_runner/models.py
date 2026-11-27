@@ -111,6 +111,7 @@ class ResourceLimits(BaseModel):
     oom_score_adj: Optional[int] = Field(default=None, ge=-1000, le=1000, description="OOM killer score adjustment")
     oom_kill_disable: Optional[bool] = Field(default=False, description="Disable OOM killer for container")
     cpu_shares: Optional[int] = Field(default=1024, ge=2, le=262144, description="CPU shares relative weight")
+    device_read_bps: Dict[str, str] = Field(default_factory=dict, description="Device read bytes per second limits")
 
     @field_validator("mem_limit")
     @classmethod
