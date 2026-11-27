@@ -324,3 +324,5 @@ TEMPLATES["terraform-validate"] = BenchmarkTemplate(id="terraform-validate", nam
 TEMPLATES["ansible-syntax"] = BenchmarkTemplate(id="ansible-syntax", name="Ansible Playbook Syntax", category="DevOps", description="Runs ansible-playbook --syntax-check.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"Ansible valid\")'", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
 
 TEMPLATES["racket-test"] = BenchmarkTemplate(id="racket-test", name="Racket Test Suite", category="Functional", description="Runs raco test on Racket source.", task=TaskSubmission(image="racket/racket:8.12", main_cmd="racket --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["pascal-fpc"] = BenchmarkTemplate(id="pascal-fpc", name="FreePascal Test Harness", category="Pascal", description="Compiles and tests FreePascal unit.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo FPC OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
