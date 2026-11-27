@@ -374,3 +374,7 @@ def cmd_image_durations(server_url: str):
 
 def cmd_badge_url(server_url: str, run_id: str):
     print(f"{server_url}/runs/{run_id}/badge")
+
+def terminal_yellow(text: str) -> str:
+    """Format string with yellow ANSI color escape."""
+    return f"\033[33m{text}\033[0m"
