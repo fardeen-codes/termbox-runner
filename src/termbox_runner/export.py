@@ -274,3 +274,8 @@ def generate_allure_result_json(manifest: RunManifest) -> dict:
         "parameters": [{"name": "command", "value": manifest.task.main_cmd}],
         "labels": [{"name": "suite", "value": "termbox-runner"}, {"name": "framework", "value": "termbox"}]
     }
+
+def generate_circleci_test_xml(manifest: RunManifest) -> str:
+    """Format task execution results in CircleCI test results XML convention."""
+    failures = 1 if manifest.failure_mode and manifest.failure_mode != FailureMode.PASSED else 0
+    return f'<?xml version="1.0" encoding="UTF-8"?><testsuite name="circleci.task" tests="1" failures="{failures}" time="{manifest.duration_ms / 1000.0:.3f}"><testcase name="{manifest.run_id}" classname="termbox.runner"/></testsuite>'
