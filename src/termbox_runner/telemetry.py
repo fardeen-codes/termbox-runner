@@ -262,3 +262,11 @@ def check_duration_sla(duration_ms: float, sla_ms: float = 1000.0) -> bool:
 def is_valid_otel_span_kind(kind: str) -> bool:
     """Check if span kind matches standard OTEL enum."""
     return kind.upper() in ("INTERNAL", "SERVER", "CLIENT", "PRODUCER", "CONSUMER")
+
+def calculate_p999(durations: list[float]) -> float:
+    """Compute p99.9 percentile from durations list."""
+    if not durations:
+        return 0.0
+    s = sorted(durations)
+    idx = min(int(len(s) * 0.999), len(s) - 1)
+    return s[idx]
