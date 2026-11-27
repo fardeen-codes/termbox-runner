@@ -314,3 +314,5 @@ TEMPLATES["v-test"] = BenchmarkTemplate(id="v-test", name="V Language Test Runne
 TEMPLATES["valgrind-memcheck"] = BenchmarkTemplate(id="valgrind-memcheck", name="Valgrind Memcheck Audit", category="Memory", description="Runs valgrind --leak-check=full.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Valgrind OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=30.0)))
 
 TEMPLATES["openapi-validate"] = BenchmarkTemplate(id="openapi-validate", name="OpenAPI Spec Validator", category="Validation", description="Validates openapi.yaml specs.", task=TaskSubmission(image="python:3.12-slim", main_cmd="python -c 'print(\"OpenAPI valid\")'", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["proto-validate"] = BenchmarkTemplate(id="proto-validate", name="Protobuf Schema Compiler", category="Validation", description="Compiles .proto files.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Protoc OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
