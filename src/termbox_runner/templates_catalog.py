@@ -292,3 +292,5 @@ TEMPLATES["liquibase-mig"] = BenchmarkTemplate(id="liquibase-mig", name="Liquiba
 def list_template_categories() -> list[str]:
     """Return sorted list of distinct template categories."""
     return sorted(list(set(t.category for t in TEMPLATES.values())))
+
+TEMPLATES["lisp-sbcl"] = BenchmarkTemplate(id="lisp-sbcl", name="Common Lisp SBCL Test", category="Functional", description="Executes SBCL lisp script.", task=TaskSubmission(image="daewok/sbcl:latest", main_cmd="sbcl --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
