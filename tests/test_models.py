@@ -120,3 +120,8 @@ def test_models_additional_schemas():
 
     percentiles = RunPercentileStats(p50_ms=100.0, p90_ms=250.0, p99_ms=500.0)
     assert percentiles.p90_ms == 250.0
+
+def test_sanitize_tag():
+    from termbox_runner.models import sanitize_tag_string
+    assert sanitize_tag_string("eval:pass 1") == "evalpass1"
+    assert sanitize_tag_string("team-core_v2") == "team-core_v2"
