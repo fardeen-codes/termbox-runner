@@ -157,3 +157,17 @@ def test_export_batch1_ci_formats():
     assert "<svg" in generate_status_badge_svg("PASSED")
     assert "echo test" in format_multi_run_markdown_matrix([m])
     assert "data" in encode_ndjson_event("STARTED", {"id": 1})
+
+def test_export_batch3_ci_annotations():
+    from termbox_runner.models import RunManifest, TaskSubmission, RunStatus, FailureMode
+    from termbox_runner.export import (
+        generate_jenkins_test_xml,
+        format_travis_log_section,
+        format_github_action_error,
+        format_github_action_warning,
+    )
+    m = RunManifest(task=TaskSubmission(main_cmd="echo test"), status=RunStatus.COMPLETED, failure_mode=FailureMode.PASSED, duration_ms=20.0)
+    assert "<testsuite name="jenkins.runner"" in generate_jenkins_test_xml(m)
+    assert "travis_fold:start:build" in format_travis_log_section("build", "Compiling...")
+    assert "::error" in format_github_action_error("OOM", "Memory limit exceeded")
+    assert "::warning" in format_github_action_warning("Slow", "Execution took > 10s")
