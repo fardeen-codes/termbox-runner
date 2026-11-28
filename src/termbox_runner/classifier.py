@@ -704,3 +704,7 @@ def detect_haskell_undefined_exception(output: str) -> bool:
 def detect_deno_permission_denied(output: str) -> bool:
     """Detect Deno security sandbox permission rejection."""
     return "permissiondenied: requires " in output.lower() and "run again with --allow-" in output.lower()
+
+def detect_bun_out_of_memory(output: str) -> bool:
+    """Detect Bun runtime out-of-memory crash."""
+    return "bun: out of memory" in output.lower() or "javascriptcore::outofmemory" in output.lower()
