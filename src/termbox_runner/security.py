@@ -238,3 +238,12 @@ def deduplicate_capabilities(caps: list[str]) -> list[str]:
 def is_valid_network_mode(mode: str) -> bool:
     """Ensure network mode is sandboxed or isolated."""
     return mode.lower() in ("none", "bridge", "host", "container")
+
+def is_valid_host_ip(ip: str) -> bool:
+    """Check if string is a valid IPv4 address."""
+    parts = ip.split(".")
+    if len(parts) != 4: return False
+    try:
+        return all(0 <= int(p) <= 255 for p in parts)
+    except ValueError:
+        return False
