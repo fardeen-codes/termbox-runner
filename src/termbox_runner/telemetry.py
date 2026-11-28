@@ -293,3 +293,9 @@ def calculate_error_rate_percentage(failures: int, total: int) -> float:
     if total <= 0:
         return 0.0
     return (failures / total) * 100.0
+
+def calculate_memory_efficiency_ratio(used_mb: float, allocated_mb: float) -> float:
+    """Calculate memory utilization ratio (clamped to [0.0, 1.0])."""
+    if allocated_mb <= 0:
+        return 0.0
+    return min(1.0, max(0.0, used_mb / allocated_mb))
