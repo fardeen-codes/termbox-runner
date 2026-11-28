@@ -712,3 +712,7 @@ def detect_bun_out_of_memory(output: str) -> bool:
 def detect_vitest_assertion_error(output: str) -> bool:
     """Detect Vitest test assertion error."""
     return "assertionerror: " in output.lower() and "failed |" in output.lower()
+
+def detect_playwright_page_crashed(output: str) -> bool:
+    """Detect Playwright page/browser target crash."""
+    return "targetpagecrashed" in output.lower() or "page.gotourl: target closed" in output.lower()
