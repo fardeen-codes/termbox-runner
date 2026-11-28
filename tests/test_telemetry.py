@@ -128,3 +128,18 @@ def test_telemetry_part4_sla_and_p999():
     assert is_valid_otel_span_kind("INTERNAL") is True
     assert is_valid_otel_span_kind("INVALID") is False
     assert calculate_p999([1.0, 2.0, 3.0]) == 3.0
+
+
+def test_telemetry_tps_and_jitter():
+    from termbox_runner.telemetry import (
+        calculate_ema_latency,
+        calculate_latency_jitter,
+        estimate_throughput_tps,
+        calculate_error_rate_percentage,
+        calculate_memory_efficiency_ratio,
+    )
+    assert calculate_ema_latency(100.0, 150.0, 0.2) == 110.0
+    assert calculate_latency_jitter([100.0, 110.0, 105.0]) == 7.5
+    assert estimate_throughput_tps(10, 1000.0) == 10.0
+    assert calculate_error_rate_percentage(5, 50) == 10.0
+    assert calculate_memory_efficiency_ratio(128.0, 256.0) == 0.5
