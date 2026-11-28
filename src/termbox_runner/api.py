@@ -1109,3 +1109,10 @@ async def get_tps_endpoint(storage: RunStorage = Depends(get_storage_dependency)
     total_time = sum([r.duration_ms for r in runs if r.duration_ms is not None])
     from termbox_runner.telemetry import estimate_throughput_tps
     return {"tps": estimate_throughput_tps(len(runs), total_time), "total_runs": len(runs)}
+
+@app.get("/stats/error-rate")
+async def get_error_rate_endpoint(storage: RunStorage = Depends(get_storage_dependency)):
+    runs = await storage.list_runs(limit=100)
+    failures = sum(1 for r in runs if r.exit_code != 0)
+    from termbox_runner.telemetry import calculate_error_rate_percentage
+    return {"error_rate_pct": calculate_error_rate_percentage(failures, len(runs)), "total_runs": len(runs)}
