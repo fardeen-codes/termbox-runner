@@ -495,3 +495,7 @@ def format_markdown_table_row(manifest: RunManifest) -> str:
     """Generate GitHub Flavored Markdown table row for execution manifest."""
     status = "PASSED" if manifest.exit_code == 0 else "FAILED"
     return f"| `{manifest.run_id[:8]}` | {status} | `{manifest.exit_code}` | {manifest.duration_ms:.1f}ms |"
+
+def format_csv_run_row(manifest: RunManifest) -> str:
+    """Format CSV row for run record."""
+    return f"{manifest.run_id},{manifest.exit_code},{manifest.duration_ms:.2f}"
