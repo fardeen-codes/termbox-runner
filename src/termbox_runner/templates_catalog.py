@@ -396,3 +396,5 @@ TEMPLATES["deno-run"] = BenchmarkTemplate(id="deno-run", name="Deno Modern Runti
 TEMPLATES["bun-test"] = BenchmarkTemplate(id="bun-test", name="Bun Fast Test Runner", category="JavaScript", description="Runs Bun native test runner.", task=TaskSubmission(image="oven/bun:alpine", main_cmd="bun --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
 
 TEMPLATES["vitest-run"] = BenchmarkTemplate(id="vitest-run", name="Vitest ESM Framework", category="JavaScript", description="Executes Vitest test suites.", task=TaskSubmission(image="node:20-alpine", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["playwright-test"] = BenchmarkTemplate(id="playwright-test", name="Playwright Headless", category="Testing", description="Runs Playwright headless browser test.", task=TaskSubmission(image="mcr.microsoft.com/playwright:v1.42.0-jammy", main_cmd="echo Playwright OK", limits=ResourceLimits(mem_limit="1g", timeout_seconds=40.0)))
