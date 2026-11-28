@@ -964,3 +964,13 @@ async def count_runs_by_date_bucket(storage) -> dict[str, int]:
     async with conn.execute("SELECT SUBSTR(created_at, 1, 10) as day, COUNT(*) FROM runs GROUP BY day ORDER BY day DESC") as cur:
         rows = await cur.fetchall()
         return {r[0]: r[1] for r in rows if r[0]}
+
+async def calculate_average_duration_by_image(storage) -> dict[str, float]:
+    """Aggregate average execution duration per container image."""
+    all_runs = await storage.list_runs(limit=100)
+    img_map = {}
+    for r in all_runs:
+        img = getattr(r.task, "image", "unknown")
+        if r.duration_ms is not None:
+            img_map.setdefault(img, []).append(r.duration_ms)
+    return {img: sum(durs) / len(durs) for img, durs in img_map.items()}
