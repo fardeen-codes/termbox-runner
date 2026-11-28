@@ -696,3 +696,7 @@ def detect_zig_panic(output: str) -> bool:
 def detect_ocaml_uncaught_exception(output: str) -> bool:
     """Detect OCaml fatal uncaught exception."""
     return "fatal error: exception " in output.lower() or "uncaught_exception" in output.lower()
+
+def detect_haskell_undefined_exception(output: str) -> bool:
+    """Detect Haskell Prelude.undefined or empty list head error."""
+    return "prelude.undefined" in output.lower() or "prelude.head: empty list" in output.lower()
