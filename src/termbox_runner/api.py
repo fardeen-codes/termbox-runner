@@ -1095,3 +1095,10 @@ async def get_p999_latency(storage: RunStorage = Depends(get_storage_dependency)
     durations = [r.duration_ms for r in runs if r.duration_ms is not None]
     from termbox_runner.telemetry import calculate_p999
     return {"p999_ms": calculate_p999(durations), "count": len(durations)}
+
+@app.get("/stats/latency-jitter")
+async def get_latency_jitter_endpoint(storage: RunStorage = Depends(get_storage_dependency)):
+    runs = await storage.list_runs(limit=100)
+    durs = [r.duration_ms for r in runs if r.duration_ms is not None]
+    from termbox_runner.telemetry import calculate_latency_jitter
+    return {"jitter_ms": calculate_latency_jitter(durs), "samples": len(durs)}
