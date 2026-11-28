@@ -950,3 +950,10 @@ async def query_runs_by_exit_code_range(storage, min_code: int, max_code: int) -
     async with conn.execute("SELECT run_id FROM runs WHERE exit_code >= ? AND exit_code <= ? ORDER BY created_at DESC", (min_code, max_code)) as cur:
         rows = await cur.fetchall()
         return [r[0] for r in rows]
+
+async def query_runs_in_time_window(storage, start_iso: str, end_iso: str) -> list[str]:
+    """Fetch run IDs created between two ISO-8601 timestamps."""
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT run_id FROM runs WHERE created_at >= ? AND created_at <= ? ORDER BY created_at DESC", (start_iso, end_iso)) as cur:
+        rows = await cur.fetchall()
+        return [r[0] for r in rows]
