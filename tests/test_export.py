@@ -171,3 +171,52 @@ def test_export_batch3_ci_annotations():
     assert "travis_fold:start:build" in format_travis_log_section("build", "Compiling...")
     assert "::error" in format_github_action_error("OOM", "Memory limit exceeded")
     assert "::warning" in format_github_action_warning("Slow", "Execution took > 10s")
+
+
+def test_chatops_and_metric_exporters():
+    from termbox_runner.models import RunManifest, TaskSubmission, ResourceLimits, FailureMode
+    from termbox_runner.export import (
+        generate_codecov_report,
+        generate_github_check_run_payload,
+        generate_slack_block_notification,
+        generate_discord_embed_notification,
+        generate_pagerduty_event,
+        generate_datadog_metric_series,
+        format_prometheus_push_metrics,
+        calculate_total_junit_duration,
+        is_valid_cobertura_xml,
+        format_json_run_summary,
+        format_markdown_table_row,
+        format_csv_run_row,
+        calculate_webhook_backoff,
+        get_webhook_signature_header,
+    )
+    manifest = RunManifest(
+        run_id="run-chatops-test-12345",
+        task=TaskSubmission(image="alpine", main_cmd="echo ok", limits=ResourceLimits(mem_limit="64m")),
+        exit_code=0,
+        failure_mode=FailureMode.PASSED,
+        duration_ms=250.0,
+    )
+    cc = generate_codecov_report(manifest)
+    assert cc["status"] == "passed"
+    gh = generate_github_check_run_payload(manifest)
+    assert gh["conclusion"] == "success"
+    slack = generate_slack_block_notification(manifest)
+    assert len(slack["blocks"]) == 2
+    discord = generate_discord_embed_notification(manifest)
+    assert len(discord["embeds"]) == 1
+    pd = generate_pagerduty_event(manifest, "routing-123")
+    assert pd["event_action"] == "resolve"
+    dd = generate_datadog_metric_series(manifest)
+    assert dd["series"][0]["points"][0]["value"] == 250.0
+    prom = format_prometheus_push_metrics(manifest)
+    assert 'termbox_task_duration_seconds' in prom
+    assert calculate_total_junit_duration([1000.0, 2000.0]) == 3.0
+    assert is_valid_cobertura_xml('<coverage version="1"></coverage>') is True
+    assert '"run-chatops-test-12345"' in format_json_run_summary(manifest)
+    assert '| `run-chat` |' in format_markdown_table_row(manifest)
+    assert 'run-chatops-test-12345,0,250.00' == format_csv_run_row(manifest)
+    assert calculate_webhook_backoff(1) == 1.0
+    assert calculate_webhook_backoff(3) == 4.0
+    assert get_webhook_signature_header() == "X-Termbox-Signature-256"
