@@ -436,3 +436,17 @@ def generate_discord_embed_notification(manifest: RunManifest) -> dict:
             }
         ]
     }
+
+def generate_pagerduty_event(manifest: RunManifest, routing_key: str) -> dict:
+    """Construct PagerDuty Events API v2 trigger alert for failures."""
+    severity = "error" if manifest.exit_code != 0 else "info"
+    return {
+        "routing_key": routing_key,
+        "event_action": "trigger" if manifest.exit_code != 0 else "resolve",
+        "dedup_key": f"termbox-{manifest.run_id}",
+        "payload": {
+            "summary": f"Termbox run failure: {manifest.run_id}",
+            "severity": severity,
+            "source": "termbox-runner",
+        },
+    }
