@@ -189,3 +189,7 @@ def format_memory_reservation(reservation_mb: int) -> str:
 def is_valid_oom_score_adj(score: int) -> bool:
     """Validate oom_score_adj is within Linux bounds [-1000, 1000]."""
     return -1000 <= score <= 1000
+
+def get_readonly_rootfs_flag(enabled: bool) -> list[str]:
+    """Return docker flag for read-only rootfs."""
+    return ["--read-only"] if enabled else []
