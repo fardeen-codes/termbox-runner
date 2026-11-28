@@ -86,3 +86,10 @@
 - 50+ benchmark templates for web, systems, database, AI/ML, and security evaluation.
 - Enterprise CI/CD reporting formats (GitHub Summary, GitLab, CircleCI, Azure DevOps, Allure, TAP 14, Jenkins).
 - Distributed telemetry, SLA latency percentiles, and SQLite high-performance WAL optimizations.
+
+## [1.1.0] - 2026-11-28
+### Added
+- Extended language templates for Zig, Deno, Bun, and OCaml.
+- Slack Block Kit and Discord Webhook alert exporters.
+- Telemetry TPS, latency jitter, and EMA trackers.
+- Ulimits parsing and security hardening validators.
