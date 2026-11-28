@@ -943,3 +943,10 @@ async def query_runs_by_duration_range(storage, min_ms: float, max_ms: float) ->
     async with conn.execute("SELECT run_id FROM runs WHERE duration_ms >= ? AND duration_ms <= ? ORDER BY created_at DESC", (min_ms, max_ms)) as cur:
         rows = await cur.fetchall()
         return [r[0] for r in rows]
+
+async def query_runs_by_exit_code_range(storage, min_code: int, max_code: int) -> list[str]:
+    """Fetch run IDs with exit codes between min_code and max_code."""
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT run_id FROM runs WHERE exit_code >= ? AND exit_code <= ? ORDER BY created_at DESC", (min_code, max_code)) as cur:
+        rows = await cur.fetchall()
+        return [r[0] for r in rows]
