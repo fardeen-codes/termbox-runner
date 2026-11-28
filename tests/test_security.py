@@ -118,3 +118,52 @@ def test_security_part6_utilities():
     assert is_valid_tmpfs_path("/tmp") is True
     assert is_valid_tmpfs_path("/etc") is False
     assert parse_device_numbers("1:3") == (1, 3)
+
+
+def test_sandboxing_options_and_ulimits():
+    from termbox_runner.security import (
+        is_valid_pids_limit,
+        normalize_memory_swappiness,
+        is_valid_kernel_memory_mb,
+        get_private_ipc_flag,
+        is_valid_container_hostname,
+        format_memory_reservation,
+        is_valid_oom_score_adj,
+        get_readonly_rootfs_flag,
+        is_valid_seccomp_action,
+        format_cgroup_parent,
+        convert_shm_size_to_bytes,
+        parse_nofile_limit,
+        parse_nproc_limit,
+        is_valid_memlock_limit,
+        deduplicate_capabilities,
+        is_valid_network_mode,
+        is_valid_host_ip,
+        forbid_privileged_mode,
+        is_forbidden_socket_mount,
+    )
+    assert is_valid_pids_limit(100) is True
+    assert is_valid_pids_limit(5) is False
+    assert normalize_memory_swappiness(-10) == 0
+    assert normalize_memory_swappiness(150) == 100
+    assert is_valid_kernel_memory_mb(64) is True
+    assert get_private_ipc_flag() == "--ipc=private"
+    assert is_valid_container_hostname("sandbox-worker-1") is True
+    assert is_valid_container_hostname("invalid host with spaces") is False
+    assert format_memory_reservation(256) == "--memory-reservation=256m"
+    assert is_valid_oom_score_adj(-500) is True
+    assert is_valid_oom_score_adj(2000) is False
+    assert get_readonly_rootfs_flag(True) == ["--read-only"]
+    assert get_readonly_rootfs_flag(False) == []
+    assert is_valid_seccomp_action("SCMP_ACT_KILL") is True
+    assert format_cgroup_parent("agent") == "--cgroup-parent=agent.slice"
+    assert convert_shm_size_to_bytes("64m") == 64 * 1024 * 1024
+    assert parse_nofile_limit("1024:2048") == (1024, 2048)
+    assert parse_nproc_limit("512") == (512, 512)
+    assert is_valid_memlock_limit(-1) is True
+    assert deduplicate_capabilities(["cap_net_admin", "CAP_NET_ADMIN"]) == ["CAP_NET_ADMIN"]
+    assert is_valid_network_mode("bridge") is True
+    assert is_valid_host_ip("192.168.1.1") is True
+    assert is_valid_host_ip("999.1.1.1") is False
+    assert forbid_privileged_mode(False) is True
+    assert is_forbidden_socket_mount("/var/run/docker.sock") is True
