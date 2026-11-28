@@ -384,3 +384,17 @@ def generate_codecov_report(manifest: RunManifest, coverage_pct: float = 100.0) 
         "coverage": coverage_pct,
         "status": "passed" if manifest.exit_code == 0 else "failed",
     }
+
+def generate_github_check_run_payload(manifest: RunManifest, app_name: str = "Termbox Runner") -> dict:
+    """Construct GitHub Checks API check-run payload."""
+    conclusion = "success" if manifest.exit_code == 0 else "failure"
+    return {
+        "name": app_name,
+        "head_sha": getattr(manifest.task, "git_commit", "main") or "main",
+        "status": "completed",
+        "conclusion": conclusion,
+        "output": {
+            "title": f"Run {manifest.run_id}: {conclusion.upper()}",
+            "summary": f"Duration: {manifest.duration_ms:.1f}ms with exit code {manifest.exit_code}",
+        },
+    }
