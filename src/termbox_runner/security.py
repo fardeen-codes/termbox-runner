@@ -193,3 +193,7 @@ def is_valid_oom_score_adj(score: int) -> bool:
 def get_readonly_rootfs_flag(enabled: bool) -> list[str]:
     """Return docker flag for read-only rootfs."""
     return ["--read-only"] if enabled else []
+
+def is_valid_seccomp_action(action: str) -> bool:
+    """Validate seccomp default action."""
+    return action.upper() in ("SCMP_ACT_KILL", "SCMP_ACT_ERRNO", "SCMP_ACT_ALLOW", "SCMP_ACT_LOG", "SCMP_ACT_TRAP")
