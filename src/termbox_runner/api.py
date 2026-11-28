@@ -1116,3 +1116,8 @@ async def get_error_rate_endpoint(storage: RunStorage = Depends(get_storage_depe
     failures = sum(1 for r in runs if r.exit_code != 0)
     from termbox_runner.telemetry import calculate_error_rate_percentage
     return {"error_rate_pct": calculate_error_rate_percentage(failures, len(runs)), "total_runs": len(runs)}
+
+@app.get("/runs/filter/duration")
+async def get_runs_by_duration_filter(min_ms: float = 0.0, max_ms: float = 60000.0, storage: RunStorage = Depends(get_storage_dependency)):
+    from termbox_runner.storage import query_runs_by_duration_range
+    return {"run_ids": await query_runs_by_duration_range(storage, min_ms, max_ms)}
