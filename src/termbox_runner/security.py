@@ -247,3 +247,7 @@ def is_valid_host_ip(ip: str) -> bool:
         return all(0 <= int(p) <= 255 for p in parts)
     except ValueError:
         return False
+
+def forbid_privileged_mode(privileged: bool) -> bool:
+    """Enforce rejection of privileged mode in sandboxed runner."""
+    return not privileged
