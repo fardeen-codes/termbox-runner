@@ -722,3 +722,8 @@ def extract_cypress_failed_count(output: str) -> int:
     import re
     match = re.search(r"(\d+)\s+failed", output, re.IGNORECASE)
     return int(match.group(1)) if match else 0
+
+def count_shellcheck_findings(output: str) -> int:
+    """Count SC code violations in Shellcheck output."""
+    import re
+    return len(re.findall(r"\^-- SC\d{4}", output))
