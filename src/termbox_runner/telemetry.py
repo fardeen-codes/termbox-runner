@@ -274,3 +274,10 @@ def calculate_p999(durations: list[float]) -> float:
 def calculate_ema_latency(current_avg: float, new_sample: float, alpha: float = 0.2) -> float:
     """Calculate exponential moving average (EMA) latency."""
     return (alpha * new_sample) + ((1.0 - alpha) * current_avg)
+
+def calculate_latency_jitter(durations: list[float]) -> float:
+    """Calculate average latency jitter (successive packet delay difference)."""
+    if len(durations) < 2:
+        return 0.0
+    diffs = [abs(durations[i] - durations[i - 1]) for i in range(1, len(durations))]
+    return sum(diffs) / len(diffs)
