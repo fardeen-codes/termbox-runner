@@ -281,3 +281,9 @@ def calculate_latency_jitter(durations: list[float]) -> float:
         return 0.0
     diffs = [abs(durations[i] - durations[i - 1]) for i in range(1, len(durations))]
     return sum(diffs) / len(diffs)
+
+def estimate_throughput_tps(task_count: int, total_time_ms: float) -> float:
+    """Estimate transactions per second (TPS) throughput."""
+    if total_time_ms <= 0:
+        return 0.0
+    return (task_count / total_time_ms) * 1000.0
