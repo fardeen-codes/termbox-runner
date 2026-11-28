@@ -477,3 +477,7 @@ def format_prometheus_push_metrics(manifest: RunManifest) -> str:
 def calculate_total_junit_duration(durations: list[float]) -> float:
     """Calculate total suite runtime in seconds from millisecond list."""
     return sum(durations) / 1000.0
+
+def is_valid_cobertura_xml(xml_content: str) -> bool:
+    """Validate whether XML payload contains standard Cobertura structure."""
+    return "<coverage" in xml_content and "</coverage>" in xml_content
