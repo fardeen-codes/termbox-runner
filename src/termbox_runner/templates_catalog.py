@@ -386,3 +386,5 @@ TEMPLATES["zig-build"] = BenchmarkTemplate(id="zig-build", name="Zig Compiler Su
 TEMPLATES["ocaml-dune"] = BenchmarkTemplate(id="ocaml-dune", name="OCaml Dune Runner", category="Functional", description="Executes OCaml Dune build harness.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Dune OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
 
 TEMPLATES["haskell-cabal"] = BenchmarkTemplate(id="haskell-cabal", name="Haskell Cabal Test", category="Functional", description="Runs Haskell Cabal test suites.", task=TaskSubmission(image="haskell:9.6", main_cmd="echo Cabal OK", limits=ResourceLimits(mem_limit="512m", timeout_seconds=25.0)))
+
+TEMPLATES["scala-cli"] = BenchmarkTemplate(id="scala-cli", name="Scala CLI Runner", category="JVM", description="Runs Scala CLI scripts and assertions.", task=TaskSubmission(image="eclipse-temurin:21", main_cmd="echo Scala OK", limits=ResourceLimits(mem_limit="512m", timeout_seconds=20.0)))
