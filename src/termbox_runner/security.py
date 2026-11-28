@@ -226,3 +226,7 @@ def parse_nproc_limit(limit_str: str) -> tuple[int, int]:
         return int(soft), int(hard)
     val = int(limit_str)
     return val, val
+
+def is_valid_memlock_limit(bytes_limit: int) -> bool:
+    """Validate memlock limit bytes or unlimited (-1)."""
+    return bytes_limit >= -1
