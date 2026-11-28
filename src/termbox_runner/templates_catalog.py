@@ -410,3 +410,5 @@ TEMPLATES["vegeta-attack"] = BenchmarkTemplate(id="vegeta-attack", name="Vegeta 
 TEMPLATES["ab-bench"] = BenchmarkTemplate(id="ab-bench", name="ApacheBench HTTP Benchmark", category="Performance", description="Runs ApacheBench ab tool.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo AB OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["wrk-bench"] = BenchmarkTemplate(id="wrk-bench", name="Wrk HTTP Benchmarker", category="Performance", description="Runs wrk HTTP benchmarking tool.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Wrk OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["hadolint-check"] = BenchmarkTemplate(id="hadolint-check", name="Hadolint Dockerfile Linter", category="Security", description="Lints Dockerfile against best practices.", task=TaskSubmission(image="hadolint/hadolint:latest-alpine", main_cmd="hadolint --version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=10.0)))
