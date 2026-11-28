@@ -414,3 +414,5 @@ TEMPLATES["wrk-bench"] = BenchmarkTemplate(id="wrk-bench", name="Wrk HTTP Benchm
 TEMPLATES["hadolint-check"] = BenchmarkTemplate(id="hadolint-check", name="Hadolint Dockerfile Linter", category="Security", description="Lints Dockerfile against best practices.", task=TaskSubmission(image="hadolint/hadolint:latest-alpine", main_cmd="hadolint --version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=10.0)))
 
 TEMPLATES["shellcheck-run"] = BenchmarkTemplate(id="shellcheck-run", name="ShellCheck Shell Linter", category="Security", description="Lints Bash/sh scripts statically.", task=TaskSubmission(image="koalaman/shellcheck-alpine:latest", main_cmd="shellcheck --version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=10.0)))
+
+TEMPLATES["actionlint-check"] = BenchmarkTemplate(id="actionlint-check", name="Actionlint Workflow Linter", category="Security", description="Validates GitHub Actions workflow YAML.", task=TaskSubmission(image="rhysd/actionlint:latest", main_cmd="actionlint -version", limits=ResourceLimits(mem_limit="128m", timeout_seconds=10.0)))
