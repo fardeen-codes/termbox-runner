@@ -936,3 +936,10 @@ async def get_failure_mode_counts(storage) -> dict[str, int]:
     async with conn.execute("SELECT failure_mode, COUNT(*) FROM runs WHERE failure_mode IS NOT NULL GROUP BY failure_mode") as cur:
         rows = await cur.fetchall()
         return {r[0]: r[1] for r in rows}
+
+async def query_runs_by_duration_range(storage, min_ms: float, max_ms: float) -> list[str]:
+    """Fetch run IDs whose duration falls within [min_ms, max_ms]."""
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT run_id FROM runs WHERE duration_ms >= ? AND duration_ms <= ? ORDER BY created_at DESC", (min_ms, max_ms)) as cur:
+        rows = await cur.fetchall()
+        return [r[0] for r in rows]
