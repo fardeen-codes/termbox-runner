@@ -471,3 +471,8 @@ def cmd_export_slack(server_url: str, run_id: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         manifest = client.get(f"/runs/{run_id}").json()
         print(manifest)
+
+def cmd_export_discord(server_url: str, run_id: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        manifest = client.get(f"/runs/{run_id}").json()
+        print(manifest)
