@@ -473,3 +473,7 @@ def format_prometheus_push_metrics(manifest: RunManifest) -> str:
         f'termbox_task_exit_code{{run_id="{manifest.run_id}"}} {manifest.exit_code}',
     ]
     return "\n".join(lines) + "\n"
+
+def calculate_total_junit_duration(durations: list[float]) -> float:
+    """Calculate total suite runtime in seconds from millisecond list."""
+    return sum(durations) / 1000.0
