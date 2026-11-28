@@ -380,3 +380,5 @@ def count_total_templates() -> int:
 def get_templates_by_category(category: str) -> list[BenchmarkTemplate]:
     """Return benchmark templates in specified category."""
     return [t for t in TEMPLATES.values() if t.category.lower() == category.lower()]
+
+TEMPLATES["zig-build"] = BenchmarkTemplate(id="zig-build", name="Zig Compiler Suite", category="Systems", description="Compiles and tests Zig source code.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Zig OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
