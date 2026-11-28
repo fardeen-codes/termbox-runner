@@ -176,3 +176,8 @@ def is_valid_kernel_memory_mb(kmem_mb: int) -> bool:
 def get_private_ipc_flag() -> str:
     """Return Docker flag to enforce private IPC namespace."""
     return "--ipc=private"
+
+def is_valid_container_hostname(hostname: str) -> bool:
+    """Validate container hostname conforming to RFC 1123."""
+    import re
+    return bool(re.match(r"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}$", hostname))
