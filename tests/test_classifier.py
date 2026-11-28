@@ -357,3 +357,26 @@ def test_classifier_part4_diagnostics():
     assert extract_pytest_assertion_line("  >       assert 1 == 2") == ">       assert 1 == 2"
     assert detect_unbound_local_error("UnboundLocalError: local variable 'x' referenced before assignment") is True
     assert detect_attribute_error("AttributeError: 'NoneType' object has no attribute 'val'") is True
+
+
+def test_modern_detectors_and_extractors():
+    from termbox_runner.classifier import (
+        detect_zig_panic,
+        detect_ocaml_uncaught_exception,
+        detect_haskell_undefined_exception,
+        detect_deno_permission_denied,
+        detect_bun_out_of_memory,
+        detect_vitest_assertion_error,
+        detect_playwright_page_crashed,
+        extract_cypress_failed_count,
+        count_shellcheck_findings,
+    )
+    assert detect_zig_panic("src/main.zig:12:4: error: panic: integer overflow") is True
+    assert detect_ocaml_uncaught_exception("Fatal error: exception Failure(\"not found\")") is True
+    assert detect_haskell_undefined_exception("*** Exception: Prelude.undefined") is True
+    assert detect_deno_permission_denied("error: PermissionDenied: requires read access to \"file.txt\", run again with --allow-read") is True
+    assert detect_bun_out_of_memory("bun: out of memory allocating 1048576 bytes") is True
+    assert detect_vitest_assertion_error("FAIL tests/app.test.ts > suite > test\nAssertionError: expected 1 to be 2\n 1 failed | 0 passed") is True
+    assert detect_playwright_page_crashed("playwright.TargetPageCrashed: Target crashed") is True
+    assert extract_cypress_failed_count("Spec execution finished: 3 failed, 12 passed") == 3
+    assert count_shellcheck_findings("line 2:\n  ^-- SC2086 (info): Double quote to prevent globbing") == 1
