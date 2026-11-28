@@ -251,3 +251,7 @@ def is_valid_host_ip(ip: str) -> bool:
 def forbid_privileged_mode(privileged: bool) -> bool:
     """Enforce rejection of privileged mode in sandboxed runner."""
     return not privileged
+
+def is_forbidden_socket_mount(host_path: str) -> bool:
+    """Check if mount path attempts to expose docker.sock."""
+    return "docker.sock" in host_path.lower()
