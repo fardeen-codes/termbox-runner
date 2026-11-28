@@ -270,3 +270,7 @@ def calculate_p999(durations: list[float]) -> float:
     s = sorted(durations)
     idx = min(int(len(s) * 0.999), len(s) - 1)
     return s[idx]
+
+def calculate_ema_latency(current_avg: float, new_sample: float, alpha: float = 0.2) -> float:
+    """Calculate exponential moving average (EMA) latency."""
+    return (alpha * new_sample) + ((1.0 - alpha) * current_avg)
