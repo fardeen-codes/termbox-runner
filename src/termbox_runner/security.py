@@ -218,3 +218,11 @@ def parse_nofile_limit(limit_str: str) -> tuple[int, int]:
         return int(soft), int(hard)
     val = int(limit_str)
     return val, val
+
+def parse_nproc_limit(limit_str: str) -> tuple[int, int]:
+    """Parse nproc limit formatted as soft:hard or single int."""
+    if ":" in limit_str:
+        soft, hard = limit_str.split(":", 1)
+        return int(soft), int(hard)
+    val = int(limit_str)
+    return val, val
