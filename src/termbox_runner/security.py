@@ -230,3 +230,7 @@ def parse_nproc_limit(limit_str: str) -> tuple[int, int]:
 def is_valid_memlock_limit(bytes_limit: int) -> bool:
     """Validate memlock limit bytes or unlimited (-1)."""
     return bytes_limit >= -1
+
+def deduplicate_capabilities(caps: list[str]) -> list[str]:
+    """Normalize and deduplicate capability names."""
+    return sorted(list({c.upper() for c in caps}))
