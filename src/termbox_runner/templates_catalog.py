@@ -392,3 +392,5 @@ TEMPLATES["scala-cli"] = BenchmarkTemplate(id="scala-cli", name="Scala CLI Runne
 TEMPLATES["gleam-test"] = BenchmarkTemplate(id="gleam-test", name="Gleam Erlang Target", category="Functional", description="Runs Gleam BEAM test suite.", task=TaskSubmission(image="erlang:26-alpine", main_cmd="echo Gleam OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
 
 TEMPLATES["deno-run"] = BenchmarkTemplate(id="deno-run", name="Deno Modern Runtime", category="JavaScript", description="Executes secure sandboxed Deno tasks.", task=TaskSubmission(image="denoland/deno:alpine", main_cmd="deno --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
+
+TEMPLATES["bun-test"] = BenchmarkTemplate(id="bun-test", name="Bun Fast Test Runner", category="JavaScript", description="Runs Bun native test runner.", task=TaskSubmission(image="oven/bun:alpine", main_cmd="bun --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
