@@ -197,3 +197,7 @@ def get_readonly_rootfs_flag(enabled: bool) -> list[str]:
 def is_valid_seccomp_action(action: str) -> bool:
     """Validate seccomp default action."""
     return action.upper() in ("SCMP_ACT_KILL", "SCMP_ACT_ERRNO", "SCMP_ACT_ALLOW", "SCMP_ACT_LOG", "SCMP_ACT_TRAP")
+
+def format_cgroup_parent(slice_name: str) -> str:
+    """Format cgroup-parent argument."""
+    return f"--cgroup-parent={slice_name}.slice"
