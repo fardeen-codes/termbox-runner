@@ -234,3 +234,7 @@ def is_valid_memlock_limit(bytes_limit: int) -> bool:
 def deduplicate_capabilities(caps: list[str]) -> list[str]:
     """Normalize and deduplicate capability names."""
     return sorted(list({c.upper() for c in caps}))
+
+def is_valid_network_mode(mode: str) -> bool:
+    """Ensure network mode is sandboxed or isolated."""
+    return mode.lower() in ("none", "bridge", "host", "container")
