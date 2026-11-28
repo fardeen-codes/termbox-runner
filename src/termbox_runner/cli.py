@@ -454,3 +454,7 @@ def cmd_failure_modes(server_url: str):
 def cmd_p999_stats(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/stats/p999").json())
+
+def cmd_latency_jitter(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/stats/latency-jitter").json())
