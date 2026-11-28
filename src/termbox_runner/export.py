@@ -375,3 +375,12 @@ def format_github_action_error(title: str, message: str, file: str = "main.py", 
 def format_github_action_warning(title: str, message: str, file: str = "main.py", line: int = 1) -> str:
     """Generate GitHub Actions workflow command warning annotation string."""
     return f"::warning file={file},line={line},title={title}::{message}"
+
+def generate_codecov_report(manifest: RunManifest, coverage_pct: float = 100.0) -> dict:
+    """Construct Codecov custom upload payload."""
+    return {
+        "version": "1.0",
+        "run_id": manifest.run_id,
+        "coverage": coverage_pct,
+        "status": "passed" if manifest.exit_code == 0 else "failed",
+    }
