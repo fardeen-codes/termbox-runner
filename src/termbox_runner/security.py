@@ -201,3 +201,12 @@ def is_valid_seccomp_action(action: str) -> bool:
 def format_cgroup_parent(slice_name: str) -> str:
     """Format cgroup-parent argument."""
     return f"--cgroup-parent={slice_name}.slice"
+
+def convert_shm_size_to_bytes(shm_size_str: str) -> int:
+    """Convert shm-size string (e.g. '64m') to bytes."""
+    unit = shm_size_str[-1].lower()
+    val = int(shm_size_str[:-1])
+    if unit == "k": return val * 1024
+    if unit == "m": return val * 1024 * 1024
+    if unit == "g": return val * 1024 * 1024 * 1024
+    return int(shm_size_str)
