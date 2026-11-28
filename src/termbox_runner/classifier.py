@@ -716,3 +716,9 @@ def detect_vitest_assertion_error(output: str) -> bool:
 def detect_playwright_page_crashed(output: str) -> bool:
     """Detect Playwright page/browser target crash."""
     return "targetpagecrashed" in output.lower() or "page.gotourl: target closed" in output.lower()
+
+def extract_cypress_failed_count(output: str) -> int:
+    """Extract number of failing specs from Cypress summary."""
+    import re
+    match = re.search(r"(\d+)\s+failed", output, re.IGNORECASE)
+    return int(match.group(1)) if match else 0
