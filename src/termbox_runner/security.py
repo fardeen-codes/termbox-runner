@@ -185,3 +185,7 @@ def is_valid_container_hostname(hostname: str) -> bool:
 def format_memory_reservation(reservation_mb: int) -> str:
     """Format memory reservation parameter for docker run."""
     return f"--memory-reservation={reservation_mb}m"
+
+def is_valid_oom_score_adj(score: int) -> bool:
+    """Validate oom_score_adj is within Linux bounds [-1000, 1000]."""
+    return -1000 <= score <= 1000
