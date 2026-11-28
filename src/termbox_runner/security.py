@@ -172,3 +172,7 @@ def normalize_memory_swappiness(swappiness: int) -> int:
 def is_valid_kernel_memory_mb(kmem_mb: int) -> bool:
     """Validate kernel memory limit bounds."""
     return 4 <= kmem_mb <= 4096
+
+def get_private_ipc_flag() -> str:
+    """Return Docker flag to enforce private IPC namespace."""
+    return "--ipc=private"
