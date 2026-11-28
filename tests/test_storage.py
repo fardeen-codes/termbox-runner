@@ -219,3 +219,28 @@ def test_storage_batch2_helpers():
     sig = sign_webhook_payload(b"hello", "secret")
     assert len(sig) == 64
     assert "]]]]><![CDATA[>" in sanitize_cdata_text("test]]>text")
+
+
+async def test_storage_range_and_bucket_queries(tmp_path):
+    from termbox_runner.storage import (
+        RunStorage,
+        query_runs_by_duration_range,
+        query_runs_by_exit_code_range,
+        query_runs_in_time_window,
+        count_runs_by_date_bucket,
+        calculate_average_duration_by_image,
+    )
+    db_file = str(tmp_path / "range_test.db")
+    storage = RunStorage(db_file)
+    await storage.initialize()
+    res1 = await query_runs_by_duration_range(storage, 0.0, 5000.0)
+    assert isinstance(res1, list)
+    res2 = await query_runs_by_exit_code_range(storage, 0, 1)
+    assert isinstance(res2, list)
+    res3 = await query_runs_in_time_window(storage, "2020-01-01", "2030-01-01")
+    assert isinstance(res3, list)
+    buckets = await count_runs_by_date_bucket(storage)
+    assert isinstance(buckets, dict)
+    avg_img = await calculate_average_duration_by_image(storage)
+    assert isinstance(avg_img, dict)
+    await storage.close()
