@@ -465,3 +465,11 @@ def generate_datadog_metric_series(manifest: RunManifest) -> dict:
             }
         ]
     }
+
+def format_prometheus_push_metrics(manifest: RunManifest) -> str:
+    """Format metrics for Prometheus Pushgateway text format."""
+    lines = [
+        f'termbox_task_duration_seconds{{run_id="{manifest.run_id}"}} {manifest.duration_ms / 1000.0:.4f}',
+        f'termbox_task_exit_code{{run_id="{manifest.run_id}"}} {manifest.exit_code}',
+    ]
+    return "\n".join(lines) + "\n"
