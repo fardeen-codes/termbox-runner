@@ -708,3 +708,7 @@ def detect_deno_permission_denied(output: str) -> bool:
 def detect_bun_out_of_memory(output: str) -> bool:
     """Detect Bun runtime out-of-memory crash."""
     return "bun: out of memory" in output.lower() or "javascriptcore::outofmemory" in output.lower()
+
+def detect_vitest_assertion_error(output: str) -> bool:
+    """Detect Vitest test assertion error."""
+    return "assertionerror: " in output.lower() and "failed |" in output.lower()
