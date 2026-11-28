@@ -394,3 +394,5 @@ TEMPLATES["gleam-test"] = BenchmarkTemplate(id="gleam-test", name="Gleam Erlang 
 TEMPLATES["deno-run"] = BenchmarkTemplate(id="deno-run", name="Deno Modern Runtime", category="JavaScript", description="Executes secure sandboxed Deno tasks.", task=TaskSubmission(image="denoland/deno:alpine", main_cmd="deno --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
 
 TEMPLATES["bun-test"] = BenchmarkTemplate(id="bun-test", name="Bun Fast Test Runner", category="JavaScript", description="Runs Bun native test runner.", task=TaskSubmission(image="oven/bun:alpine", main_cmd="bun --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
+
+TEMPLATES["vitest-run"] = BenchmarkTemplate(id="vitest-run", name="Vitest ESM Framework", category="JavaScript", description="Executes Vitest test suites.", task=TaskSubmission(image="node:20-alpine", main_cmd="node --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
