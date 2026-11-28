@@ -384,3 +384,5 @@ def get_templates_by_category(category: str) -> list[BenchmarkTemplate]:
 TEMPLATES["zig-build"] = BenchmarkTemplate(id="zig-build", name="Zig Compiler Suite", category="Systems", description="Compiles and tests Zig source code.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Zig OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
 
 TEMPLATES["ocaml-dune"] = BenchmarkTemplate(id="ocaml-dune", name="OCaml Dune Runner", category="Functional", description="Executes OCaml Dune build harness.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Dune OK", limits=ResourceLimits(mem_limit="256m", timeout_seconds=15.0)))
+
+TEMPLATES["haskell-cabal"] = BenchmarkTemplate(id="haskell-cabal", name="Haskell Cabal Test", category="Functional", description="Runs Haskell Cabal test suites.", task=TaskSubmission(image="haskell:9.6", main_cmd="echo Cabal OK", limits=ResourceLimits(mem_limit="512m", timeout_seconds=25.0)))
