@@ -450,3 +450,18 @@ def generate_pagerduty_event(manifest: RunManifest, routing_key: str) -> dict:
             "source": "termbox-runner",
         },
     }
+
+def generate_datadog_metric_series(manifest: RunManifest) -> dict:
+    """Construct Datadog v2 metric series data point."""
+    import time
+    now = int(time.time())
+    return {
+        "series": [
+            {
+                "metric": "termbox.run.duration_ms",
+                "type": 3,
+                "points": [{"timestamp": now, "value": manifest.duration_ms}],
+                "tags": [f"status:{'success' if manifest.exit_code == 0 else 'failure'}"],
+            }
+        ]
+    }
