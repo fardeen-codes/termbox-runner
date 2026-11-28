@@ -210,3 +210,11 @@ def convert_shm_size_to_bytes(shm_size_str: str) -> int:
     if unit == "m": return val * 1024 * 1024
     if unit == "g": return val * 1024 * 1024 * 1024
     return int(shm_size_str)
+
+def parse_nofile_limit(limit_str: str) -> tuple[int, int]:
+    """Parse nofile limit formatted as soft:hard or single int."""
+    if ":" in limit_str:
+        soft, hard = limit_str.split(":", 1)
+        return int(soft), int(hard)
+    val = int(limit_str)
+    return val, val
