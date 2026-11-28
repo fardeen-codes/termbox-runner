@@ -419,3 +419,20 @@ def generate_slack_block_notification(manifest: RunManifest) -> dict:
             },
         ]
     }
+
+def generate_discord_embed_notification(manifest: RunManifest) -> dict:
+    """Construct Discord webhook embed payload."""
+    color = 3066993 if manifest.exit_code == 0 else 15158332
+    return {
+        "embeds": [
+            {
+                "title": f"Termbox Run: {manifest.run_id}",
+                "description": f"Main command: `{manifest.task.main_cmd}`",
+                "color": color,
+                "fields": [
+                    {"name": "Exit Code", "value": str(manifest.exit_code), "inline": True},
+                    {"name": "Duration", "value": f"{manifest.duration_ms:.1f}ms", "inline": True},
+                ],
+            }
+        ]
+    }
