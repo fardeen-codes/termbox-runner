@@ -700,3 +700,7 @@ def detect_ocaml_uncaught_exception(output: str) -> bool:
 def detect_haskell_undefined_exception(output: str) -> bool:
     """Detect Haskell Prelude.undefined or empty list head error."""
     return "prelude.undefined" in output.lower() or "prelude.head: empty list" in output.lower()
+
+def detect_deno_permission_denied(output: str) -> bool:
+    """Detect Deno security sandbox permission rejection."""
+    return "permissiondenied: requires " in output.lower() and "run again with --allow-" in output.lower()
