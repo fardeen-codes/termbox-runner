@@ -400,3 +400,5 @@ TEMPLATES["vitest-run"] = BenchmarkTemplate(id="vitest-run", name="Vitest ESM Fr
 TEMPLATES["playwright-test"] = BenchmarkTemplate(id="playwright-test", name="Playwright Headless", category="Testing", description="Runs Playwright headless browser test.", task=TaskSubmission(image="mcr.microsoft.com/playwright:v1.42.0-jammy", main_cmd="echo Playwright OK", limits=ResourceLimits(mem_limit="1g", timeout_seconds=40.0)))
 
 TEMPLATES["cypress-run"] = BenchmarkTemplate(id="cypress-run", name="Cypress Headless Spec", category="Testing", description="Executes Cypress end-to-end specs.", task=TaskSubmission(image="cypress/included:13.6.0", main_cmd="echo Cypress OK", limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0)))
+
+TEMPLATES["k6-load"] = BenchmarkTemplate(id="k6-load", name="K6 Performance Benchmark", category="Performance", description="Runs K6 load testing script.", task=TaskSubmission(image="grafana/k6:latest", main_cmd="k6 version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
