@@ -692,3 +692,7 @@ def detect_permission_error(output: str) -> bool:
 def detect_zig_panic(output: str) -> bool:
     """Detect Zig runtime panic error messages."""
     return "panic: " in output.lower() and ".zig:" in output.lower()
+
+def detect_ocaml_uncaught_exception(output: str) -> bool:
+    """Detect OCaml fatal uncaught exception."""
+    return "fatal error: exception " in output.lower() or "uncaught_exception" in output.lower()
