@@ -957,3 +957,10 @@ async def query_runs_in_time_window(storage, start_iso: str, end_iso: str) -> li
     async with conn.execute("SELECT run_id FROM runs WHERE created_at >= ? AND created_at <= ? ORDER BY created_at DESC", (start_iso, end_iso)) as cur:
         rows = await cur.fetchall()
         return [r[0] for r in rows]
+
+async def count_runs_by_date_bucket(storage) -> dict[str, int]:
+    """Aggregate total executions by date bucket (YYYY-MM-DD)."""
+    conn = await storage.get_connection()
+    async with conn.execute("SELECT SUBSTR(created_at, 1, 10) as day, COUNT(*) FROM runs GROUP BY day ORDER BY day DESC") as cur:
+        rows = await cur.fetchall()
+        return {r[0]: r[1] for r in rows if r[0]}
