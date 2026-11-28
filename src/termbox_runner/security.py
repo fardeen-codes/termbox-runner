@@ -181,3 +181,7 @@ def is_valid_container_hostname(hostname: str) -> bool:
     """Validate container hostname conforming to RFC 1123."""
     import re
     return bool(re.match(r"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}$", hostname))
+
+def format_memory_reservation(reservation_mb: int) -> str:
+    """Format memory reservation parameter for docker run."""
+    return f"--memory-reservation={reservation_mb}m"
