@@ -408,3 +408,5 @@ TEMPLATES["locust-test"] = BenchmarkTemplate(id="locust-test", name="Locust Load
 TEMPLATES["vegeta-attack"] = BenchmarkTemplate(id="vegeta-attack", name="Vegeta HTTP Attack", category="Performance", description="Runs Vegeta HTTP load testing tool.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Vegeta OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
 
 TEMPLATES["ab-bench"] = BenchmarkTemplate(id="ab-bench", name="ApacheBench HTTP Benchmark", category="Performance", description="Runs ApacheBench ab tool.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo AB OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
+
+TEMPLATES["wrk-bench"] = BenchmarkTemplate(id="wrk-bench", name="Wrk HTTP Benchmarker", category="Performance", description="Runs wrk HTTP benchmarking tool.", task=TaskSubmission(image="alpine:3.19", main_cmd="echo Wrk OK", limits=ResourceLimits(mem_limit="128m", timeout_seconds=15.0)))
