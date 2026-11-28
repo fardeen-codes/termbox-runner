@@ -462,3 +462,7 @@ def cmd_latency_jitter(server_url: str):
 def cmd_tps(server_url: str):
     with httpx.Client(base_url=server_url, timeout=5.0) as client:
         print(client.get("/stats/tps").json())
+
+def cmd_error_rate(server_url: str):
+    with httpx.Client(base_url=server_url, timeout=5.0) as client:
+        print(client.get("/stats/error-rate").json())
