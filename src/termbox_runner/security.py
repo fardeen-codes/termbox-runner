@@ -164,3 +164,7 @@ def is_valid_tmpfs_path(path: str) -> bool:
 def is_valid_pids_limit(pids_limit: int) -> bool:
     """Validate that pids_limit is within safe container execution range."""
     return 16 <= pids_limit <= 32768
+
+def normalize_memory_swappiness(swappiness: int) -> int:
+    """Clamp memory swappiness to safe range [0, 100]."""
+    return max(0, min(100, swappiness))
