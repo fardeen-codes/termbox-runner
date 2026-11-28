@@ -118,3 +118,16 @@ def test_testing_and_performance_templates_batch4():
     assert "criterion-rust" in TEMPLATES
     assert count_total_templates() >= 50
     assert len(get_templates_by_category("Performance")) >= 3
+
+
+def test_modern_templates_and_categories():
+    from termbox_runner.templates_catalog import TEMPLATES, list_all_template_categories
+    assert "zig-build" in TEMPLATES
+    assert "deno-run" in TEMPLATES
+    assert "bun-test" in TEMPLATES
+    assert "vitest-run" in TEMPLATES
+    assert "hadolint-check" in TEMPLATES
+    categories = list_all_template_categories()
+    assert "Systems" in categories
+    assert "JavaScript" in categories
+    assert "Performance" in categories
