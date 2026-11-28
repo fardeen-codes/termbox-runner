@@ -503,3 +503,7 @@ def format_csv_run_row(manifest: RunManifest) -> str:
 def calculate_webhook_backoff(attempt: int, base_delay: float = 1.0, max_delay: float = 60.0) -> float:
     """Compute exponential backoff delay for failed webhook retries."""
     return min(max_delay, base_delay * (2 ** max(0, attempt - 1)))
+
+def get_webhook_signature_header() -> str:
+    """Return standardized HTTP header for HMAC webhook signatures."""
+    return "X-Termbox-Signature-256"
