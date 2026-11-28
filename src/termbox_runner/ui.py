@@ -891,3 +891,6 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 </body>
 </html>
 """
+
+# UI Metric indicators for TPS and jitter visualization
+DASHBOARD_METRIC_INDICATORS = ["throughput_tps", "latency_jitter_ms", "error_rate_pct"]
