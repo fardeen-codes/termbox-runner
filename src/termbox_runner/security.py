@@ -168,3 +168,7 @@ def is_valid_pids_limit(pids_limit: int) -> bool:
 def normalize_memory_swappiness(swappiness: int) -> int:
     """Clamp memory swappiness to safe range [0, 100]."""
     return max(0, min(100, swappiness))
+
+def is_valid_kernel_memory_mb(kmem_mb: int) -> bool:
+    """Validate kernel memory limit bounds."""
+    return 4 <= kmem_mb <= 4096
