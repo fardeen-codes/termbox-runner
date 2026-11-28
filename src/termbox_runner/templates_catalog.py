@@ -402,3 +402,5 @@ TEMPLATES["playwright-test"] = BenchmarkTemplate(id="playwright-test", name="Pla
 TEMPLATES["cypress-run"] = BenchmarkTemplate(id="cypress-run", name="Cypress Headless Spec", category="Testing", description="Executes Cypress end-to-end specs.", task=TaskSubmission(image="cypress/included:13.6.0", main_cmd="echo Cypress OK", limits=ResourceLimits(mem_limit="1g", timeout_seconds=45.0)))
 
 TEMPLATES["k6-load"] = BenchmarkTemplate(id="k6-load", name="K6 Performance Benchmark", category="Performance", description="Runs K6 load testing script.", task=TaskSubmission(image="grafana/k6:latest", main_cmd="k6 version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
+
+TEMPLATES["locust-test"] = BenchmarkTemplate(id="locust-test", name="Locust Load Testing", category="Performance", description="Runs Locust swarm benchmark.", task=TaskSubmission(image="locustio/locust:latest", main_cmd="locust --version", limits=ResourceLimits(mem_limit="256m", timeout_seconds=20.0)))
