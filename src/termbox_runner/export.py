@@ -398,3 +398,24 @@ def generate_github_check_run_payload(manifest: RunManifest, app_name: str = "Te
             "summary": f"Duration: {manifest.duration_ms:.1f}ms with exit code {manifest.exit_code}",
         },
     }
+
+def generate_slack_block_notification(manifest: RunManifest) -> dict:
+    """Construct Slack Block Kit message structure for run completion."""
+    status_emoji = ":white_check_mark:" if manifest.exit_code == 0 else ":x:"
+    return {
+        "blocks": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"{status_emoji} *Termbox Task Finished*: `{manifest.run_id}`",
+                },
+            },
+            {
+                "type": "context",
+                "elements": [
+                    {"type": "mrkdwn", "text": f"*Duration*: {manifest.duration_ms:.1f}ms | *Exit*: {manifest.exit_code}"}
+                ],
+            },
+        ]
+    }
