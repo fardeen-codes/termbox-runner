@@ -287,3 +287,9 @@ def estimate_throughput_tps(task_count: int, total_time_ms: float) -> float:
     if total_time_ms <= 0:
         return 0.0
     return (task_count / total_time_ms) * 1000.0
+
+def calculate_error_rate_percentage(failures: int, total: int) -> float:
+    """Calculate percentage of failed executions."""
+    if total <= 0:
+        return 0.0
+    return (failures / total) * 100.0
