@@ -232,7 +232,7 @@ async def test_storage_range_and_bucket_queries(tmp_path):
     )
     db_file = str(tmp_path / "range_test.db")
     storage = RunStorage(db_file)
-    await storage.initialize()
+    await storage.init_db()
     res1 = await query_runs_by_duration_range(storage, 0.0, 5000.0)
     assert isinstance(res1, list)
     res2 = await query_runs_by_exit_code_range(storage, 0, 1)

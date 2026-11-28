@@ -1091,28 +1091,28 @@ async def get_failure_modes_distribution(storage: RunStorage = Depends(get_stora
 
 @app.get("/stats/p999")
 async def get_p999_latency(storage: RunStorage = Depends(get_storage_dependency)):
-    runs = await storage.list_runs(limit=100)
+    runs, _ = await storage.list_runs(limit=100)
     durations = [r.duration_ms for r in runs if r.duration_ms is not None]
     from termbox_runner.telemetry import calculate_p999
     return {"p999_ms": calculate_p999(durations), "count": len(durations)}
 
 @app.get("/stats/latency-jitter")
 async def get_latency_jitter_endpoint(storage: RunStorage = Depends(get_storage_dependency)):
-    runs = await storage.list_runs(limit=100)
+    runs, _ = await storage.list_runs(limit=100)
     durs = [r.duration_ms for r in runs if r.duration_ms is not None]
     from termbox_runner.telemetry import calculate_latency_jitter
     return {"jitter_ms": calculate_latency_jitter(durs), "samples": len(durs)}
 
 @app.get("/stats/tps")
 async def get_tps_endpoint(storage: RunStorage = Depends(get_storage_dependency)):
-    runs = await storage.list_runs(limit=100)
+    runs, _ = await storage.list_runs(limit=100)
     total_time = sum([r.duration_ms for r in runs if r.duration_ms is not None])
     from termbox_runner.telemetry import estimate_throughput_tps
     return {"tps": estimate_throughput_tps(len(runs), total_time), "total_runs": len(runs)}
 
 @app.get("/stats/error-rate")
 async def get_error_rate_endpoint(storage: RunStorage = Depends(get_storage_dependency)):
-    runs = await storage.list_runs(limit=100)
+    runs, _ = await storage.list_runs(limit=100)
     failures = sum(1 for r in runs if r.exit_code != 0)
     from termbox_runner.telemetry import calculate_error_rate_percentage
     return {"error_rate_pct": calculate_error_rate_percentage(failures, len(runs)), "total_runs": len(runs)}

@@ -866,7 +866,8 @@ async def delete_run_annotation(storage, run_id: str, key: str) -> bool:
 
 async def query_runs_by_annotation_key(storage, key: str) -> list[str]:
     """Find run IDs containing a specific metadata annotation key."""
-    all_runs = await storage.list_runs(limit=100)
+    res = await storage.list_runs(limit=100)
+    all_runs = res[0] if isinstance(res, tuple) else res
     return [r.run_id for r in all_runs if key in getattr(r, "annotations", {})]
 
 async def count_table_rows(storage, table_name: str = "runs") -> int:
@@ -922,13 +923,15 @@ async def query_timeout_runs(storage, limit: int = 50) -> list[str]:
 
 async def query_runs_by_git_commit(storage, commit_hash: str) -> list[str]:
     """Return run IDs matching a specific git commit SHA."""
-    all_runs = await storage.list_runs(limit=100)
-    return [r.run_id for r in all_runs if getattr(r.task, "git_commit", None) == commit_hash]
+    res = await storage.list_runs(limit=100)
+    all_runs = res[0] if isinstance(res, tuple) else res
+    return [r.run_id for r in all_runs if getattr(r, "git_commit", None) == commit_hash or getattr(getattr(r, "task", None), "git_commit", None) == commit_hash]
 
 async def query_runs_by_git_branch(storage, branch_name: str) -> list[str]:
     """Return run IDs matching a specific git branch."""
-    all_runs = await storage.list_runs(limit=100)
-    return [r.run_id for r in all_runs if getattr(r.task, "git_branch", None) == branch_name]
+    res = await storage.list_runs(limit=100)
+    all_runs = res[0] if isinstance(res, tuple) else res
+    return [r.run_id for r in all_runs if getattr(r, "git_branch", None) == branch_name or getattr(getattr(r, "task", None), "git_branch", None) == branch_name]
 
 async def get_failure_mode_counts(storage) -> dict[str, int]:
     """Return distribution of runs by failure mode."""
@@ -967,10 +970,11 @@ async def count_runs_by_date_bucket(storage) -> dict[str, int]:
 
 async def calculate_average_duration_by_image(storage) -> dict[str, float]:
     """Aggregate average execution duration per container image."""
-    all_runs = await storage.list_runs(limit=100)
+    res = await storage.list_runs(limit=100)
+    all_runs = res[0] if isinstance(res, tuple) else res
     img_map = {}
     for r in all_runs:
-        img = getattr(r.task, "image", "unknown")
-        if r.duration_ms is not None:
+        img = getattr(r, "image", None) or getattr(getattr(r, "task", None), "image", "unknown")
+        if getattr(r, "duration_ms", None) is not None:
             img_map.setdefault(img, []).append(r.duration_ms)
     return {img: sum(durs) / len(durs) for img, durs in img_map.items()}
