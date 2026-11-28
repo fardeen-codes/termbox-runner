@@ -499,3 +499,7 @@ def format_markdown_table_row(manifest: RunManifest) -> str:
 def format_csv_run_row(manifest: RunManifest) -> str:
     """Format CSV row for run record."""
     return f"{manifest.run_id},{manifest.exit_code},{manifest.duration_ms:.2f}"
+
+def calculate_webhook_backoff(attempt: int, base_delay: float = 1.0, max_delay: float = 60.0) -> float:
+    """Compute exponential backoff delay for failed webhook retries."""
+    return min(max_delay, base_delay * (2 ** max(0, attempt - 1)))
