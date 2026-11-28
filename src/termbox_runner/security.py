@@ -160,3 +160,7 @@ def count_seccomp_filtered_syscalls(profile: dict) -> int:
 def is_valid_tmpfs_path(path: str) -> bool:
     """Ensure tmpfs mount path is standard temporary directory."""
     return path in ("/tmp", "/var/tmp", "/dev/shm", "/run")
+
+def is_valid_pids_limit(pids_limit: int) -> bool:
+    """Validate that pids_limit is within safe container execution range."""
+    return 16 <= pids_limit <= 32768
