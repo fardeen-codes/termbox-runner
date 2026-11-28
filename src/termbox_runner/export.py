@@ -481,3 +481,12 @@ def calculate_total_junit_duration(durations: list[float]) -> float:
 def is_valid_cobertura_xml(xml_content: str) -> bool:
     """Validate whether XML payload contains standard Cobertura structure."""
     return "<coverage" in xml_content and "</coverage>" in xml_content
+
+def format_json_run_summary(manifest: RunManifest) -> str:
+    """Format minimal JSON execution summary string."""
+    import json
+    return json.dumps({
+        "run_id": manifest.run_id,
+        "status": "passed" if manifest.exit_code == 0 else "failed",
+        "duration_ms": manifest.duration_ms,
+    })
